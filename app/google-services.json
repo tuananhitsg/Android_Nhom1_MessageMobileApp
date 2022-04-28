@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "442606130770",
+    "firebase_url": "https://messagemobileapp-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "messagemobileapp",
+    "storage_bucket": "messagemobileapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442606130770:android:cc238535c0e6641475b18b",
+        "android_client_info": {
+          "package_name": "com.example.messagemobileapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "442606130770-lhk76h15l981m7j00rj835msqh45u9tc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdsz70DmAedV8j4aIQN3kNnhcJnt6w8YE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "442606130770-lhk76h15l981m7j00rj835msqh45u9tc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
