@@ -3,7 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/data/handout/Android/BaiTapLon/Android_Nhom1_MessageMobileApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2295" />
+        <entry key="..\:/data/handout/Android/BaiTapLon/Android_Nhom1_MessageMobileApp/app/src/main/res/layout/activity_home.xml" value="0.18541666666666667" />
         <entry key="..\:/data/handout/Android/BaiTapLon/Android_Nhom1_MessageMobileApp/app/src/main/res/layout/activity_main.xml" value="0.18541666666666667" />
+        <entry key="..\:/data/handout/Android/BaiTapLon/Android_Nhom1_MessageMobileApp/app/src/main/res/layout/fragment_ca_nhan.xml" value="0.18697916666666667" />
+        <entry key="..\:/data/handout/Android/BaiTapLon/Android_Nhom1_MessageMobileApp/app/src/main/res/layout/fragment_danh_ba.xml" value="0.18697916666666667" />
+        <entry key="..\:/data/handout/Android/BaiTapLon/Android_Nhom1_MessageMobileApp/app/src/main/res/layout/fragment_home.xml" value="0.44600431965442766" />
+        <entry key="..\:/data/handout/Android/BaiTapLon/Android_Nhom1_MessageMobileApp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.18541666666666667" />
       </map>
     </option>
   </component>

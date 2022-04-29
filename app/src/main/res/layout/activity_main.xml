@@ -5,5 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent">
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            app:menu="@menu/bottom_nav_menu"
+            android:background="#00ffffff"
+            app:elevation="0dp"
+            app:itemTextColor="@color/black"
+            app:itemIconSize="30dp"
+            app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
+        />
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
