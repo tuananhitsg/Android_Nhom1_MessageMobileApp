@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tinnhan"
+        android:title="Tin nhắn"
+        android:icon="@drawable/ic_chat"
+        />
+    <item
+        android:id="@+id/danhba"
+        android:title="Danh bạ"
+        android:icon="@drawable/ic_danhba"
+        />
+    <item
+        android:id="@+id/canhan"
+        android:title="Cá nhân"
+        android:icon="@drawable/ic_profile"/>
+
+</menu>
