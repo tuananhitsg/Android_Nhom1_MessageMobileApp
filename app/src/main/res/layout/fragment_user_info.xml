@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".UserInfoFragment">
 
     <LinearLayout
@@ -15,20 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
             android:weightSum="10">
-
-            <ImageButton
-                android:id="@+id/userInfo_btnBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:src="@drawable/back_icon"
-                android:stateListAnimator="@null" />
-
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
@@ -48,13 +37,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/userInfo_btnImgAvatar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+            <ImageView
+                android:id="@+id/userInfo_imgAvatar"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_gravity="center"
-                app:cornerRadius="120dp"
-                tools:src="@tools:sample/avatars" />
+                android:background="@drawable/border_avatar"
+                android:clipToOutline="true"
+                tools:src="@drawable/logo" />
 
             <TextView
                 android:id="@+id/userInfo_tvName"
@@ -74,6 +64,10 @@
                 android:layout_marginTop="20dp"
                 android:background="@android:color/transparent"
                 android:drawableLeft="@drawable/dark_mode_icon"
+                android:drawablePadding="10dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
                 android:text="Chế độ tối"
                 android:textAlignment="textStart"
                 android:textAllCaps="false"
@@ -105,6 +99,10 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:drawableLeft="@drawable/username_icon"
+                android:drawablePadding="10dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
                 android:stateListAnimator="@null"
                 android:text="Tên người dùng"
                 android:textAlignment="textStart"
@@ -113,14 +111,29 @@
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/userInfo_tvHandleName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="phamdangdan"
+                android:layout_marginLeft="60dp"
+                android:layout_marginTop="-14dp"
+                android:textColor="@color/text_color_gray"
+                android:textSize="14dp" />
+
             <Button
                 android:id="@+id/userInfo_btnEditInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
+                android:drawablePadding="10dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
                 android:stateListAnimator="@null"
                 android:text="Chỉnh sửa thông tin cá nhân"
                 android:textAlignment="textStart"
+                android:drawableLeft="@drawable/edit_icon"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="16dp"
@@ -149,6 +162,10 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:drawableLeft="@drawable/password_icon"
+                android:drawablePadding="10dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
                 android:stateListAnimator="@null"
                 android:text="Đổi mật khẩu"
                 android:textAlignment="textStart"
@@ -163,6 +180,10 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:drawableLeft="@drawable/logout_icon"
+                android:drawablePadding="10dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
                 android:stateListAnimator="@null"
                 android:text="Đăng xuất"
                 android:textAlignment="textStart"
@@ -170,7 +191,7 @@
                 android:textColor="@color/black"
                 android:textSize="16dp"
                 android:textStyle="bold" />
-        </LinearLayout>
 
+        </LinearLayout>
     </LinearLayout>
-</FrameLayout>
+</ScrollView>
