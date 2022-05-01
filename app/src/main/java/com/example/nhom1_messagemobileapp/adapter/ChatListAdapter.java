@@ -1,4 +1,4 @@
-package com.example.messagemobileapp.adapter;
+package com.example.nhom1_messagemobileapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,10 +13,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.messagemobileapp.ChatActivity;
-import com.example.messagemobileapp.R;
-import com.example.messagemobileapp.entity.Friend;
-import com.example.messagemobileapp.utils.CustomeDateTime;
+import com.example.nhom1_messagemobileapp.ChatActivity;
+import com.example.nhom1_messagemobileapp.R;
+import com.example.nhom1_messagemobileapp.entity.Friend;
+import com.example.nhom1_messagemobileapp.utils.CustomeDateTime;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.example.messagemobileapp;
+package com.example.nhom1_messagemobileapp;
 
 import android.os.Bundle;
 

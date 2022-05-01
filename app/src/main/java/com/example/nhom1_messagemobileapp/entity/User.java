@@ -1,4 +1,4 @@
-package com.example.messagemobileapp.entity;
+package com.example.nhom1_messagemobileapp.entity;
 
 // tạo tạm =))
 public class User {

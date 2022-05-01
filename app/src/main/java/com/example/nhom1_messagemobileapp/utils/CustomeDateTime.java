@@ -1,4 +1,4 @@
-package com.example.messagemobileapp.utils;
+package com.example.nhom1_messagemobileapp.utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
