@@ -24,7 +24,7 @@
             android:background="#00ffffff"
             app:elevation="0dp"
             app:itemTextColor="@color/black"
-            app:itemIconSize="30dp"
+            app:itemIconSize="25dp"
             app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
         />
     </FrameLayout>
