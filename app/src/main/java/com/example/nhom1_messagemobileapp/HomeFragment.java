@@ -1,4 +1,4 @@
-package com.example.messagemobileapp;
+package com.example.nhom1_messagemobileapp;
 
 import android.os.Bundle;
 
@@ -10,10 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.messagemobileapp.adapter.ChatListAdapter;
-import com.example.messagemobileapp.entity.Friend;
-import com.example.messagemobileapp.entity.Message;
-import com.example.messagemobileapp.entity.User;
+import com.example.nhom1_messagemobileapp.adapter.ChatListAdapter;
+import com.example.nhom1_messagemobileapp.entity.Friend;
+import com.example.nhom1_messagemobileapp.entity.Message;
+import com.example.nhom1_messagemobileapp.entity.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

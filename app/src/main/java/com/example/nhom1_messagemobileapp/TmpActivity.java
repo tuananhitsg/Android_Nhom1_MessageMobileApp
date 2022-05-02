@@ -1,4 +1,4 @@
-package com.example.messagemobileapp;
+package com.example.nhom1_messagemobileapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +16,12 @@ public class TmpActivity extends AppCompatActivity {
         Button btnToHomePage = findViewById(R.id.btn_to_home_page);
         btnToHomePage.setOnClickListener((v) -> {
             Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        });
+
+        Button btnDemoFirebase = findViewById(R.id.button_demoFirebase);
+        btnDemoFirebase.setOnClickListener((v) -> {
+            Intent intent = new Intent(this, DemoFirebase.class);
             startActivity(intent);
         });
     }

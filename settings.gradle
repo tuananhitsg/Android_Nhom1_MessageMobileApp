@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "MessageMobileApp"
+rootProject.name = "Nhom1_MessageMobileApp"
 include ':app'

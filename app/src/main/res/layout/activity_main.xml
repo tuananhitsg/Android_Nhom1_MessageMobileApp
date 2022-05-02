@@ -26,6 +26,6 @@
             app:itemTextColor="@color/black"
             app:itemIconSize="25dp"
             app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
-        />
+            />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
