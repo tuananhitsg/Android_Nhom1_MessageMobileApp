@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.MessageMobileApp">
         <activity
+            android:name=".UpdateUserInfo"
+            android:exported="false" />
+        <activity
             android:name=".WelcomeActivity"
             android:exported="false" />
         <activity

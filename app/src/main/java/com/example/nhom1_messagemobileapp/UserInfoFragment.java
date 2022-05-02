@@ -1,6 +1,7 @@
 package com.example.nhom1_messagemobileapp;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -98,6 +99,7 @@ public class UserInfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user_info, container, false);
         // Inflate the layout for this fragment
 
+//        tìm đối tượng trong view
         tvName = view.findViewById(R.id.userInfo_tvName);
         tvHandleName = view.findViewById(R.id.userInfo_tvHandleName);
         imgAvatar = view.findViewById(R.id.userInfo_imgAvatar);
@@ -107,19 +109,21 @@ public class UserInfoFragment extends Fragment {
         btnChangePassword = view.findViewById(R.id.userInfo_btnChangePassword);
         btnLogout = view.findViewById(R.id.userInfo_btnLogout);
 
+//        cấu hình firebase
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("user").child(uid);
 
+//        set value
         imgAvatar.setImageResource(R.drawable.logo);
         imgAvatar.setClipToOutline(true);
 
         handleName = "phamdangdan";
-
         tvName.setText("Phạm Đăng Đan");
         tvHandleName.setText(handleName);
 
+//        bắt sự kiện button
         btnDarkMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,8 +141,8 @@ public class UserInfoFragment extends Fragment {
         btnEditInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Đang phát triển", Toast.LENGTH_LONG).show();
-
+                Intent intentUpdateUserInfo = new Intent(getActivity(), UpdateUserInfo.class);
+                getActivity().startActivity(intentUpdateUserInfo);
             }
         });
 
@@ -248,6 +252,7 @@ public class UserInfoFragment extends Fragment {
                     return;
                 }
 
+//                đọc email trên database realtime
                 DatabaseReference ref = database.getReference("user").child(uid);
                 ref.child("email").addValueEventListener(new ValueEventListener() {
                     @Override
@@ -260,6 +265,7 @@ public class UserInfoFragment extends Fragment {
                     }
                 });
 
+//                xác thực email + password vừa được nhập
 //                AuthCredential credential = EmailAuthProvider.getCredential(email, password);
 //
 //                user.reauthenticate(credential)
