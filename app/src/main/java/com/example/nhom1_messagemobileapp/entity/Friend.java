@@ -1,9 +1,10 @@
 package com.example.nhom1_messagemobileapp.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 // tạo tạm =))
-public class Friend {
+public class Friend implements Serializable {
     private int id;
     private User user;
     List<Message> messages;
@@ -36,5 +37,13 @@ public class Friend {
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
+    }
+
+    @Override
+    public String toString() {
+        return "Friend{" +
+                "id=" + id +
+                ", user=" + user +
+                "}";
     }
 }

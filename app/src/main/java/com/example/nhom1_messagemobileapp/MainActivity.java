@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.nhom1_messagemobileapp.R;
 import com.example.nhom1_messagemobileapp.adapter.ChatListAdapter;
 import com.example.nhom1_messagemobileapp.entity.Friend;
 import com.example.nhom1_messagemobileapp.entity.Message;
