@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.MessageMobileApp">
         <activity
+            android:name=".WelcomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".TmpActivity"
             android:exported="true">
             <intent-filter>
