@@ -2,6 +2,7 @@ package com.example.nhom1_messagemobileapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,10 +46,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.item_friend_message, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
-        viewHolder.itemView.setOnClickListener(view1 -> {
-            Intent intent = new Intent(context, ChatActivity.class);
-            context.startActivity(intent);
-        });
+
         return viewHolder;
     }
 
@@ -58,6 +56,13 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         holder.txt_name.setText(friendMessage.getUser().getName());
         holder.txt_message.setText(friendMessage.getMessages().get(0).getContent());
         holder.txt_time.setText(CustomeDateTime.HMFormat(friendMessage.getMessages().get(0).getTime()));
+        holder.itemView.setOnClickListener(view1 -> {
+            Intent intent = new Intent(context, ChatActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("friend", friendMessage);
+            intent.putExtras(bundle);
+            context.startActivity(intent);
+        });
 //        Picasso.get().load(friendMessage.getUser().getImage()).into(holder.img_avatar_friend);
     }
 

@@ -1,7 +1,9 @@
 package com.example.nhom1_messagemobileapp.entity;
 
+import java.io.Serializable;
+
 // tạo tạm =))
-public class User {
+public class User implements Serializable {
     private int id;
     private String name;
     private String image;
@@ -34,5 +36,14 @@ public class User {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", image='" + image + '\'' +
+                '}';
     }
 }

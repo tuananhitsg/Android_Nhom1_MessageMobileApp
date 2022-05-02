@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ChatActivity">
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -52,5 +53,90 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginLeft="10dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:orientation="vertical"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/header"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/action">-->
+<!--       -->
+<!--    </LinearLayout>-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header"
+        app:layout_constraintBottom_toTopOf="@+id/action">
 
+    </androidx.recyclerview.widget.RecyclerView>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="10dp"
+        android:background="@drawable/border_top">
+        <ImageButton
+            android:id="@+id/btn_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_camera"
+            android:background="@android:color/transparent"
+            android:padding="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:scaleType="fitXY"
+            android:scaleX="1.4"
+            android:scaleY="1.4"
+            />
+        <ImageButton
+            android:id="@+id/btn_media"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_media"
+            android:background="@android:color/transparent"
+            android:padding="10dp"
+            app:layout_constraintLeft_toRightOf="@id/btn_camera"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:scaleType="fitXY"
+            android:scaleX="1.4"
+            android:scaleY="1.4"
+            />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            app:layout_constraintLeft_toRightOf="@id/btn_media"
+            app:layout_constraintRight_toLeftOf="@id/btn_love"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/bg_message_input"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="5dp"
+            android:hint="Ab"
+            android:textColorHint="#b6b6b6"
+            android:drawableRight="@drawable/ic_react"
+            android:drawablePadding="10dp"/>
+        <ImageButton
+            android:id="@+id/btn_love"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_love"
+            android:background="@android:color/transparent"
+            android:padding="10dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:scaleType="fitXY"
+            android:scaleX="1.4"
+            android:scaleY="1.4"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
