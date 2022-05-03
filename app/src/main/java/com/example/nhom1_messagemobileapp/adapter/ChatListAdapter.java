@@ -53,7 +53,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Friend friendMessage = friendMessages.get(position);
-        holder.txt_name.setText(friendMessage.getUser().getName());
+        holder.txt_name.setText(friendMessage.getUser().getHandleName());
         holder.txt_message.setText(friendMessage.getMessages().get(0).getContent());
         holder.txt_time.setText(CustomeDateTime.HMFormat(friendMessage.getMessages().get(0).getTime()));
         holder.itemView.setOnClickListener(view1 -> {

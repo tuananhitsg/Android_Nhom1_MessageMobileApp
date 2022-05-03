@@ -1,49 +1,75 @@
 package com.example.nhom1_messagemobileapp.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 // tạo tạm =))
 public class User implements Serializable {
-    private int id;
-    private String name;
-    private String image;
+    private String handleName;
+    private String email;
+    private String password;
+    private String avatar;
+    private List<Message> messages;
 
-    public User(int id, String name, String image) {
-        this.id = id;
-        this.name = name;
-        this.image = image;
+    public String getHandleName() {
+        return handleName;
     }
 
-    public int getId() {
-        return id;
+    public void setHandleName(String handleName) {
+        this.handleName = handleName;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getEmail() {
+        return email;
     }
 
-    public String getName() {
-        return name;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getPassword() {
+        return password;
     }
 
-    public String getImage() {
-        return image;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public User() {
+
+    }
+
+    public User(String handleName, String email, String passwordr) {
+        this.handleName = handleName;
+        this.email = email;
+        this.password = password;
+
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", image='" + image + '\'' +
+                "handleName='" + handleName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", messages=" + messages +
                 '}';
     }
 }
