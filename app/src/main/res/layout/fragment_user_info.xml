@@ -43,9 +43,10 @@
                 android:id="@+id/progressBar"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_margin="42dp"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center"
-                android:visibility="gone" />
+                />
 
             <ImageView
                 android:id="@+id/userInfo_imgAvatar"
@@ -53,8 +54,8 @@
                 android:layout_height="120dp"
                 android:layout_gravity="center"
                 android:background="@drawable/border_avatar"
-                android:clipToOutline="true"
                 android:visibility="gone"
+                android:clipToOutline="true"
                 tools:src="@drawable/logo" />
 
             <TextView

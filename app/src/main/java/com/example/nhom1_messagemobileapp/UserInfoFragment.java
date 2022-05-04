@@ -26,7 +26,6 @@ import com.example.nhom1_messagemobileapp.entity.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -92,7 +91,7 @@ public class UserInfoFragment extends Fragment {
     private ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
-    private FirebaseUser user;
+    private FirebaseUser account;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
 
@@ -109,26 +108,26 @@ public class UserInfoFragment extends Fragment {
         btnEditInfo = view.findViewById(R.id.userInfo_btnEditInfo);
         btnChangePassword = view.findViewById(R.id.userInfo_btnChangePassword);
         btnLogout = view.findViewById(R.id.userInfo_btnLogout);
-
-//        cấu hình firebase
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-        database = FirebaseDatabase.getInstance();
-        uid = mAuth.getCurrentUser().getUid();
-        myRef = database.getReference("user").child(uid);
-
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
         if (progressBar != null) {
             progressBar.setVisibility(View.VISIBLE);
         }
 
-//        set value
+//        cấu hình firebase
+        mAuth = FirebaseAuth.getInstance();
+        account = mAuth.getCurrentUser();
+        database = FirebaseDatabase.getInstance();
+        uid = mAuth.getCurrentUser().getUid();
+        myRef = database.getReference("user").child(uid);
+
+//        read database and set value
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 theUser = dataSnapshot.getValue(User.class);
                 tvName.setText(theUser.getName());
+//                set link image
                 Picasso.get().load(theUser.getAvatar()).into(imgAvatar);
                 imgAvatar.setClipToOutline(true);
                 progressBar.setVisibility(View.GONE);
@@ -214,9 +213,9 @@ public class UserInfoFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String password = edtPassword.getText().toString();
-                String newPassword = edtNewPassword.getText().toString();
-                String reNewPassword = edtReNewPassword.getText().toString();
+                String password = edtPassword.getText().toString().trim();
+                String newPassword = edtNewPassword.getText().toString().trim();
+                String reNewPassword = edtReNewPassword.getText().toString().trim();
 
                 Toast.makeText(getActivity(), password, Toast.LENGTH_LONG).show();
                 if (password.isEmpty() || password.length() <= 0) {
@@ -237,12 +236,12 @@ public class UserInfoFragment extends Fragment {
                 }
 //                xác thực email + password vừa được nhập
                 AuthCredential credential = EmailAuthProvider.getCredential(theUser.getEmail(), password);
-                user.reauthenticate(credential)
+                account.reauthenticate(credential)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    account.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
@@ -254,7 +253,7 @@ public class UserInfoFragment extends Fragment {
                                         }
                                     });
                                 } else {
-                                    Toast.makeText(getActivity(), "Cập nhật mật khẩu thất bại", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), "Mật khẩu không chính xác", Toast.LENGTH_LONG).show();
                                 }
                             }
                         });

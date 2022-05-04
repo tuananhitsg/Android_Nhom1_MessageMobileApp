@@ -66,7 +66,7 @@ public class DemoFirebase extends AppCompatActivity {
         btnUploadStorage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StorageReference mountainsRef = storageRef.child("pet_shop.png");
+                StorageReference mountainsRef = storageRef.child("images/pet_shop.png");
                 StorageReference mountainImagesRef = storageRef.child("images/pet_shop.png");
                 mountainsRef.getName().equals(mountainImagesRef.getName());
                 mountainsRef.getPath().equals(mountainImagesRef.getPath());
