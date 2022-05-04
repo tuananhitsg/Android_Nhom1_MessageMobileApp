@@ -1,22 +1,24 @@
 package com.example.nhom1_messagemobileapp.entity;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.io.Serializable;
 import java.util.List;
 
 // tạo tạm =))
+@IgnoreExtraProperties
 public class User implements Serializable {
-    private String handleName;
+    private String name;
     private String email;
-    private String password;
     private String avatar;
     private List<Message> messages;
 
-    public String getHandleName() {
-        return handleName;
+    public String getName() {
+        return name;
     }
 
-    public void setHandleName(String handleName) {
-        this.handleName = handleName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -25,14 +27,6 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getAvatar() {
@@ -55,21 +49,16 @@ public class User implements Serializable {
 
     }
 
-    public User(String handleName, String email, String passwordr) {
-        this.handleName = handleName;
+    public User(String name, String email, String avatar) {
+        this.name = name;
         this.email = email;
-        this.password = password;
-
+        this.avatar = avatar;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "handleName='" + handleName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", avatar='" + avatar + '\'' +
-                ", messages=" + messages +
-                '}';
+    public User(String name, String email, String avatar, List<Message> messages) {
+        this.name = name;
+        this.email = email;
+        this.avatar = avatar;
+        this.messages = messages;
     }
 }

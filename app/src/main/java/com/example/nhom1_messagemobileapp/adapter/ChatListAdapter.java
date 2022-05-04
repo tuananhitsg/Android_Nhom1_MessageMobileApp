@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,7 +16,6 @@ import com.example.nhom1_messagemobileapp.ChatActivity;
 import com.example.nhom1_messagemobileapp.R;
 import com.example.nhom1_messagemobileapp.entity.Friend;
 import com.example.nhom1_messagemobileapp.utils.CustomeDateTime;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +50,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Friend friendMessage = friendMessages.get(position);
-        holder.txt_name.setText(friendMessage.getUser().getHandleName());
+        holder.txt_name.setText(friendMessage.getUser().getName());
         holder.txt_message.setText(friendMessage.getMessages().get(0).getContent());
         holder.txt_time.setText(CustomeDateTime.HMFormat(friendMessage.getMessages().get(0).getTime()));
         holder.itemView.setOnClickListener(view1 -> {

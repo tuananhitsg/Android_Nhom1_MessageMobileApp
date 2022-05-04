@@ -33,6 +33,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -81,12 +82,13 @@ public class UserInfoFragment extends Fragment {
         }
     }
 
-    private TextView tvName, tvHandleName;
+    private TextView tvName;
     private ImageView imgAvatar;
-    private Button btnDarkMode, btnChangeUsername, btnEditInfo, btnChangePassword, btnLogout;
+    private Button btnDarkMode, btnEditInfo, btnChangePassword, btnLogout;
     private String uid = "6kBO5yFQu1Y355mxKuc1YSaLtSZ2";
-    private String handleName;
     private String email;
+    private String name;
+    private String avatar;
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -101,10 +103,8 @@ public class UserInfoFragment extends Fragment {
 
 //        tìm đối tượng trong view
         tvName = view.findViewById(R.id.userInfo_tvName);
-        tvHandleName = view.findViewById(R.id.userInfo_tvHandleName);
         imgAvatar = view.findViewById(R.id.userInfo_imgAvatar);
         btnDarkMode = view.findViewById(R.id.userInfo_btnDarkMode);
-        btnChangeUsername = view.findViewById(R.id.userInfo_btnChangeUsername);
         btnEditInfo = view.findViewById(R.id.userInfo_btnEditInfo);
         btnChangePassword = view.findViewById(R.id.userInfo_btnChangePassword);
         btnLogout = view.findViewById(R.id.userInfo_btnLogout);
@@ -116,25 +116,40 @@ public class UserInfoFragment extends Fragment {
         myRef = database.getReference("user").child(uid);
 
 //        set value
-        imgAvatar.setImageResource(R.drawable.logo);
-        imgAvatar.setClipToOutline(true);
+        name = "";
+        myRef.child("name").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                name = dataSnapshot.getValue(String.class);
+                tvName.setText(name);
+            }
 
-        handleName = "phamdangdan";
-        tvName.setText("Phạm Đăng Đan");
-        tvHandleName.setText(handleName);
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(getActivity(), "Kết nối internet không ổn định", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        avatar = "";
+        myRef.child("avatar").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                avatar = dataSnapshot.getValue(String.class);
+                Picasso.get().load(avatar).into(imgAvatar);
+                imgAvatar.setClipToOutline(true);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(getActivity(), "Kết nối internet không ổn định", Toast.LENGTH_LONG).show();
+            }
+        });
 
 //        bắt sự kiện button
         btnDarkMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "Đang phát triển", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        btnChangeUsername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openChangeHandleNameDialog(Gravity.CENTER, handleName);
             }
         });
 
@@ -178,47 +193,17 @@ public class UserInfoFragment extends Fragment {
             WindowManager.LayoutParams windowAttributes = window.getAttributes();
             windowAttributes.gravity = gravity;
             window.setAttributes(windowAttributes);
-    //        click ra ngoài để tắt
+            //        click ra ngoài để tắt
             dialog.setCancelable(true);
             return dialog;
         }
         return null;
     }
 
-    private void openChangeHandleNameDialog(int gravity, String oldHandleName) {
-        final Dialog dialog = createDialog(gravity, R.layout.layout_dialog_change_handle_name);
-
-        if(dialog == null)
-            return;
-
-        EditText editHandlerName = dialog.findViewById(R.id.dialogChangeHandleName_edt);
-        Button btnSave = dialog.findViewById(R.id.dialogChangeHandleName_btnSave);
-        Button btnCancel = dialog.findViewById(R.id.dialogChangeHandleName_btnCancel);
-
-        editHandlerName.setText(oldHandleName);
-
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String handleName = editHandlerName.getText().toString();
-                Toast.makeText(getActivity(), handleName, Toast.LENGTH_LONG).show();
-            }
-        });
-
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
-
     private void openChangePasswordDialog(int gravity) {
         final Dialog dialog = createDialog(gravity, R.layout.layout_dialog_change_password);
 
-        if(dialog == null)
+        if (dialog == null)
             return;
 
         EditText edtPassword = dialog.findViewById(R.id.dialogChangePassword_edtPassword);
