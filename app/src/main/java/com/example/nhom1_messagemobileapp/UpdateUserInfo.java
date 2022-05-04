@@ -143,9 +143,9 @@ public class UpdateUserInfo extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             Toast.makeText(context, "Cập nhật thành công", Toast.LENGTH_LONG).show();
-//                                            uploadImage();
                                             theUser.setEmail(email);
                                             updateData(theUser);
+                                            uploadImage();
                                         } else {
                                             Toast.makeText(context, "Cập nhật thất bại", Toast.LENGTH_LONG).show();
                                         }
@@ -200,8 +200,14 @@ public class UpdateUserInfo extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
                             Toast.makeText(context, "Cập nhật ảnh thành công", Toast.LENGTH_SHORT).show();
-                            String data = ref.getDownloadUrl().getResult().getPath();
-                            Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
+                            ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    String avatar = task.getResult().toString();
+                                    theUser.setAvatar(avatar);
+                                    myRef.child(uid).child("avatar").setValue(avatar);
+                                }
+                            });
                         }
                     })
 
