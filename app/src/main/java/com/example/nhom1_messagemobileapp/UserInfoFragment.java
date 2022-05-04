@@ -18,9 +18,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nhom1_messagemobileapp.entity.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -85,10 +87,9 @@ public class UserInfoFragment extends Fragment {
     private TextView tvName;
     private ImageView imgAvatar;
     private Button btnDarkMode, btnEditInfo, btnChangePassword, btnLogout;
-    private String uid = "6kBO5yFQu1Y355mxKuc1YSaLtSZ2";
-    private String email;
-    private String name;
-    private String avatar;
+    private String uid;
+    private User theUser;
+    private ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -113,35 +114,31 @@ public class UserInfoFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
+        uid = mAuth.getCurrentUser().getUid();
         myRef = database.getReference("user").child(uid);
 
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
 //        set value
-        name = "";
-        myRef.child("name").addValueEventListener(new ValueEventListener() {
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                name = dataSnapshot.getValue(String.class);
-                tvName.setText(name);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Toast.makeText(getActivity(), "Kết nối internet không ổn định", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        avatar = "";
-        myRef.child("avatar").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                avatar = dataSnapshot.getValue(String.class);
-                Picasso.get().load(avatar).into(imgAvatar);
+                theUser = dataSnapshot.getValue(User.class);
+                tvName.setText(theUser.getName());
+                Picasso.get().load(theUser.getAvatar()).into(imgAvatar);
                 imgAvatar.setClipToOutline(true);
+                progressBar.setVisibility(View.GONE);
+                imgAvatar.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
                 Toast.makeText(getActivity(), "Kết nối internet không ổn định", Toast.LENGTH_LONG).show();
+                progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -157,6 +154,8 @@ public class UserInfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intentUpdateUserInfo = new Intent(getActivity(), UpdateUserInfo.class);
+                intentUpdateUserInfo.putExtra("user", theUser);
+                intentUpdateUserInfo.putExtra("uid", uid);
                 getActivity().startActivity(intentUpdateUserInfo);
             }
         });
@@ -236,43 +235,29 @@ public class UserInfoFragment extends Fragment {
                     Toast.makeText(getActivity(), "Mật khẩu mới và mật khẩu nhập lại không giống nhau", Toast.LENGTH_LONG).show();
                     return;
                 }
-
-//                đọc email trên database realtime
-                DatabaseReference ref = database.getReference("user").child(uid);
-                ref.child("email").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        email = dataSnapshot.getValue(String.class);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                    }
-                });
-
 //                xác thực email + password vừa được nhập
-//                AuthCredential credential = EmailAuthProvider.getCredential(email, password);
-//
-//                user.reauthenticate(credential)
-//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                if (task.isSuccessful()) {
-//                                    user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<Void> task) {
-//                                            if (task.isSuccessful()) {
-//                                                Toast.makeText(getActivity(), "Cập nhật mật khẩu thành công", Toast.LENGTH_LONG).show();
-//                                            } else {
-//                                                Toast.makeText(getActivity(), "Cập nhật mật khẩu thất bại", Toast.LENGTH_LONG).show();
-//                                            }
-//                                        }
-//                                    });
-//                                } else {
-//                                    Toast.makeText(getActivity(), "Cập nhật mật khẩu thất bại", Toast.LENGTH_LONG).show();
-//                                }
-//                            }
-//                        });
+                AuthCredential credential = EmailAuthProvider.getCredential(theUser.getEmail(), password);
+                user.reauthenticate(credential)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(getActivity(), "Cập nhật mật khẩu thành công", Toast.LENGTH_LONG).show();
+                                                dialog.dismiss();
+                                            } else {
+                                                Toast.makeText(getActivity(), "Cập nhật mật khẩu thất bại", Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    Toast.makeText(getActivity(), "Cập nhật mật khẩu thất bại", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
             }
         });
 

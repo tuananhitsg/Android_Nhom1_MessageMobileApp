@@ -36,7 +36,7 @@
                 android:layout_weight="9"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:text="Tôi"
+                android:text="Chỉnh sửa thông tin"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
                 android:textSize="22dp"
@@ -46,6 +46,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="vertical">
 
             <ImageView
@@ -58,13 +59,99 @@
                 tools:src="@drawable/logo" />
 
             <ImageView
-                android:layout_marginTop="-30dp"
-                android:layout_marginLeft="40dp"
-                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="-30dp"
                 android:src="@drawable/edit_icon" />
         </LinearLayout>
-    </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="16dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/updateUserInfo_edtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/bg_white_conner_16_border_gray"
+                android:hint="Họ và tên"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="10dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="8dp"
+                android:textColorHint="#acacac" />
+
+            <EditText
+                android:id="@+id/updateUserInfo_edtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/bg_white_conner_16_border_gray"
+                android:hint="Email"
+                android:inputType="textPersonName"
+                android:paddingLeft="10dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="8dp"
+                android:textColorHint="#acacac" />
+
+            <EditText
+                android:id="@+id/updateUserInfo_edtPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/bg_white_conner_16_border_gray"
+                android:hint="Mật khẩu"
+                android:inputType="textPassword"
+                android:paddingLeft="10dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="8dp"
+                android:textColorHint="#acacac" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:gravity="center|bottom"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/updateUserInfo_btnCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/pink"
+                android:text="Hủy"
+                android:textAllCaps="false"
+                android:textColor="#ff4668"
+                android:textSize="17sp"
+                app:cornerRadius="20dp" />
+
+            <Button
+                android:id="@+id/updateUserInfo_btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:text="Lưu"
+                android:textAllCaps="false"
+                android:textSize="17sp"
+                app:cornerRadius="20dp" />
+        </LinearLayout>
+    </LinearLayout>
 </ScrollView>
