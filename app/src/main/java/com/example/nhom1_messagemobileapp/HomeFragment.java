@@ -53,33 +53,33 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        // Inflate the layout for this fragment
+//        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-        User user1 = new User(1, "Trần Văn Nhân", "");
-        User user2 = new User(2, "Trần Văn A", "");
-        List<Message> messages1 = new ArrayList<Message>();
-        messages1.add(new Message(2, user1, user2, "Có ở đó không", LocalDateTime.now()));
-        messages1.add(new Message(1, user1, user2, "Hello", LocalDateTime.of(2022, 05, 01, 11, 30)));
-
-        List<Friend> friendMessages = new ArrayList<Friend>();
-        friendMessages.add(new Friend(1, user2, messages1));
-
-
-        User user3 = new User(2, "Trần Văn B", "");
-        List<Message> messages2 = new ArrayList<Message>();
-        messages2.add(new Message(2, user1, user3, "Aloooooooooooooo", LocalDateTime.now()));
-        friendMessages.add(new Friend(2, user3, messages2));
-
-        recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerAdapter = new ChatListAdapter(getContext(), friendMessages);
-//        System.out.println(recyclerView);
-        recyclerView.setAdapter(recyclerAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        return view;
-    }
+//        User user1 = new User(1, "Trần Văn Nhân", "");
+//        User user2 = new User(2, "Trần Văn A", "");
+//        List<Message> messages1 = new ArrayList<Message>();
+//        messages1.add(new Message(2, user1, user2, "Có ở đó không", LocalDateTime.now()));
+//        messages1.add(new Message(1, user1, user2, "Hello", LocalDateTime.of(2022, 05, 01, 11, 30)));
+//
+//        List<Friend> friendMessages = new ArrayList<Friend>();
+//        friendMessages.add(new Friend(1, user2, messages1));
+//
+//
+//        User user3 = new User(2, "Trần Văn B", "");
+//        List<Message> messages2 = new ArrayList<Message>();
+//        messages2.add(new Message(2, user1, user3, "Aloooooooooooooo", LocalDateTime.now()));
+//        friendMessages.add(new Friend(2, user3, messages2));
+//
+//        recyclerView = view.findViewById(R.id.recyclerView);
+//        recyclerAdapter = new ChatListAdapter(getContext(), friendMessages);
+////        System.out.println(recyclerView);
+//        recyclerView.setAdapter(recyclerAdapter);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//        return view;
+//    }
 }

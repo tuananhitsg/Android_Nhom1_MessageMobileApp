@@ -21,15 +21,19 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 public class DemoFirebase extends AppCompatActivity {
-    private Button btnLogin, btnStorage;
+    private Button btnLogin, btnUploadStorage, btnDownloadStorage;
     private ImageView imageView;
     private FirebaseAuth mAuth;
     private Context context;
@@ -46,7 +50,8 @@ public class DemoFirebase extends AppCompatActivity {
         storageRef = rootRef.getReference();
 
         btnLogin = findViewById(R.id.btnLogin);
-        btnStorage = findViewById(R.id.btnStorage);
+        btnUploadStorage = findViewById(R.id.btnUploadStorage);
+        btnDownloadStorage = findViewById(R.id.btnDownloadStorage);
         imageView = findViewById(R.id.imageView);
 
         mAuth = FirebaseAuth.getInstance();
@@ -57,7 +62,8 @@ public class DemoFirebase extends AppCompatActivity {
                 dangKy();
             }
         });
-        btnStorage.setOnClickListener(new View.OnClickListener() {
+
+        btnUploadStorage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 StorageReference mountainsRef = storageRef.child("pet_shop.png");
@@ -84,6 +90,30 @@ public class DemoFirebase extends AppCompatActivity {
                         Toast.makeText(context, "upload thanh cong", Toast.LENGTH_LONG).show();
                     }
                 });
+            }
+        });
+
+        btnDownloadStorage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StorageReference pathReference = storageRef.child("pet_shop.png");
+
+                try {
+                    File localFile = File.createTempFile("images", "png");
+                    pathReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(context, "download thành công", Toast.LENGTH_LONG).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(context, "download that bai", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

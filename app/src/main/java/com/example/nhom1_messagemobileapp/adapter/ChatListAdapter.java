@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,7 +16,6 @@ import com.example.nhom1_messagemobileapp.ChatActivity;
 import com.example.nhom1_messagemobileapp.R;
 import com.example.nhom1_messagemobileapp.entity.Friend;
 import com.example.nhom1_messagemobileapp.utils.CustomeDateTime;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
