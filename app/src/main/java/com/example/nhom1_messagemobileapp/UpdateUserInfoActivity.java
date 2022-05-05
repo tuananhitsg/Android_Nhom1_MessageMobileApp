@@ -6,11 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,11 +36,9 @@ import com.squareup.picasso.Picasso;
 import android.net.Uri;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.util.UUID;
 
-public class UpdateUserInfo extends AppCompatActivity {
+public class UpdateUserInfoActivity extends AppCompatActivity {
     private ImageView imgLogo;
     private ImageButton btnBack;
     private Button btnSave, btnCancel;
@@ -122,15 +118,15 @@ public class UpdateUserInfo extends AppCompatActivity {
                 String email = edtEmail.getText().toString().trim();
                 String password = edtPassword.getText().toString().trim();
                 if (name.isEmpty() || name.length() <= 0)
-                    Toast.makeText(UpdateUserInfo.this, "Tên không được để trống", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateUserInfoActivity.this, "Tên không được để trống", Toast.LENGTH_SHORT).show();
                 else
                     theUser.setName(name);
 
                 if (email.isEmpty() || email.length() <= 0)
-                    Toast.makeText(UpdateUserInfo.this, "Email không được để trống", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UpdateUserInfoActivity.this, "Email không được để trống", Toast.LENGTH_LONG).show();
 
                 if (password.isEmpty() || password.length() <= 0)
-                    Toast.makeText(UpdateUserInfo.this, "Mật khẩu không được để trống", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UpdateUserInfoActivity.this, "Mật khẩu không được để trống", Toast.LENGTH_LONG).show();
                 else {
 //                xác thực email + password vừa được nhập
                     AuthCredential credential = EmailAuthProvider.getCredential(theUser.getEmail(), password);
@@ -142,10 +138,10 @@ public class UpdateUserInfo extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            Toast.makeText(context, "Cập nhật thành công", Toast.LENGTH_LONG).show();
                                             theUser.setEmail(email);
                                             updateData(theUser);
                                             uploadImage();
+                                            Toast.makeText(context, "Cập nhật thành công", Toast.LENGTH_LONG).show();
                                         } else {
                                             Toast.makeText(context, "Cập nhật thất bại", Toast.LENGTH_LONG).show();
                                         }
@@ -199,7 +195,6 @@ public class UpdateUserInfo extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
-                            Toast.makeText(context, "Cập nhật ảnh thành công", Toast.LENGTH_SHORT).show();
                             ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
@@ -210,7 +205,6 @@ public class UpdateUserInfo extends AppCompatActivity {
                             });
                         }
                     })
-
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {

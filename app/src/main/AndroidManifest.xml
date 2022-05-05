@@ -13,7 +13,7 @@
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".UpdateUserInfo"
+            android:name=".UpdateUserInfoActivity"
             android:exported="false" />
         <activity
             android:name=".WelcomeActivity"
