@@ -10,6 +10,9 @@ public class Message implements Serializable {
     private String content;
     private LocalDateTime time;
 
+    public Message() {
+    }
+
     public Message(int id, User from, User to, String content, LocalDateTime time) {
         this.id = id;
         this.from = from;
@@ -56,5 +59,16 @@ public class Message implements Serializable {
 
     public void setTime(LocalDateTime time) {
         this.time = time;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", from=" + from +
+                ", to=" + to +
+                ", content='" + content + '\'' +
+                ", time=" + time +
+                '}';
     }
 }

@@ -41,7 +41,6 @@ import com.squareup.picasso.Picasso;
  * create an instance of this fragment.
  */
 public class UserInfoFragment extends Fragment {
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -51,8 +50,11 @@ public class UserInfoFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    public UserInfoFragment(String uid) {
+        this.uid = uid;
+    }
+
     public UserInfoFragment() {
-        // Required empty public constructor
     }
 
     /**
@@ -82,10 +84,11 @@ public class UserInfoFragment extends Fragment {
         }
     }
 
+    private String uid = "6kBO5yFQu1Y355mxKuc1YSaLtSZ2";
+
     private TextView tvName;
     private ImageView imgAvatar;
     private Button btnDarkMode, btnEditInfo, btnChangePassword, btnLogout;
-    private String uid = "6kBO5yFQu1Y355mxKuc1YSaLtSZ2";
     private String email;
     private String name;
     private String avatar;
