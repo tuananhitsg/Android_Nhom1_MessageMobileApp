@@ -16,6 +16,7 @@ import com.example.nhom1_messagemobileapp.ChatActivity;
 import com.example.nhom1_messagemobileapp.R;
 import com.example.nhom1_messagemobileapp.entity.User;
 import com.example.nhom1_messagemobileapp.utils.CustomeDateTime;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         holder.txt_name.setText(userMessage.getName());
         holder.txt_message.setText(userMessage.getMessages().get(0).getContent());
         holder.txt_time.setText(CustomeDateTime.HMFormat(userMessage.getMessages().get(0).getTime()));
+        Picasso.get().load(userMessage.getAvatar()).into(holder.img_avatar_friend);
         holder.itemView.setOnClickListener(view1 -> {
             Intent intent = new Intent(context, ChatActivity.class);
             Bundle bundle = new Bundle();
@@ -88,7 +90,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 //        return componentList;
 //    }
 //
-//    public void setComponentList(List<CardComponent> componentList) {
-//        this.componentList = componentList;
-//    }
+    public void setUserMessages(List<User> userMessages) {
+        this.userMessages = userMessages;
+        notifyDataSetChanged();
+    }
 }

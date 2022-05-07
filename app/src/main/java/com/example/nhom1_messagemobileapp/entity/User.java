@@ -9,6 +9,7 @@ import java.util.List;
 // tạo tạm =))
 @IgnoreExtraProperties
 public class User implements Serializable {
+    private String uid;
     private String name;
     private String email;
     private String avatar;
@@ -52,6 +53,14 @@ public class User implements Serializable {
 
     public User() {
         this.messages = new ArrayList<>();
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public User(String name, String email, String avatar) {

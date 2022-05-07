@@ -51,47 +51,4 @@ public class UserFirebaseDAO {
 //        return user.get();
 //    }
 
-//    public class getUserByUid extends AsyncTask<String, String, User> {
-//
-//        private final String uid;
-//
-//        public getUserByUid(String uid){
-//            this.uid = uid;
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected User doInBackground (String...params){
-//            AtomicReference<User> user = new AtomicReference<>();
-//            CountDownLatch latch = new CountDownLatch(1);
-//            mDatabase.child(uid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DataSnapshot> task) {
-//                    if (!task.isSuccessful()) {
-//                        Log.e("firebase", "Error getting data", task.getException());
-//                    }
-//                    else {
-//                        user.set(task.getResult().getValue(User.class));
-//                        System.out.println(user.get());
-//                    }
-//                    latch.countDown();
-//                }
-//            });
-//            try {
-//                latch.await();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            return user.get();
-//        }
-//
-//        @Override
-//        protected void onPostExecute (User user){
-//
-//        }
-//    }
 }

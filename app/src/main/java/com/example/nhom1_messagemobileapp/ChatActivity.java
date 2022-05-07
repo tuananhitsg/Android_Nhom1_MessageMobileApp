@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Editable;
@@ -13,6 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nhom1_messagemobileapp.adapter.ChatListAdapter;
@@ -27,12 +30,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
+import java.util.concurrent.CountDownLatch;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -46,7 +53,7 @@ public class ChatActivity extends AppCompatActivity {
     private DatabaseReference refMessage;
     private DatabaseReference refUser;
     private User myUser;
-    private User friendUser;
+    private User friend;
 
     public ChatActivity(String uid){
         this.uid = uid;
@@ -66,45 +73,24 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         Bundle bundle = getIntent().getExtras();
-        //Friend friend = (Friend) bundle.getSerializable("friend");
-        //System.out.println(friend);
+        friend = (User) bundle.getSerializable("friend");
+        System.out.println(friend);
+
+        ImageView imgAvt = findViewById(R.id.img_avatar);
+        Picasso.get().load(friend.getAvatar()).into(imgAvt);
+
+        TextView txtNameFriend = findViewById(R.id.txt_name_friend);
+        txtNameFriend.setText(friend.getName());
 
 
-//        User user1 = new User(1, "Trần Văn Nhân", "");
-//        User user2 = new User(2, "Trần Văn A", "");
-//        List<Message> messages1 = new ArrayList<Message>();
-//        messages1.add(new Message(1, user2, user1, "Hello", LocalDateTime.of(2022, 05, 01, 11, 30)));
-//        messages1.add(new Message(2, user2, user1, "Có ở đó không? Có ở đó không? Có ở đó không? Có ở đó không? Có ở đó không?",
-//                                    LocalDateTime.of(2022, 05, 01, 11, 40)));
-//        messages1.add(new Message(3, user1, user2, "Có việc gì vậy?", LocalDateTime.now()));
-//        messages1.add(new Message(1, user2, user1, "Hello", LocalDateTime.of(2022, 05, 01, 11, 30)));
-//        messages1.add(new Message(2, user2, user1, "Có ở đó không? Có ở đó không? Có ở đó không? Có ở đó không? Có ở đó không?",
-//                LocalDateTime.of(2022, 05, 01, 11, 40)));
-//        messages1.add(new Message(3, user1, user2, "Có việc gì vậy?", LocalDateTime.now()));
-//        messages1.add(new Message(1, user2, user1, "Hello", LocalDateTime.of(2022, 05, 01, 11, 30)));
-//        messages1.add(new Message(2, user2, user1, "Có ở đó không? Có ở đó không? Có ở đó không? Có ở đó không? Có ở đó không?",
-//                LocalDateTime.of(2022, 05, 01, 11, 40)));
-//        messages1.add(new Message(3, user1, user2, "Có việc gì vậy?", LocalDateTime.now()));
-//        messages1.add(new Message(1, user2, user1, "Hello", LocalDateTime.of(2022, 05, 01, 11, 30)));
-//        messages1.add(new Message(2, user2, user1, "Có ở đó không? Có ở đó không? Có ở đó không? Có ở đó không? Có ở đó không?",
-//                LocalDateTime.of(2022, 05, 01, 11, 40)));
-//        messages1.add(new Message(3, user1, user2, "Có việc gì vậy?", LocalDateTime.now()));
-//        messages1.add(new Message(1, user2, user1, "Hello", LocalDateTime.of(2022, 05, 01, 11, 30)));
-//        messages1.add(new Message(2, user2, user1, "Có ở đó không? Có ở đó không? Có ở đó không? Có ở đó không? Có ở đó không?",
-//                LocalDateTime.of(2022, 05, 01, 11, 40)));
-//        messages1.add(new Message(3, user1, user2, "Có việc gì vậy?", LocalDateTime.now()));
-//        messages1.add(new Message(1, user2, user1, "Hello", LocalDateTime.of(2022, 05, 01, 11, 30)));
-//        messages1.add(new Message(2, user2, user1, "Có ở đó không? Có ở đó không? Có ở đó không? Có ở đó không? Có ở đó không?",
-//                LocalDateTime.of(2022, 05, 01, 11, 40)));
-//        messages1.add(new Message(3, user1, user2, "Có việc gì vậy?", LocalDateTime.now()));
-//
-//        recyclerView = findViewById(R.id.recyclerView);
-//        recyclerAdapter = new MessageListAdapter(this, messages1, user1);
-//        recyclerView.setAdapter(recyclerAdapter);
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-////        linearLayoutManager.setReverseLayout(true);
-////        linearLayoutManager.setStackFromEnd(true);
-//        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerAdapter = new MessageListAdapter(this, new ArrayList<>(), myUser);
+        recyclerView.setAdapter(recyclerAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        ShowListMessageTask showListMessageTask = new ShowListMessageTask();
+        showListMessageTask.execute();
 
         EditText edtMessage = findViewById(R.id.input);
         edtMessage.addTextChangedListener(new TextWatcher() {
@@ -144,7 +130,7 @@ public class ChatActivity extends AppCompatActivity {
         btnAction.setOnClickListener(v -> {
 
         });
-        System.out.println("hello111111111111");
+
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         refMessage = database.getReference("message");
         refUser = database.getReference("user");
@@ -158,7 +144,58 @@ public class ChatActivity extends AppCompatActivity {
             }
             else {
                 myUser = task.getResult().getValue(User.class);
+                myUser.setUid(uid);
             }
         });
+    }
+
+    public class ShowListMessageTask extends AsyncTask<String, String, List<Message>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected List<Message> doInBackground (String...params){
+            List<Message> messages = new ArrayList<>();
+            refMessage.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    UserFirebaseDAO userFirebaseDAO = new UserFirebaseDAO();
+                    for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                        Message message = new Message();
+                        String content = snapshot.child("content").getValue(String.class);
+                        String uidFrom = snapshot.child("from").getValue(String.class);
+                        String uidTo = snapshot.child("to").getValue(String.class);
+                        Long timestamp = snapshot.child("time").getValue(Long.class);
+//                    Log.d("date", timestamp.toString());
+                        LocalDateTime time = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp),
+                                TimeZone.getDefault().toZoneId());
+                        message.setContent(content);
+                        message.setTime(time);
+                        if(uidFrom.equals(myUser.getUid())){
+
+                        }else if(uidTo .equals(myUser.getUid())){
+
+                        }
+
+                    }
+//                    HomeFragment.ShowListUserTask showListUserTask = new HomeFragment.ShowListUserTask(userLastMessages);
+//                    showListUserTask.execute();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            });
+            return messages;
+        }
+
+        @Override
+        protected void onPostExecute (List<Message> messages){
+            Log.d("firebase messages", messages.toString());
+        }
     }
 }

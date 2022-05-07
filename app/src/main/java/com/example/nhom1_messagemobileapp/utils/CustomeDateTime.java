@@ -17,7 +17,11 @@ public class CustomeDateTime {
     }
 
     public static String HMFormat(LocalDateTime dt){
-        return hMFormat.format(dt);
+        try {
+            return hMFormat.format(dt);
+        }catch (Exception e){
+            return "";
+        }
     }
 
 
