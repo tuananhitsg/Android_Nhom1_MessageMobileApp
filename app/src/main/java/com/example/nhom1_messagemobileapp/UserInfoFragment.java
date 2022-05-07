@@ -1,9 +1,12 @@
 package com.example.nhom1_messagemobileapp;
 
 import android.app.Dialog;
+import android.app.UiModeManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -95,6 +98,7 @@ public class UserInfoFragment extends Fragment {
     private String avatar;
     private User theUser;
     private ProgressBar progressBar;
+    private boolean flagDarkMode = false;
 
     private FirebaseAuth mAuth;
     private FirebaseUser account;
@@ -136,8 +140,10 @@ public class UserInfoFragment extends Fragment {
 //                set link image
                 Picasso.get().load(theUser.getAvatar()).into(imgAvatar);
                 imgAvatar.setClipToOutline(true);
+
                 progressBar.setVisibility(View.GONE);
                 imgAvatar.setVisibility(View.VISIBLE);
+                btnEditInfo.setEnabled(true);
             }
 
             @Override
@@ -151,24 +157,32 @@ public class UserInfoFragment extends Fragment {
         btnDarkMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Đang phát triển", Toast.LENGTH_LONG).show();
+                setNightMode(getActivity());
             }
         });
 
         btnEditInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentUpdateUserInfo = new Intent(getActivity(), UpdateUserInfo.class);
-                intentUpdateUserInfo.putExtra("user", theUser);
-                intentUpdateUserInfo.putExtra("uid", uid);
-                getActivity().startActivity(intentUpdateUserInfo);
+                if (progressBar.getVisibility() == View.GONE) {
+                    Intent intentUpdateUserInfo = new Intent(getActivity(), UpdateUserInfoActivity.class);
+                    intentUpdateUserInfo.putExtra("user", theUser);
+                    intentUpdateUserInfo.putExtra("uid", uid);
+                    getActivity().startActivity(intentUpdateUserInfo);
+                } else {
+                    Toast.makeText(getActivity(), "Đăng lấy thông tin của bạn vui lòng đợi ...", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openChangePasswordDialog(Gravity.CENTER);
+                if (progressBar.getVisibility() == View.GONE) {
+                    openChangePasswordDialog(Gravity.CENTER);
+                } else {
+                    Toast.makeText(getActivity(), "Đăng lấy thông tin của bạn vui lòng đợi ...", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -274,5 +288,31 @@ public class UserInfoFragment extends Fragment {
         });
 
         dialog.show();
+    }
+
+    public void setNightMode(Context target){
+        int whiteColor = Color.parseColor("#ffffff");
+        int blackColor = Color.parseColor("#000000");
+        int seletedColor;
+        UiModeManager uiManager = (UiModeManager) target.getSystemService(Context.UI_MODE_SERVICE);
+
+        if (Build.VERSION.SDK_INT <= 22) {
+            uiManager.enableCarMode(0);
+        }
+
+        if (!flagDarkMode) {
+            uiManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
+            seletedColor = whiteColor;
+            flagDarkMode = false;
+        } else {
+            uiManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
+            seletedColor = blackColor;
+            flagDarkMode = true;
+        }
+            tvName.setTextColor(seletedColor);
+            btnDarkMode.setTextColor(seletedColor);
+            btnEditInfo.setTextColor(seletedColor);
+            btnChangePassword.setTextColor(seletedColor);
+            btnLogout.setTextColor(seletedColor);
     }
 }
