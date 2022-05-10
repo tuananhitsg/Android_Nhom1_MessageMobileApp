@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.example.nhom1_messagemobileapp.R;
 import com.example.nhom1_messagemobileapp.adapter.ChatListAdapter;
-import com.example.nhom1_messagemobileapp.entity.Friend;
 import com.example.nhom1_messagemobileapp.entity.Message;
 import com.example.nhom1_messagemobileapp.entity.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -37,12 +36,21 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mPager;
     private BottomNavigationView navigationView;
     private ScreenSlidePagerAdapter pagerAdapter;
+    private String uid = "";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        try {
+            uid = getIntent().getExtras().getString("uid");
+            System.out.println(uid);
+        }catch (Exception e){
+
+        }
+
 
         mPager = findViewById(R.id.pager);
         navigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
@@ -102,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 return new DanhBaFragment();
             }
             if (position == 2) {
-                return new UserInfoFragment();
+                return new UserInfoFragment(uid);
             }
             return null;
         }

@@ -14,8 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nhom1_messagemobileapp.ChatActivity;
 import com.example.nhom1_messagemobileapp.R;
-import com.example.nhom1_messagemobileapp.entity.Friend;
+import com.example.nhom1_messagemobileapp.entity.User;
 import com.example.nhom1_messagemobileapp.utils.CustomeDateTime;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,16 +26,16 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     private static final String TAG = "ChatListAdapter";
     private Context context;
 
-    List<Friend> friendMessages;
+    List<User> userMessages;
 
     public ChatListAdapter(Context context) {
         this.context = context;
-        friendMessages = new ArrayList<>();
+        userMessages = new ArrayList<>();
     }
 
-    public ChatListAdapter(Context context, List<Friend> friendMessages) {
+    public ChatListAdapter(Context context, List<User> userMessages) {
         this.context = context;
-        this.friendMessages = friendMessages;
+        this.userMessages = userMessages;
     }
 
     @NonNull
@@ -49,14 +50,15 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Friend friendMessage = friendMessages.get(position);
-        holder.txt_name.setText(friendMessage.getUser().getName());
-        holder.txt_message.setText(friendMessage.getMessages().get(0).getContent());
-        holder.txt_time.setText(CustomeDateTime.HMFormat(friendMessage.getMessages().get(0).getTime()));
+        User userMessage = userMessages.get(position);
+        holder.txt_name.setText(userMessage.getName());
+        holder.txt_message.setText(userMessage.getMessages().get(0).getContent());
+        holder.txt_time.setText(CustomeDateTime.HMFormat(userMessage.getMessages().get(0).getTime()));
+        Picasso.get().load(userMessage.getAvatar()).into(holder.img_avatar_friend);
         holder.itemView.setOnClickListener(view1 -> {
             Intent intent = new Intent(context, ChatActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("friend", friendMessage);
+            bundle.putSerializable("friend", userMessage);
             intent.putExtras(bundle);
             context.startActivity(intent);
         });
@@ -66,7 +68,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return friendMessages.size();
+        return userMessages.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
@@ -88,7 +90,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 //        return componentList;
 //    }
 //
-//    public void setComponentList(List<CardComponent> componentList) {
-//        this.componentList = componentList;
-//    }
+    public void setUserMessages(List<User> userMessages) {
+        this.userMessages = userMessages;
+        notifyDataSetChanged();
+    }
 }
