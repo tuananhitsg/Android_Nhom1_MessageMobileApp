@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
-    android:background="@drawable/bg_white_conner_16"
+    android:background="@drawable/bg_popup_conner_16"
     android:orientation="vertical">
 
 
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Nhập gmail của bạn "
-            android:textColor="@color/black"
+            android:textColor="@color/text_color"
             android:textSize="17sp" />
 
         <EditText

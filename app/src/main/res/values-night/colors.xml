@@ -10,11 +10,10 @@
     <color name="primary">#07DB89</color>
     <color name="pink">#ffe8ed</color>
 
-<!--    design dark mode-->
-    <color name="text_color">#FF000000</color>
+    <!--    design dark mode-->
+    <color name="text_color">#FFFFFFFF</color>
     <color name="text_color_hint">#acacac</color>
     <color name="subText_color">#b7b7b7</color>
-    <color name="background_color">#FFFFFFFF</color>
-    <color name="background_color_popup">#FFFFFFFF</color>
-
+    <color name="background_color">#27292c</color>
+    <color name="background_color_popup">#28292d</color>
 </resources>

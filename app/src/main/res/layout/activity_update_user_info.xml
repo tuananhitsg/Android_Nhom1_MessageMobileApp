@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     tools:context=".UpdateUserInfoActivity">
 
     <LinearLayout
@@ -38,7 +39,7 @@
                 android:paddingBottom="4dp"
                 android:text="Chỉnh sửa thông tin"
                 android:textAlignment="textStart"
-                android:textColor="@color/black"
+                android:textColor="@color/text_color"
                 android:textSize="22dp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -82,6 +83,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="2dp"
                 android:background="@drawable/bg_white_conner_16_border_gray"
+                android:textColor="@color/text_color"
                 android:hint="Họ và tên"
                 android:inputType="textEmailAddress"
                 android:paddingLeft="10dp"

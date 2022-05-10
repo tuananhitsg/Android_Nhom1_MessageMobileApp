@@ -98,7 +98,9 @@ public class UserInfoFragment extends Fragment {
     private String avatar;
     private User theUser;
     private ProgressBar progressBar;
+
     private boolean flagDarkMode = false;
+    private UiModeManager uiModeManager;
 
     private FirebaseAuth mAuth;
     private FirebaseUser account;
@@ -109,6 +111,7 @@ public class UserInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_info, container, false);
+        view.setForceDarkAllowed(true);
         // Inflate the layout for this fragment
 
 //        tìm đối tượng trong view
@@ -118,7 +121,7 @@ public class UserInfoFragment extends Fragment {
         btnEditInfo = view.findViewById(R.id.userInfo_btnEditInfo);
         btnChangePassword = view.findViewById(R.id.userInfo_btnChangePassword);
         btnLogout = view.findViewById(R.id.userInfo_btnLogout);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        progressBar = view.findViewById(R.id.progressBar);
 
         if (progressBar != null) {
             progressBar.setVisibility(View.VISIBLE);

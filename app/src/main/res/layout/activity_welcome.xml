@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/background_color"
     tools:context=".WelcomeActivity">
 
     <ImageView
@@ -20,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/bg_white_conner_16"
+        android:background="@drawable/bg_popup_conner_16"
         android:text="Bắt đầu nhắn tin"
         android:textAllCaps="false"
         android:textSize="17sp" />
