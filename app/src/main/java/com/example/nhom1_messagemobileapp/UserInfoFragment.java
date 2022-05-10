@@ -88,7 +88,7 @@ public class UserInfoFragment extends Fragment {
         }
     }
 
-    private String uid = "6kBO5yFQu1Y355mxKuc1YSaLtSZ2";
+    private String uid;
 
     private TextView tvName;
     private ImageView imgAvatar;
@@ -237,7 +237,6 @@ public class UserInfoFragment extends Fragment {
                 String newPassword = edtNewPassword.getText().toString().trim();
                 String reNewPassword = edtReNewPassword.getText().toString().trim();
 
-                Toast.makeText(getActivity(), password, Toast.LENGTH_LONG).show();
                 if (password.isEmpty() || password.length() <= 0) {
                     Toast.makeText(getActivity(), "Mật khẩu không được để trống", Toast.LENGTH_LONG).show();
                     return;
