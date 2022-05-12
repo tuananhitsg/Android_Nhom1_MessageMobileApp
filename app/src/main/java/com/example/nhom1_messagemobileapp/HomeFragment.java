@@ -13,9 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.nhom1_messagemobileapp.adapter.ChatListAdapter;
-import com.example.nhom1_messagemobileapp.dao.UserFirebaseDAO;
+import com.example.nhom1_messagemobileapp.dao.UserSqlDAO;
 import com.example.nhom1_messagemobileapp.entity.Message;
 import com.example.nhom1_messagemobileapp.entity.User;
+import com.example.nhom1_messagemobileapp.utils.converter.TimestampConverter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,7 +120,6 @@ public class HomeFragment extends Fragment {
         refMessage.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                UserFirebaseDAO userFirebaseDAO = new UserFirebaseDAO();
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     Message message = new Message();
                     System.out.println(snapshot);
@@ -127,8 +128,7 @@ public class HomeFragment extends Fragment {
                     String uidTo = snapshot.child("to").getValue(String.class);
                     Long timestamp = snapshot.child("time").getValue(Long.class);
 //                    Log.d("date", timestamp.toString());
-                    LocalDateTime time = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp),
-                                    TimeZone.getDefault().toZoneId());
+                    Date time = TimestampConverter.fromTimestamp(timestamp);
                     message.setContent(content);
                     message.setTime(time);
                     if(uidFrom.equals(uid)){

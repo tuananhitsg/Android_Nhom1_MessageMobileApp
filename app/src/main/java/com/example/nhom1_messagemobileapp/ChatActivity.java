@@ -7,24 +7,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.nhom1_messagemobileapp.adapter.ChatListAdapter;
 import com.example.nhom1_messagemobileapp.adapter.MessageListAdapter;
-import com.example.nhom1_messagemobileapp.dao.UserFirebaseDAO;
+import com.example.nhom1_messagemobileapp.dao.UserSqlDAO;
 import com.example.nhom1_messagemobileapp.entity.Message;
 import com.example.nhom1_messagemobileapp.entity.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.nhom1_messagemobileapp.utils.converter.TimestampConverter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,11 +31,9 @@ import com.squareup.picasso.Picasso;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
-import java.util.concurrent.CountDownLatch;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -159,10 +153,9 @@ public class ChatActivity extends AppCompatActivity {
         @Override
         protected List<Message> doInBackground (String...params){
             List<Message> messages = new ArrayList<>();
-            refMessage.addValueEventListener(new ValueEventListener() {
+            ChatActivity.this.refMessage.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    UserFirebaseDAO userFirebaseDAO = new UserFirebaseDAO();
                     for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                         Message message = new Message();
                         String content = snapshot.child("content").getValue(String.class);
@@ -170,8 +163,7 @@ public class ChatActivity extends AppCompatActivity {
                         String uidTo = snapshot.child("to").getValue(String.class);
                         Long timestamp = snapshot.child("time").getValue(Long.class);
 //                    Log.d("date", timestamp.toString());
-                        LocalDateTime time = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp),
-                                TimeZone.getDefault().toZoneId());
+                        Date time = TimestampConverter.fromTimestamp(timestamp);
                         message.setContent(content);
                         message.setTime(time);
                         if(uidFrom.equals(myUser.getUid())){

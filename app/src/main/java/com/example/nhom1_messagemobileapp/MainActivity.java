@@ -6,30 +6,18 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import com.example.nhom1_messagemobileapp.R;
-import com.example.nhom1_messagemobileapp.adapter.ChatListAdapter;
-import com.example.nhom1_messagemobileapp.entity.Message;
+import com.example.nhom1_messagemobileapp.database.Database;
 import com.example.nhom1_messagemobileapp.entity.User;
+import com.example.nhom1_messagemobileapp.service.SyncDatabaseService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigationView;
     private ScreenSlidePagerAdapter pagerAdapter;
     private String uid = "";
+    private Database database;
 
 
     @Override
@@ -50,7 +39,19 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
 
         }
+        database = Room.databaseBuilder(this, Database.class, "mydb")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
+                .build();
 
+        
+//        database.getUserSqlDAO().insert();
+        Log.d("sqlite", database.getUserSqlDAO().findAll().toString());
+        Intent intent = new Intent(this, SyncDatabaseService.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("uid", uid);
+        intent.putExtras(bundle);
+        startService(intent);
 
         mPager = findViewById(R.id.pager);
         navigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);

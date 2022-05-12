@@ -1,18 +1,28 @@
 package com.example.nhom1_messagemobileapp.entity;
 
+
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-// tạo tạm =))
+
 @IgnoreExtraProperties
+@Entity(tableName = "users")
 public class User implements Serializable {
+    @PrimaryKey
+    @NonNull
     private String uid;
     private String name;
     private String email;
     private String avatar;
+    @Ignore
     private List<Message> messages;
 
     public String getName() {

@@ -1,19 +1,39 @@
 package com.example.nhom1_messagemobileapp.entity;
 
+
+import static androidx.room.ForeignKey.CASCADE;
+
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.example.nhom1_messagemobileapp.utils.converter.TimestampConverter;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
+@Entity(tableName = "messages")
 public class Message implements Serializable {
+    @PrimaryKey(autoGenerate = true)
     private int id;
-    private User from;
-    private User to;
+
+    @ForeignKey(entity = User.class, parentColumns = "uid", childColumns = "from", onDelete = CASCADE)
+    private String from;
+
+    @ForeignKey(entity = User.class, parentColumns = "uid", childColumns = "to", onDelete = CASCADE)
+    private String to;
     private String content;
-    private LocalDateTime time;
+
+    @TypeConverters({TimestampConverter.class})
+    private Date time;
 
     public Message() {
     }
 
-    public Message(int id, User from, User to, String content, LocalDateTime time) {
+    public Message(int id, String from, String to, String content, Date time) {
         this.id = id;
         this.from = from;
         this.to = to;
@@ -29,19 +49,19 @@ public class Message implements Serializable {
         this.id = id;
     }
 
-    public User getFrom() {
+    public String getFrom() {
         return from;
     }
 
-    public void setFrom(User from) {
+    public void setFrom(String from) {
         this.from = from;
     }
 
-    public User getTo() {
+    public String getTo() {
         return to;
     }
 
-    public void setTo(User to) {
+    public void setTo(String to) {
         this.to = to;
     }
 
@@ -53,11 +73,11 @@ public class Message implements Serializable {
         this.content = content;
     }
 
-    public LocalDateTime getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 
