@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mPager;
     private BottomNavigationView navigationView;
     private ScreenSlidePagerAdapter pagerAdapter;
-    private String uid = "";
+    private String uid = "pKtiff3DLPPWtNNOnN906uzELha2";
     private Database database;
 
 
@@ -39,10 +39,7 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
 
         }
-        database = Room.databaseBuilder(this, Database.class, "mydb")
-                .fallbackToDestructiveMigration()
-                .allowMainThreadQueries()
-                .build();
+        database = Database.getInstance(this);
 
         
 //        database.getUserSqlDAO().insert();

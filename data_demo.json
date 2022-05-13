@@ -1,25 +1,21 @@
 {
-    "pKtiff3DLPPWtNNOnN906uzELha2": [ 
-        {
-            "id": "kajhksasjahsa187821",
-            "uid": "uizow12pnkWR1ONG9zCCqwpbLAv2",
-            "content": "Are there?",
-            "time": "1651723915",
-            "type": "send"
-        },
-        {
-            "id": "jassakkasjjaskasjk",
-            "uid": "uizow12pnkWR1ONG9zCCqwpbLAv2",
-            "content": "I am here",
-            "time": "1651723915",
-            "type": "receive"
-        },
-        {
-            "id": "klaskslaklaslsasjkas",
-            "uid": "6kBO5yFQu1Y355mxKuc1YSaLtSZ2",
-            "content": "Helllooooo",
-            "time": "1651723915",
-            "type": "receive"
+    "pKtiff3DLPPWtNNOnN906uzELha2": {
+        "16524399172940": {
+            "id": "16524399172940",
+            "content": "hi",
+            "fromUid": "pKtiff3DLPPWtNNOnN906uzELha2",
+            "time": {
+              "date": 13,
+              "day": 5,
+              "hours": 18,
+              "minutes": 5,
+              "month": 4,
+              "seconds": 17,
+              "time": 1652439917294,
+              "timezoneOffset": -420,
+              "year": 122
+            },
+            "toUid": "6kBO5yFQu1Y355mxKuc1YSaLtSZ2"
         }
-    ]
+    }
 }

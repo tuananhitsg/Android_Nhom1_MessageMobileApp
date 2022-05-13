@@ -21,6 +21,8 @@ import com.example.nhom1_messagemobileapp.R;
 import com.example.nhom1_messagemobileapp.entity.Message;
 import com.example.nhom1_messagemobileapp.entity.User;
 import com.example.nhom1_messagemobileapp.utils.CustomeDateTime;
+import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,8 @@ import java.util.List;
 public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter.ViewHolder>{
 
     private static final String TAG = "ChatListAdapter";
-    private User user;
+    private User friend;
+    private String uid;
     private Context context;
 
     List<Message> messages;
@@ -36,12 +39,21 @@ public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter
     public MessageListAdapter(Context context) {
         this.context = context;
         messages = new ArrayList<>();
+        uid = FirebaseAuth.getInstance().getUid();
     }
 
-    public MessageListAdapter(Context context, List<Message> messages, User user) {
+    public MessageListAdapter(Context context, User friend) {
         this.context = context;
+        this.friend = friend;
+        messages = new ArrayList<>();
+        uid = FirebaseAuth.getInstance().getUid();
+    }
+
+    public MessageListAdapter(Context context, User friend, List<Message> messages) {
+        this.context = context;
+        this.friend = friend;
         this.messages = messages;
-        this.user = user;
+        uid = FirebaseAuth.getInstance().getUid();
     }
 
     @NonNull
@@ -58,8 +70,10 @@ public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter
     public void onBindViewHolder(@NonNull MessageListAdapter.ViewHolder holder, int position) {
         Message message = messages.get(position);
         holder.txt_message.setText(message.getContent());
-        System.out.println(user.equals(message.getFrom()));
-        if(user.equals(message.getFrom())){
+        System.out.println(uid.equals(message.getFromUid()));
+
+
+        if(uid.equals(message.getFromUid())){
             ConstraintSet constraintSet = new ConstraintSet();
             constraintSet.clone(holder.container_message);
             constraintSet.connect(holder.txt_message.getId(),ConstraintSet.RIGHT,holder.container_message.getId(),ConstraintSet.RIGHT,0);
@@ -81,7 +95,7 @@ public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter
             constraintSet.connect(holder.txt_message.getId(),ConstraintSet.LEFT,holder.card_avatar_friend.getId(), ConstraintSet.RIGHT,0);
             constraintSet.applyTo(holder.container_message);
         }
-//        Picasso.get().load(friendMessage.getUser().getImage()).into(holder.img_avatar_friend);
+        Picasso.get().load(friend.getAvatar()).into(holder.img_avatar_friend);
     }
 
 
@@ -111,4 +125,12 @@ public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter
 
     }
 
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+        notifyDataSetChanged();
+    }
 }

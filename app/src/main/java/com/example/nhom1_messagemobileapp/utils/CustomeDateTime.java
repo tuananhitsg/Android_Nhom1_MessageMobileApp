@@ -32,7 +32,7 @@ public class CustomeDateTime {
 
     public static String HMFormat(Date d){
         try {
-            return datetimeFormat.format(d);
+            return hMFormat.format(d);
         } catch (Exception e) {
             e.printStackTrace();
         }

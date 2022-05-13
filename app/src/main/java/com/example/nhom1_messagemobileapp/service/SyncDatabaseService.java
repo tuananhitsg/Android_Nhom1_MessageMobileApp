@@ -5,17 +5,27 @@ import android.content.Intent;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.nhom1_messagemobileapp.HomeFragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.room.Room;
+
+import com.example.nhom1_messagemobileapp.dao.MessageSqlDAO;
+import com.example.nhom1_messagemobileapp.dao.UserSqlDAO;
+import com.example.nhom1_messagemobileapp.database.Database;
 import com.example.nhom1_messagemobileapp.entity.Message;
+import com.example.nhom1_messagemobileapp.entity.User;
 import com.example.nhom1_messagemobileapp.utils.converter.TimestampConverter;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,8 +49,12 @@ public class SyncDatabaseService extends IntentService {
     // TODO: Rename parameters
     private static final String EXTRA_PARAM1 = "com.example.nhom1_messagemobileapp.service.extra.PARAM1";
     private static final String EXTRA_PARAM2 = "com.example.nhom1_messagemobileapp.service.extra.PARAM2";
-    private FirebaseDatabase database;
+    private FirebaseDatabase firebaseDatabase;
     private String uid;
+    private Database sqlDatabase;
+    private MessageSqlDAO messageSqlDAO;
+    private UserSqlDAO userSqlDAO;
+    List<User> users = new ArrayList<>();
 
     public SyncDatabaseService() {
         super("SyncDatabaseService");
@@ -82,50 +96,127 @@ public class SyncDatabaseService extends IntentService {
         if (intent == null) {
             return;
         }
-        database = FirebaseDatabase.getInstance();
-        refMessage = database.getReference("message");
-        refUser = database.getReference("user");
+
+        sqlDatabase = Room.databaseBuilder(this, Database.class, "mydb")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
+                .build();
+        messageSqlDAO = sqlDatabase.getMessageSqlDAO();
+        userSqlDAO = sqlDatabase.getUserSqlDAO();
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        refMessage = firebaseDatabase.getReference("message");
+        refUser = firebaseDatabase.getReference("user");
         uid = intent.getExtras().getString("uid");
         Log.e("uid", uid);
-        getFriends();
+        sync();
     }
 
-    public void getFriends(){
-        Map<String, Message> userLastMessages = new HashMap<>();
+    public void sync(){
+        // sync user
 
-        refMessage.addValueEventListener(new ValueEventListener() {
+        syncUsers();
+        // sync messages
+        syncMessages();
+    }
+
+    public  void syncMessages(){
+        refMessage.child(uid).addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                    Message message = new Message();
-                    System.out.println(snapshot);
-                    String content = snapshot.child("content").getValue(String.class);
-                    String uidFrom = snapshot.child("from").getValue(String.class);
-                    String uidTo = snapshot.child("to").getValue(String.class);
-                    Long timestamp = snapshot.child("time").getValue(Long.class);
-//                    Log.d("date", timestamp.toString());
-                    Date time = TimestampConverter.fromTimestamp(timestamp);
-                    message.setContent(content);
-                    message.setTime(time);
-                    message.setFrom(uidFrom);
-                    message.setTo(uidTo);
-                    if(uidFrom.equals(uid)){
-                        userLastMessages.put(uidTo, message);
-                    }else if(uidTo.equals(uid)){
-                        userLastMessages.put(uidFrom, message);
-                    }
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                String fromUid = snapshot.child("fromUid").getValue(String.class);
+                String toUid = snapshot.child("toUid").getValue(String.class);
+                if(!userSqlDAO.checkExits(fromUid)){
+                    refUser.child(fromUid).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            User friend = new User(snapshot);
+                            userSqlDAO.insertOrUpdate(friend);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {}
+                    });
                 }
-                Log.e("friends", userLastMessages.toString());
-//                HomeFragment.ShowListUserTask showListUserTask = new HomeFragment.ShowListUserTask(userLastMessages);
-//                showListUserTask.execute();
+                if(!userSqlDAO.checkExits(toUid)){
+                    refUser.child(toUid).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            User friend = new User(snapshot);
+                            userSqlDAO.insertOrUpdate(friend);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {}
+                    });
+                }
+
+                if(!messageSqlDAO.checkExits(snapshot.getKey())){
+                    Log.e("add message", snapshot.toString());
+//                    Message message = new Message(snapshot);
+                    Message message = snapshot.getValue(Message.class);
+                    Log.e("->>>>>>", message.toString());
+                    messageSqlDAO.insert(message);
+
+                    Log.e("messagesssssss", messageSqlDAO.findAll().toString());
+                }
+
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Log.e("onChildChanged", snapshot.toString());
+                if(messageSqlDAO.checkExits(snapshot.getKey())){
+                    Log.e("change message", snapshot.toString());
+                    Message message = new Message(snapshot);
+                    messageSqlDAO.update(message);
+                    Log.e("messagesssssss", messageSqlDAO.findAll().toString());
+                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                Log.e("onChildRemoved", snapshot.toString());
+                if(messageSqlDAO.checkExits(snapshot.getKey())){
+                    Log.e("delete message", snapshot.toString());
+                    Message message = new Message(snapshot);
+                    messageSqlDAO.delete(message);
+                    Log.e("messagesssssss", messageSqlDAO.findAll().toString());
+                }
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
+
+    public void syncUsers(){
+        List<User> users = userSqlDAO.findAll();
+        users.forEach(user -> {
+            refUser.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    User userFirebase = new User(snapshot);
+                    userSqlDAO.update(userFirebase);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        });
+    }
+
+
 
 
     private void handleActionFoo(String param1, String param2) {

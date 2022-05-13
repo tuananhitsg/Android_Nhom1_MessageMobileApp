@@ -3,6 +3,7 @@ package com.example.nhom1_messagemobileapp.entity;
 
 import static androidx.room.ForeignKey.CASCADE;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
@@ -10,6 +11,7 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.example.nhom1_messagemobileapp.utils.converter.TimestampConverter;
+import com.google.firebase.database.DataSnapshot;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -17,14 +19,15 @@ import java.util.Date;
 
 @Entity(tableName = "messages")
 public class Message implements Serializable {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    @NonNull
+    private String id;
 
-    @ForeignKey(entity = User.class, parentColumns = "uid", childColumns = "from", onDelete = CASCADE)
-    private String from;
+    @ForeignKey(entity = User.class, parentColumns = "uid", childColumns = "fromUid", onDelete = CASCADE)
+    private String fromUid;
 
-    @ForeignKey(entity = User.class, parentColumns = "uid", childColumns = "to", onDelete = CASCADE)
-    private String to;
+    @ForeignKey(entity = User.class, parentColumns = "uid", childColumns = "toUid", onDelete = CASCADE)
+    private String toUid;
     private String content;
 
     @TypeConverters({TimestampConverter.class})
@@ -33,36 +36,52 @@ public class Message implements Serializable {
     public Message() {
     }
 
-    public Message(int id, String from, String to, String content, Date time) {
+    public Message(DataSnapshot snapshot) {
+        this.id = snapshot.getKey();
+        this.content = snapshot.child("content").getValue(String.class);
+        this.fromUid = snapshot.child("fromUid").getValue(String.class);
+        this.toUid = snapshot.child("toUid").getValue(String.class);
+        this.time = TimestampConverter.fromTimestamp(
+                Long.parseLong(snapshot.child("time").getValue(String.class)));
+    }
+
+    public Message(String id, String from, String to, String content, Date time) {
         this.id = id;
-        this.from = from;
-        this.to = to;
+        this.fromUid = from;
+        this.toUid = to;
         this.content = content;
         this.time = time;
     }
 
-    public int getId() {
+    public Message(String from, String to, String content, Date time) {
+        this.fromUid = from;
+        this.toUid = to;
+        this.content = content;
+        this.time = time;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getFrom() {
-        return from;
+    public String getFromUid() {
+        return fromUid;
     }
 
-    public void setFrom(String from) {
-        this.from = from;
+    public void setFromUid(String fromUid) {
+        this.fromUid = fromUid;
     }
 
-    public String getTo() {
-        return to;
+    public String getToUid() {
+        return toUid;
     }
 
-    public void setTo(String to) {
-        this.to = to;
+    public void setToUid(String toUid) {
+        this.toUid = toUid;
     }
 
     public String getContent() {
@@ -85,8 +104,8 @@ public class Message implements Serializable {
     public String toString() {
         return "Message{" +
                 "id=" + id +
-                ", from=" + from +
-                ", to=" + to +
+                ", from=" + fromUid +
+                ", to=" + toUid +
                 ", content='" + content + '\'' +
                 ", time=" + time +
                 '}';
