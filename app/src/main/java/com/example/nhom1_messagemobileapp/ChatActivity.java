@@ -5,12 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -36,6 +41,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.time.Instant;
@@ -44,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.UUID;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -53,7 +63,6 @@ public class ChatActivity extends AppCompatActivity {
     private ImageButton btnCamera;
     private ImageButton btnMedia;
     private ImageButton btnAction;
-    private String uidFriend;
     private DatabaseReference refMessage;
     private DatabaseReference refUser;
     private User myUser;
@@ -61,12 +70,17 @@ public class ChatActivity extends AppCompatActivity {
     private Database sqlDatabase;
     private MessageSqlDAO messageSqlDAO;
     private boolean isBtnSend = false;
+    private int SELECT_PICTURE = 200;
+    private Uri filePath;
+    private FirebaseStorage rootRef;
+    private StorageReference storageRef;
+    private EditText edtMessage;
 
-    public ChatActivity(String uid){
+    public ChatActivity(String uid) {
         this.uid = uid;
     }
 
-    public ChatActivity(){
+    public ChatActivity() {
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
@@ -77,6 +91,13 @@ public class ChatActivity extends AppCompatActivity {
 
         sqlDatabase = Database.getInstance(null);
         messageSqlDAO = sqlDatabase.getMessageSqlDAO();
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        refMessage = database.getReference("message");
+        refUser = database.getReference("user");
+
+        rootRef = FirebaseStorage.getInstance();
+        storageRef = rootRef.getReference();
 
         ImageButton btnBack = findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> {
@@ -102,30 +123,52 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
 
-
-        EditText edtMessage = findViewById(R.id.input);
+        edtMessage = findViewById(R.id.input);
         edtMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().equals("")){
+                if (s.toString().equals("")) {
                     Resources resource = getResources();
                     final int resourceId = resource.getIdentifier("ic_love", "drawable", getPackageName());
                     btnAction.setImageDrawable(resource.getDrawable(resourceId));
                     isBtnSend = false;
-                }else{
+                } else {
                     Resources resource = getResources();
                     final int resourceId = resource.getIdentifier("ic_send", "drawable", getPackageName());
                     btnAction.setImageDrawable(resource.getDrawable(resourceId));
                     isBtnSend = true;
                 }
             }
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // TODO Auto-generated method stub
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 // TODO Auto-generated method stub
+            }
+        });
+
+        edtMessage.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if(event.getRawX() >= (edtMessage.getRight() - edtMessage.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // your action here
+                        Toast.makeText(ChatActivity.this, "click", Toast.LENGTH_SHORT).show();
+                        StickerBottomSheetFragment bottomSheetFragment = new StickerBottomSheetFragment(ChatActivity.this);
+                        bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+                        return true;
+                    }
+                }
+                return false;
             }
         });
 
@@ -136,77 +179,24 @@ public class ChatActivity extends AppCompatActivity {
 
         btnMedia = findViewById(R.id.btn_media);
         btnMedia.setOnClickListener(v -> {
-            Toast.makeText(this, "Đang phát triển", Toast.LENGTH_SHORT).show();
+            imageChooser();
         });
 
         btnAction = findViewById(R.id.btn_action);
         btnAction.setOnClickListener(v -> {
-            Long timestamp = System.currentTimeMillis();
-            String key = timestamp.toString() +"_"+ Random.generateTicketNumber(0, 10000);
-            if(isBtnSend){
-                String msg = edtMessage.getText().toString();
-                Message message = new Message(key, uid, friend.getUid(), msg, new Date(), "text");
-                Log.e("new msg", message.toString());
-                // me
-                refMessage.child(uid).child(key).setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        // friend
-                        String key = timestamp.toString() +"_"+ Random.generateTicketNumber(0, 10000);
-                        Message friendMessage = new Message(key, uid, friend.getUid(), msg, new Date(), "text");
-                        refMessage.child(friend.getUid()).child(key).setValue(friendMessage).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                edtMessage.setText("");
-                                recyclerView.smoothScrollToPosition(recyclerAdapter.getItemCount()-1);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(ChatActivity.this, "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(ChatActivity.this, "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }else{
-                Message message = new Message(key, uid, friend.getUid(), "https://i.imgur.com/6YgyNCv.png", new Date(), "image");
-                refMessage.child(uid).child(key).setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        // friend
-                        String key = timestamp.toString() +"_"+ Random.generateTicketNumber(0, 10000);
-                        Message friendMessage = new Message(key, uid, friend.getUid(), "https://i.imgur.com/6YgyNCv.png", new Date(), "image");
-                        refMessage.child(friend.getUid()).child(key).setValue(friendMessage).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                edtMessage.setText("");
-                                recyclerView.smoothScrollToPosition(recyclerAdapter.getItemCount()-1);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(ChatActivity.this, "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(ChatActivity.this, "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            String msg = "";
+            String type = "";
+            if (isBtnSend) {
+                msg = edtMessage.getText().toString();
+                type = "text";
+            } else {
+                msg = "https://i.imgur.com/6YgyNCv.png";
+                type = "image";
             }
-        });
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        refMessage = database.getReference("message");
-        refUser = database.getReference("user");
+            Message message = new Message(uid, friend.getUid(), msg, new Date(), type);
+            addNewMessage(message);
+        });
 
         refMessage.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
@@ -216,7 +206,8 @@ public class ChatActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
@@ -229,17 +220,116 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         @Override
-        protected List<Message> doInBackground (String...params){
-            Log.e("chat", uid+" "+friend.getUid());
+        protected List<Message> doInBackground(String... params) {
+            Log.e("chat", uid + " " + friend.getUid());
             List<Message> messages = messageSqlDAO.findAllByUsers(uid, friend.getUid());
             return messages;
         }
 
         @Override
-        protected void onPostExecute (List<Message> messages){
+        protected void onPostExecute(List<Message> messages) {
             Log.d("->>> sqll messages", messages.toString());
             recyclerAdapter.setMessages(messages);
-            recyclerView.smoothScrollToPosition(messages.size()-1);
+            recyclerView.smoothScrollToPosition(messages.size() - 1);
+        }
+    }
+
+    private void addNewMessage(Message message) {
+        Long timestamp = System.currentTimeMillis();
+        String key = timestamp.toString() + "_" + Random.generateTicketNumber(0, 10000);
+        message.setId(key);
+
+        Log.e("new msg", message.toString());
+        // me
+        refMessage.child(uid).child(message.getId()).setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                refMessage.child(friend.getUid()).child(message.getId()).setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        edtMessage.setText("");
+                        recyclerView.smoothScrollToPosition(recyclerAdapter.getItemCount() - 1);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(ChatActivity.this, "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ChatActivity.this, "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void imageChooser() {
+        Intent i = new Intent();
+        i.setType("image/*");
+        i.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
+                Uri selectedImageUri = data.getData();
+                filePath = selectedImageUri;
+                if (null != selectedImageUri) {
+                    Log.e("image", selectedImageUri.toString());
+                    uploadImage();
+//                    imgLogo.setImageURI(selectedImageUri);
+                }
+            }
+        }
+    }
+
+    private void uploadImage() {
+        if (filePath != null) {
+            ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            StorageReference ref = storageRef.child("chat_images/" + UUID.randomUUID().toString());
+
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    String image = task.getResult().toString();
+//                                    theUser.setAvatar(avatar);
+//                                    myRef.child(uid).child("avatar").setValue(avatar);
+                                    Log.e("image", image);
+                                    Message message = new Message(uid, friend.getUid(), image, new Date(), "image");
+                                    addNewMessage(message);
+                                    Toast.makeText(ChatActivity.this, "Gửi ảnh thành công ", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(ChatActivity.this, "Gửi ảnh thất bại ", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(
+                            new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                                    progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                                }
+                            });
         }
     }
 }

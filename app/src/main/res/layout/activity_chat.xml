@@ -84,8 +84,8 @@
         android:background="@drawable/border_top">
         <ImageButton
             android:id="@+id/btn_camera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_camera"
             android:background="@android:color/transparent"
             android:padding="10dp"
@@ -93,13 +93,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:scaleType="fitXY"
-            android:scaleX="1.4"
-            android:scaleY="1.4"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
             />
         <ImageButton
             android:id="@+id/btn_media"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_media"
             android:background="@android:color/transparent"
             android:padding="10dp"
@@ -107,8 +107,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:scaleType="fitXY"
-            android:scaleX="1.4"
-            android:scaleY="1.4"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
             />
 
         <EditText
@@ -129,8 +129,8 @@
             app:layout_constraintTop_toTopOf="parent" />
         <ImageButton
             android:id="@+id/btn_action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/ic_love"
             android:background="@android:color/transparent"
             android:padding="10dp"
@@ -138,8 +138,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:scaleType="fitXY"
-            android:scaleX="1.4"
-            android:scaleY="1.4"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
