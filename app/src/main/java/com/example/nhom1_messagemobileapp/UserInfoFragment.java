@@ -201,7 +201,7 @@ public class UserInfoFragment extends Fragment {
         return view;
     }
 
-    private Dialog createDialog(int gravity, int layoutId) {
+    public Dialog createDialog(int gravity, int layoutId) {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(layoutId);
@@ -311,10 +311,10 @@ public class UserInfoFragment extends Fragment {
             seletedColor = blackColor;
             flagDarkMode = true;
         }
-            tvName.setTextColor(seletedColor);
-            btnDarkMode.setTextColor(seletedColor);
-            btnEditInfo.setTextColor(seletedColor);
-            btnChangePassword.setTextColor(seletedColor);
-            btnLogout.setTextColor(seletedColor);
+        tvName.setTextColor(seletedColor);
+        btnDarkMode.setTextColor(seletedColor);
+        btnEditInfo.setTextColor(seletedColor);
+        btnChangePassword.setTextColor(seletedColor);
+        btnLogout.setTextColor(seletedColor);
     }
 }

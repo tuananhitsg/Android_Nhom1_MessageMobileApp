@@ -21,7 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
     Button btnToLoginPage,btnRegister;
-    EditText edtName, edtEmail, edtPassword, edtRePassword;
+    EditText edtName, edtRegisterEmail, edtPassword, edtRePassword, edtLoginEmail;
     private Context context;
     private FirebaseAuth mAuth;
     @Override
@@ -50,7 +50,8 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         edtName = findViewById(R.id.regis_edtUserHandleName);
-        edtEmail = findViewById(R.id.regis_edtEmailInput);
+        edtRegisterEmail = findViewById(R.id.regis_edtEmailInput);
+        edtLoginEmail = findViewById(R.id.login_edtEmailInput);
         edtPassword = findViewById(R.id.regis_edtPassInput);
         edtRePassword = findViewById(R.id.regis_edtConfirmPassInput);
 
@@ -59,27 +60,40 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private boolean onClickRegister() {
         String name = edtName.getText().toString().trim();
-        String email = edtEmail.getText().toString().trim();
+        String email = edtRegisterEmail.getText().toString().trim();
         String password = edtPassword.getText().toString().trim();
         String rePassword = edtRePassword.getText().toString().trim();
         if (name.isEmpty() || name.length() <= 0) {
-            Toast.makeText(context, "Name không được để trống", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Tên không được để trống", Toast.LENGTH_SHORT).show();
+            edtName.requestFocus();
             return false;
         }
+        if(!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")){
+            Toast.makeText(context,"Email không hợp lệ",Toast.LENGTH_SHORT).show();
+        }
         if (email.isEmpty() || email.length() <= 0) {
-            Toast.makeText(context, "Email không được để trống", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Email không được để trống", Toast.LENGTH_SHORT).show();
+            edtRegisterEmail.requestFocus();
             return false;
         }
         if (password.isEmpty() || password.length() <= 0) {
-            Toast.makeText(context, "Password không được để trống", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Mật khẩu không được để trống", Toast.LENGTH_SHORT).show();
+            edtPassword.requestFocus();
+            return false;
+        }
+        if (password.length() < 8) {
+            Toast.makeText(context, "Mật khẩu phải từ 8 kí tự", Toast.LENGTH_SHORT).show();
+            edtPassword.requestFocus();
             return false;
         }
         if (rePassword.isEmpty() || rePassword.length() <= 0) {
-            Toast.makeText(context, "Password nhập lại không được để trống", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Mật khẩu nhập lại không được để trống", Toast.LENGTH_SHORT).show();
+            edtRePassword.requestFocus();
             return false;
         }
         if (!password.equals(rePassword)) {
-            Toast.makeText(context, "Password không giống nhau", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Mật khẩu nhập lại không đúng", Toast.LENGTH_SHORT).show();
+            edtRePassword.requestFocus();
             return false;
         }
 
@@ -92,9 +106,15 @@ public class RegisterActivity extends AppCompatActivity {
                             String uid = mAuth.getCurrentUser().getUid();
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference myRef = database.getReference("user");
-                            User user = new User(name, email, password);
+                            User user = new User(name, email,"https://firebasestorage.googleapis.com/v0/b/messagemobileapp.appspot.com/o/images%2Fooui_user-avatar.png?alt=media&token=5e572c2d-4f38-4f54-b39d-0b8574f1e8e5");
                             myRef.child(uid).setValue(user);
+
                             Toast.makeText(context, "Đăng ký tài khoản thành công", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                            startActivity(intent);
+
+
                         } else {
                             Toast.makeText(context, "Đăng ký tài khoản thất bại", Toast.LENGTH_SHORT).show();
                         }
