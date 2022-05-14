@@ -21,6 +21,8 @@ import com.example.nhom1_messagemobileapp.R;
 import com.example.nhom1_messagemobileapp.entity.Message;
 import com.example.nhom1_messagemobileapp.entity.User;
 import com.example.nhom1_messagemobileapp.utils.CustomeDateTime;
+import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,8 @@ import java.util.List;
 public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter.ViewHolder>{
 
     private static final String TAG = "ChatListAdapter";
-    private User user;
+    private User friend;
+    private String uid;
     private Context context;
 
     List<Message> messages;
@@ -36,12 +39,21 @@ public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter
     public MessageListAdapter(Context context) {
         this.context = context;
         messages = new ArrayList<>();
+        uid = FirebaseAuth.getInstance().getUid();
     }
 
-    public MessageListAdapter(Context context, List<Message> messages, User user) {
+    public MessageListAdapter(Context context, User friend) {
         this.context = context;
+        this.friend = friend;
+        messages = new ArrayList<>();
+        uid = FirebaseAuth.getInstance().getUid();
+    }
+
+    public MessageListAdapter(Context context, User friend, List<Message> messages) {
+        this.context = context;
+        this.friend = friend;
         this.messages = messages;
-        this.user = user;
+        uid = FirebaseAuth.getInstance().getUid();
     }
 
     @NonNull
@@ -58,30 +70,59 @@ public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter
     public void onBindViewHolder(@NonNull MessageListAdapter.ViewHolder holder, int position) {
         Message message = messages.get(position);
         holder.txt_message.setText(message.getContent());
-        System.out.println(user.equals(message.getFrom()));
-        if(user.equals(message.getFrom())){
+        if(uid.equals(message.getFromUid())){
             ConstraintSet constraintSet = new ConstraintSet();
             constraintSet.clone(holder.container_message);
             constraintSet.connect(holder.txt_message.getId(),ConstraintSet.RIGHT,holder.container_message.getId(),ConstraintSet.RIGHT,0);
+            constraintSet.connect(holder.image_message.getId(),ConstraintSet.RIGHT,holder.container_message.getId(),ConstraintSet.RIGHT,0);
             constraintSet.applyTo(holder.container_message);
 
-            Resources resource = context.getResources();
-            final int resourceId = resource.getIdentifier("bg_my_message", "drawable",
-                    context.getPackageName());
-            holder.txt_message.setBackground(resource.getDrawable(resourceId));
+            if(message.getType() != null && message.getType().equals("image")){
+                holder.image_message.setVisibility(View.VISIBLE);
+                holder.txt_message.setVisibility(View.INVISIBLE);
 
-            int colorId = resource.getIdentifier("white", "color", context.getPackageName());
-            int desiredColor = resource.getColor(colorId);
-            holder.txt_message.setTextColor(desiredColor);
+                Picasso.get().load(message.getContent()).into(holder.image_message);
+            }else {
+                holder.image_message.setVisibility(View.INVISIBLE);
+
+                Resources resource = context.getResources();
+                final int resourceId = resource.getIdentifier("bg_my_message", "drawable",
+                        context.getPackageName());
+                holder.txt_message.setBackground(resource.getDrawable(resourceId));
+
+                int colorId = resource.getIdentifier("white", "color", context.getPackageName());
+                int desiredColor = resource.getColor(colorId);
+                holder.txt_message.setTextColor(desiredColor);
+            }
         }else{
 
             holder.card_avatar_friend.setVisibility(View.VISIBLE);
             ConstraintSet constraintSet = new ConstraintSet();
             constraintSet.clone(holder.container_message);
             constraintSet.connect(holder.txt_message.getId(),ConstraintSet.LEFT,holder.card_avatar_friend.getId(), ConstraintSet.RIGHT,0);
+            constraintSet.connect(holder.image_message.getId(),ConstraintSet.LEFT,holder.card_avatar_friend.getId(), ConstraintSet.RIGHT,0);
             constraintSet.applyTo(holder.container_message);
+
+            if(message.getType() != null && message.getType().equals("image")){
+                holder.image_message.setVisibility(View.VISIBLE);
+                holder.txt_message.setVisibility(View.INVISIBLE);
+
+                Picasso.get().load(message.getContent()).into(holder.image_message);
+
+            }else {
+                holder.image_message.setVisibility(View.INVISIBLE);
+
+                Resources resource = context.getResources();
+                final int resourceId = resource.getIdentifier("bg_message", "drawable",
+                        context.getPackageName());
+                holder.txt_message.setBackground(resource.getDrawable(resourceId));
+
+                int colorId = resource.getIdentifier("black", "color", context.getPackageName());
+                int desiredColor = resource.getColor(colorId);
+                holder.txt_message.setTextColor(desiredColor);
+            }
         }
-//        Picasso.get().load(friendMessage.getUser().getImage()).into(holder.img_avatar_friend);
+        Picasso.get().load(friend.getAvatar()).into(holder.img_avatar_friend);
     }
 
 
@@ -99,16 +140,27 @@ public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter
         CardView card_avatar_friend;
         ImageView img_avatar_friend;
         TextView txt_message;
+        ImageView image_message;
         ConstraintLayout container_message;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             card_avatar_friend = itemView.findViewById(R.id.card_avatar_friend);
             img_avatar_friend = itemView.findViewById(R.id.img_avatar_friend);
             txt_message = itemView.findViewById(R.id.txt_message);
+            image_message = itemView.findViewById(R.id.image_message);
             container_message = itemView.findViewById(R.id.container_message);
         }
 
     }
 
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+        notifyDataSetChanged();
+    }
 }
