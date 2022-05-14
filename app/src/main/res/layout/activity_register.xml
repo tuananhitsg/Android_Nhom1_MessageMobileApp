@@ -29,14 +29,15 @@
             android:layout_marginTop="50dp"
             android:orientation="vertical"
             android:padding="16dp">
+
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusTopStart="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 app:startIconDrawable="@drawable/ic_mail">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -53,15 +54,18 @@
                     android:textColorHint="#ACACAC"
                     android:textColorLink="#ACACAC" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusTopStart="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 app:startIconDrawable="@drawable/ic_acong">
+
                 <EditText
                     android:id="@+id/regis_edtUserHandleName"
                     android:layout_width="match_parent"
@@ -76,17 +80,19 @@
                     android:textColorHint="#ACACAC"
                     android:textColorLink="#ACACAC" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusTopStart="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 app:passwordToggleEnabled="true"
-                app:startIconDrawable="@drawable/ic_lock"
-                app:passwordToggleTint="@color/primary">
+                app:passwordToggleTint="@color/primary"
+                app:startIconDrawable="@drawable/ic_lock">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/regis_edtPassInput"
@@ -101,34 +107,37 @@
                     android:paddingRight="10dp"
                     android:paddingBottom="6dp"
                     android:textColorHint="#ACACAC"
-                    android:textColorLink="#ACACAC"  />
-            </com.google.android.material.textfield.TextInputLayout><com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:passwordToggleEnabled="true"
-            app:startIconDrawable="@drawable/ic_lock"
-            app:passwordToggleTint="@color/primary">
+                    android:textColorLink="#ACACAC" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/regis_edtConfirmPassInput"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:paddingTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="Nhập lại mật khẩu"
-                android:inputType="textPassword"
-                android:minHeight="48dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="4dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="6dp"
-                android:textColorHint="#ACACAC"
-                android:textColorLink="#ACACAC"  />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="match_parent"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/primary"
+                app:startIconDrawable="@drawable/ic_lock">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/regis_edtConfirmPassInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Nhập lại mật khẩu"
+                    android:inputType="textPassword"
+                    android:minHeight="48dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="6dp"
+                    android:textColorHint="#ACACAC"
+                    android:textColorLink="#ACACAC" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/btn_register"
@@ -144,11 +153,10 @@
                 android:textSize="17sp" />
 
 
-
             <LinearLayout
-                android:layout_marginTop="70dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="70dp"
                 android:orientation="horizontal"
                 android:weightSum="2">
 

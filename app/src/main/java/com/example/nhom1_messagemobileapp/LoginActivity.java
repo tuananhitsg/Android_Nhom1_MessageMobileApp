@@ -23,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class LoginActivity extends AppCompatActivity {
 
     EditText edtPassword, edtEmail;
-    Button btnLogin, btnToRegisterPage, btnSubmit, btnCancel, btnForgotPass;
+    Button btnLogin, btnToRegisterPage,  btnForgotPass;
     private Context context;
     private FirebaseDatabase database;
     private FirebaseAuth auth;
