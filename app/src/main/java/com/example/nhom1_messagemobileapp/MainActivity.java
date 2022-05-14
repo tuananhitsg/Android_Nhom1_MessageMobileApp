@@ -18,6 +18,7 @@ import com.example.nhom1_messagemobileapp.database.Database;
 import com.example.nhom1_messagemobileapp.entity.User;
 import com.example.nhom1_messagemobileapp.service.SyncDatabaseService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,12 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        try {
-            uid = getIntent().getExtras().getString("uid");
-            System.out.println(uid);
-        }catch (Exception e){
-
-        }
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         database = Database.getInstance(this);
 
         

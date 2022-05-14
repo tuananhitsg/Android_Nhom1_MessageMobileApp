@@ -169,7 +169,7 @@ public class SyncDatabaseService extends IntentService {
                 Log.e("onChildChanged", snapshot.toString());
                 if(messageSqlDAO.checkExits(snapshot.getKey())){
                     Log.e("change message", snapshot.toString());
-                    Message message = new Message(snapshot);
+                    Message message = snapshot.getValue(Message.class);
                     messageSqlDAO.update(message);
                     Log.e("messagesssssss", messageSqlDAO.findAll().toString());
                 }
@@ -180,7 +180,7 @@ public class SyncDatabaseService extends IntentService {
                 Log.e("onChildRemoved", snapshot.toString());
                 if(messageSqlDAO.checkExits(snapshot.getKey())){
                     Log.e("delete message", snapshot.toString());
-                    Message message = new Message(snapshot);
+                    Message message = snapshot.getValue(Message.class);
                     messageSqlDAO.delete(message);
                     Log.e("messagesssssss", messageSqlDAO.findAll().toString());
                 }

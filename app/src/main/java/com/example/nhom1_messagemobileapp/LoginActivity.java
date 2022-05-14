@@ -62,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(context, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        intent.putExtra("uid", auth.getCurrentUser().getUid());
                                         startActivity(intent);
                                     } else {
                                         Toast.makeText(context, "Tài khoản/ mật khẩu không đúng", Toast.LENGTH_SHORT).show();

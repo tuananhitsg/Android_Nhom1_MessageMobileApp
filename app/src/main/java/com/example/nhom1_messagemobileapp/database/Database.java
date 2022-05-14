@@ -18,7 +18,7 @@ import com.example.nhom1_messagemobileapp.utils.converter.TimestampConverter;
         entities = {
                 User.class, Message.class
         },
-        version = 5
+        version = 6
 )
 @TypeConverters({TimestampConverter.class})
 public abstract class Database extends RoomDatabase {

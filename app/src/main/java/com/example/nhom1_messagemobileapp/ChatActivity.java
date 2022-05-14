@@ -24,6 +24,7 @@ import com.example.nhom1_messagemobileapp.database.Database;
 import com.example.nhom1_messagemobileapp.entity.Message;
 import com.example.nhom1_messagemobileapp.entity.User;
 import com.example.nhom1_messagemobileapp.utils.CustomeDateTime;
+import com.example.nhom1_messagemobileapp.utils.Random;
 import com.example.nhom1_messagemobileapp.utils.converter.TimestampConverter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -140,22 +141,64 @@ public class ChatActivity extends AppCompatActivity {
 
         btnAction = findViewById(R.id.btn_action);
         btnAction.setOnClickListener(v -> {
+            Long timestamp = System.currentTimeMillis();
+            String key = timestamp.toString() +"_"+ Random.generateTicketNumber(0, 10000);
             if(isBtnSend){
                 String msg = edtMessage.getText().toString();
-                Long timestamp = System.currentTimeMillis();
-                String key = timestamp.toString()+"_"+ (int)Math.random()*1000000;
-
-                Message message = new Message(key, uid, friend.getUid(), msg, new Date());
+                Message message = new Message(key, uid, friend.getUid(), msg, new Date(), "text");
                 Log.e("new msg", message.toString());
+                // me
                 refMessage.child(uid).child(key).setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        edtMessage.setText("");
+                        // friend
+                        String key = timestamp.toString() +"_"+ Random.generateTicketNumber(0, 10000);
+                        Message friendMessage = new Message(key, uid, friend.getUid(), msg, new Date(), "text");
+                        refMessage.child(friend.getUid()).child(key).setValue(friendMessage).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                edtMessage.setText("");
+                                recyclerView.smoothScrollToPosition(recyclerAdapter.getItemCount()-1);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(ChatActivity.this, "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        Toast.makeText(ChatActivity.this, "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }else{
+                Message message = new Message(key, uid, friend.getUid(), "https://i.imgur.com/6YgyNCv.png", new Date(), "image");
+                refMessage.child(uid).child(key).setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        // friend
+                        String key = timestamp.toString() +"_"+ Random.generateTicketNumber(0, 10000);
+                        Message friendMessage = new Message(key, uid, friend.getUid(), "https://i.imgur.com/6YgyNCv.png", new Date(), "image");
+                        refMessage.child(friend.getUid()).child(key).setValue(friendMessage).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                edtMessage.setText("");
+                                recyclerView.smoothScrollToPosition(recyclerAdapter.getItemCount()-1);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(ChatActivity.this, "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(ChatActivity.this, "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -196,6 +239,7 @@ public class ChatActivity extends AppCompatActivity {
         protected void onPostExecute (List<Message> messages){
             Log.d("->>> sqll messages", messages.toString());
             recyclerAdapter.setMessages(messages);
+            recyclerView.smoothScrollToPosition(messages.size()-1);
         }
     }
 }

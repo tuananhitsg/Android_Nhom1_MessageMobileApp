@@ -33,6 +33,8 @@ public class Message implements Serializable {
     @TypeConverters({TimestampConverter.class})
     private Date time;
 
+    private String type;
+
     public Message() {
     }
 
@@ -41,23 +43,25 @@ public class Message implements Serializable {
         this.content = snapshot.child("content").getValue(String.class);
         this.fromUid = snapshot.child("fromUid").getValue(String.class);
         this.toUid = snapshot.child("toUid").getValue(String.class);
-        this.time = TimestampConverter.fromTimestamp(
-                Long.parseLong(snapshot.child("time").getValue(String.class)));
+//        this.time = TimestampConverter.fromTimestamp(
+//                Long.parseLong(snapshot.child("time").getValue(String.class)));
     }
 
-    public Message(String id, String from, String to, String content, Date time) {
+    public Message(String id, String from, String to, String content, Date time, String type) {
         this.id = id;
         this.fromUid = from;
         this.toUid = to;
         this.content = content;
         this.time = time;
+        this.type = type;
     }
 
-    public Message(String from, String to, String content, Date time) {
+    public Message(String from, String to, String content, Date time, String type) {
         this.fromUid = from;
         this.toUid = to;
         this.content = content;
         this.time = time;
+        this.type = type;
     }
 
     public String getId() {
@@ -100,6 +104,14 @@ public class Message implements Serializable {
         this.time = time;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -108,6 +120,7 @@ public class Message implements Serializable {
                 ", to=" + toUid +
                 ", content='" + content + '\'' +
                 ", time=" + time +
+                ", type=" + type +
                 '}';
     }
 }

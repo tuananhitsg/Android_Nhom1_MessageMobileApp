@@ -17,6 +17,7 @@ import com.example.nhom1_messagemobileapp.dao.UserSqlDAO;
 import com.example.nhom1_messagemobileapp.database.Database;
 import com.example.nhom1_messagemobileapp.entity.Message;
 import com.example.nhom1_messagemobileapp.entity.User;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,7 +47,7 @@ public class HomeFragment extends Fragment {
     private UserSqlDAO userSqlDAO;
 
     public HomeFragment() {
-        uid = "pKtiff3DLPPWtNNOnN906uzELha2";
+        uid = FirebaseAuth.getInstance().getUid();
     }
 
     public HomeFragment(String uid) {
