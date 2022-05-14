@@ -10,7 +10,7 @@
     <color name="primary">#07DB89</color>
     <color name="pink">#ffe8ed</color>
 
-    <!--    design dark mode-->
+    <!--    design dark mode: night-->
     <color name="text_color">#FFFFFFFF</color>
     <color name="text_color_hint">#acacac</color>
     <color name="subText_color">#b7b7b7</color>
