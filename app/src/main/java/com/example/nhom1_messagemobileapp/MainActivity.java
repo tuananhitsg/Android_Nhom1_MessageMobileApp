@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,11 +27,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static Context context;
     private ViewPager mPager;
     private BottomNavigationView navigationView;
     private ScreenSlidePagerAdapter pagerAdapter;
-    private String uid = "pKtiff3DLPPWtNNOnN906uzELha2";
+    private String uid = "";
     private Database database;
     boolean doubleBackToExitPressedOnce = false;
 
@@ -38,17 +40,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MainActivity.context = this;
+
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            finish();
+            return;
+        }
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.e("------------> uid", uid);
         database = Database.getInstance(this);
-
-
         
 //        database.getUserSqlDAO().insert();
-        Log.d("sqlite", database.getUserSqlDAO().findAll().toString());
+//        Log.d("sqlite", database.getUserSqlDAO().findAll().toString());
         Intent intent = new Intent(this, SyncDatabaseService.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("uid", uid);
-        intent.putExtras(bundle);
         startService(intent);
 
         mPager = findViewById(R.id.pager);
@@ -93,6 +97,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+    public static boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) MainActivity.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
     @Override

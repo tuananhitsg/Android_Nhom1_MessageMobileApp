@@ -30,7 +30,7 @@ import java.util.Map;
 
 public class HomeFragment extends Fragment {
 
-    private String uid = "pKtiff3DLPPWtNNOnN906uzELha2";
+    private String uid = "";
     private RecyclerView recyclerView;
     private ChatListAdapter recyclerAdapter;
 
@@ -96,11 +96,10 @@ public class HomeFragment extends Fragment {
     }
 
     public void getFriends(){
-
+        Log.e("internet", "true");
         refMessage.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 ShowListUserTask  showListUserTask = new ShowListUserTask();
                 showListUserTask.execute();
             }
@@ -110,6 +109,11 @@ public class HomeFragment extends Fragment {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+        if(!MainActivity.isNetworkConnected()) {
+            Log.e("internet", "false");
+            ShowListUserTask showListUserTask = new ShowListUserTask();
+            showListUserTask.execute();
+        }
     }
 
 
