@@ -2,6 +2,9 @@ package com.example.nhom1_messagemobileapp.entity;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class StickerPackage implements Serializable {
     private String id;
@@ -9,6 +12,7 @@ public class StickerPackage implements Serializable {
     private String sprite;
     private String url;
     private int itemCount;
+    private List<String> stickers = new ArrayList<>();
 
     public StickerPackage(String id) {
         this.id = id;
@@ -62,6 +66,26 @@ public class StickerPackage implements Serializable {
         this.itemCount = itemCount;
     }
 
+    public List<String> getStickers() {
+        return stickers;
+    }
+
+    public void setStickers(List<String> stickers) {
+        this.stickers = stickers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StickerPackage that = (StickerPackage) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     @Override
     public String toString() {

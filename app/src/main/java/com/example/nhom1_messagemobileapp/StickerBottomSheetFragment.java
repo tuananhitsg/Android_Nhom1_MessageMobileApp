@@ -5,24 +5,29 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.nhom1_messagemobileapp.adapter.StickerAdapter;
+import com.example.nhom1_messagemobileapp.entity.Message;
 import com.example.nhom1_messagemobileapp.entity.StickerPackage;
 import com.example.nhom1_messagemobileapp.utils.FlaticonAPI;
 import com.example.nhom1_messagemobileapp.utils.GridSpacingItemDecoration;
+import com.example.nhom1_messagemobileapp.utils.RecyclerItemClickListener;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class StickerBottomSheetFragment extends BottomSheetDialogFragment {
@@ -71,7 +76,7 @@ public class StickerBottomSheetFragment extends BottomSheetDialogFragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                showSticker(packages.get(tab.getPosition()));
+                showSticker(tab.getPosition());
             }
 
             @Override
@@ -80,6 +85,23 @@ public class StickerBottomSheetFragment extends BottomSheetDialogFragment {
             @Override
             public void onTabReselected(TabLayout.Tab tab) { }
         });
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(context, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Message message = new Message(null, null, recyclerAdapter.getItem(position), new Date(), "image");
+                        ((ChatActivity)context).addNewMessage(message);
+                        Log.e("RecyclerItemClickListener", "RecyclerItemClickListener");
+
+                        dismiss();
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
+
         return view;
     }
 
@@ -95,9 +117,9 @@ public class StickerBottomSheetFragment extends BottomSheetDialogFragment {
         viewSearching.setVisibility(View.INVISIBLE);
     }
 
-    private void showSticker(StickerPackage stickerPackage){
+    private void showSticker(int position){
 
-        ShowStickersTask showStickersTask = new ShowStickersTask(stickerPackage.getUrl());
+        ShowStickersTask showStickersTask = new ShowStickersTask(position);
         showStickersTask.execute();
     }
 
@@ -111,8 +133,11 @@ public class StickerBottomSheetFragment extends BottomSheetDialogFragment {
 
         @Override
         protected List<StickerPackage> doInBackground (String...params){
-            FlaticonAPI flaticonApi = new FlaticonAPI();
-            return flaticonApi.getPackages();
+            if(FlaticonAPI.packages.size() == 0){
+                FlaticonAPI flaticonApi = new FlaticonAPI();
+                return flaticonApi.getPackages();
+            }
+            return FlaticonAPI.packages;
         }
 
         @Override
@@ -128,16 +153,16 @@ public class StickerBottomSheetFragment extends BottomSheetDialogFragment {
                 if(tab!=null) tab.setCustomView(_view);
             }
             viewContent();
-            showSticker(packages.get(0));
+            showSticker(0);
         }
     }
 
     public class ShowStickersTask extends AsyncTask<String, String, List<String>> {
 
-        private String url;
+        private int position;
 
-        public ShowStickersTask (String url){
-            this.url = url;
+        public ShowStickersTask (int position){
+            this.position = position;
         }
 
         @Override
@@ -148,8 +173,13 @@ public class StickerBottomSheetFragment extends BottomSheetDialogFragment {
 
         @Override
         protected List<String> doInBackground (String...params){
-            FlaticonAPI flaticonApi = new FlaticonAPI();
-            return flaticonApi.getStickers(url);
+            if(FlaticonAPI.packages.get(position).getStickers().size() == 0){
+                FlaticonAPI flaticonApi = new FlaticonAPI();
+                List<String> stickers = flaticonApi.getStickers(FlaticonAPI.packages.get(position));
+                FlaticonAPI.packages.get(position).setStickers(stickers);
+            }
+
+            return FlaticonAPI.packages.get(position).getStickers();
         }
 
         @Override
@@ -157,6 +187,7 @@ public class StickerBottomSheetFragment extends BottomSheetDialogFragment {
             Log.e("Stickers", stickers.toString());
             recyclerAdapter.setStickerList(stickers);
             viewContent();
+
         }
     }
 }

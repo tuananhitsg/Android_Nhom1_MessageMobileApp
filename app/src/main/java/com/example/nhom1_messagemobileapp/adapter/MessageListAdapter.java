@@ -22,6 +22,7 @@ import com.example.nhom1_messagemobileapp.entity.Message;
 import com.example.nhom1_messagemobileapp.entity.User;
 import com.example.nhom1_messagemobileapp.utils.CustomeDateTime;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -70,6 +71,7 @@ public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter
     public void onBindViewHolder(@NonNull MessageListAdapter.ViewHolder holder, int position) {
         Message message = messages.get(position);
         holder.txt_message.setText(message.getContent());
+        Picasso.get().load(friend.getAvatar()).into(holder.img_avatar_friend);
         if(uid.equals(message.getFromUid())){
             ConstraintSet constraintSet = new ConstraintSet();
             constraintSet.clone(holder.container_message);
@@ -95,8 +97,10 @@ public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter
                 holder.txt_message.setTextColor(desiredColor);
             }
         }else{
+            if(position == messages.size() - 1 || messages.get(position+1).getFromUid().equals(uid)){
+                holder.card_avatar_friend.setVisibility(View.VISIBLE);
+            }
 
-            holder.card_avatar_friend.setVisibility(View.VISIBLE);
             ConstraintSet constraintSet = new ConstraintSet();
             constraintSet.clone(holder.container_message);
             constraintSet.connect(holder.txt_message.getId(),ConstraintSet.LEFT,holder.card_avatar_friend.getId(), ConstraintSet.RIGHT,0);
@@ -122,7 +126,6 @@ public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter
                 holder.txt_message.setTextColor(desiredColor);
             }
         }
-        Picasso.get().load(friend.getAvatar()).into(holder.img_avatar_friend);
     }
 
 

@@ -234,11 +234,17 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private void addNewMessage(Message message) {
+    public void scrool(){
+        recyclerView.smoothScrollToPosition(recyclerAdapter.getMessages().size() - 1);
+    }
+
+    public void addNewMessage(Message message) {
         Long timestamp = System.currentTimeMillis();
         String key = timestamp.toString() + "_" + Random.generateTicketNumber(0, 10000);
         message.setId(key);
 
+        if(message.getFromUid() == null)message.setFromUid(uid);
+        if(message.getToUid() == null)message.setToUid(friend.getUid());
         Log.e("new msg", message.toString());
         // me
         refMessage.child(uid).child(message.getId()).setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -248,7 +254,7 @@ public class ChatActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void unused) {
                         edtMessage.setText("");
-                        recyclerView.smoothScrollToPosition(recyclerAdapter.getItemCount() - 1);
+                        scrool();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

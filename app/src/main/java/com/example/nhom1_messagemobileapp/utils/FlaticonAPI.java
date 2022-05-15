@@ -28,6 +28,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class FlaticonAPI {
+    public static List<StickerPackage> packages = new ArrayList<>();
     public static final String API_KEY = "2b1ff89850d75a7208a0803e049188c7cea5ec18";
     private final String URL_BASE = "https://api.flaticon.com/v3/";
     private Context context;
@@ -138,15 +139,16 @@ public class FlaticonAPI {
                 result.add(stickerPackage);
 
                 System.out.println(stickerPackage);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        FlaticonAPI.packages = result;
         return result;
     }
 
-    public List<String> getStickers(String url){
-        Response res = this.request(url);
+    public List<String> getStickers(StickerPackage stickerPackage){
+        Response res = this.request(stickerPackage.getUrl());
         List<String> result = new ArrayList<>();
 
         try {

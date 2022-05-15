@@ -85,6 +85,10 @@ public class StickerAdapter  extends RecyclerView.Adapter<StickerAdapter.ViewHol
         notifyDataSetChanged();
     }
 
+    public String getItem(int pos){
+        return stickers.get(pos);
+    }
+
     public List<String> getStickerList() {
         return stickers;
     }
