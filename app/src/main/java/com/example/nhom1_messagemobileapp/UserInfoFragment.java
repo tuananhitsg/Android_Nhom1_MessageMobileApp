@@ -10,10 +10,13 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -93,14 +96,14 @@ public class UserInfoFragment extends Fragment {
     private TextView tvName;
     private ImageView imgAvatar;
     private Button btnDarkMode, btnEditInfo, btnChangePassword, btnLogout;
-    private String email;
-    private String name;
-    private String avatar;
     private User theUser;
     private ProgressBar progressBar;
+    private boolean isHiddenPassword;
+    private boolean flagHiddenCurrentPassword = true;
+    private boolean flagHiddenNewPassword = true;
+    private boolean flagHiddenReNewPassword = true;
 
-    private boolean flagDarkMode = false;
-    private UiModeManager uiModeManager;
+    private boolean isDarkMode = false;
 
     private FirebaseAuth mAuth;
     private FirebaseUser account;
@@ -109,9 +112,13 @@ public class UserInfoFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                            Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_info, container, false);
-        view.setForceDarkAllowed(true);
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            getActivity().setTheme(R.style.AppTheme_MessageMobileApp_Dark);
+        } else {
+            getActivity().setTheme(R.style.AppTheme_MessageMobileApp);
+        }
         // Inflate the layout for this fragment
 
 //        tìm đối tượng trong view
@@ -160,7 +167,7 @@ public class UserInfoFragment extends Fragment {
         btnDarkMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setNightMode(getActivity());
+                setNightMode();
             }
         });
 
@@ -289,32 +296,56 @@ public class UserInfoFragment extends Fragment {
             }
         });
 
+        showAndHiddenPasswordField(edtPassword, flagHiddenCurrentPassword);
+        showAndHiddenPasswordField(edtNewPassword, flagHiddenNewPassword);
+        showAndHiddenPasswordField(edtReNewPassword, flagHiddenReNewPassword);
+
         dialog.show();
     }
 
-    public void setNightMode(Context target){
-        int whiteColor = Color.parseColor("#ffffff");
-        int blackColor = Color.parseColor("#000000");
-        int seletedColor;
-        UiModeManager uiManager = (UiModeManager) target.getSystemService(Context.UI_MODE_SERVICE);
-
-        if (Build.VERSION.SDK_INT <= 22) {
-            uiManager.enableCarMode(0);
+    public void setNightMode(){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            Toast.makeText(getContext(), "Tính năng này chỉ hoạt động trên hệ điều hành android 9 trở lên", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        if (!flagDarkMode) {
-            uiManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
-            seletedColor = whiteColor;
-            flagDarkMode = false;
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            isDarkMode = false;
         } else {
-            uiManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
-            seletedColor = blackColor;
-            flagDarkMode = true;
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            isDarkMode = true;
         }
-            tvName.setTextColor(seletedColor);
-            btnDarkMode.setTextColor(seletedColor);
-            btnEditInfo.setTextColor(seletedColor);
-            btnChangePassword.setTextColor(seletedColor);
-            btnLogout.setTextColor(seletedColor);
+    }
+
+    private void showAndHiddenPasswordField(EditText edt, boolean flagHiddenPassword) {
+        isHiddenPassword = flagHiddenPassword;
+        edt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (edt.getRight() - edt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if (isHiddenPassword) {
+                            edt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_hidepass, 0);
+                            edt.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            edt.setSelection(edt.length());
+                            isHiddenPassword = false;
+                        } else {
+                            edt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_showpass, 0);
+                            edt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            edt.setSelection(edt.length());
+                            isHiddenPassword = true;
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 }

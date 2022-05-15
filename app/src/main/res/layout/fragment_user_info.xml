@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_color"
+    android:layout_marginBottom="50dp"
     tools:context=".UserInfoFragment">
 
     <LinearLayout
@@ -51,10 +52,11 @@
 
             <ImageView
                 android:id="@+id/userInfo_imgAvatar"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:layout_gravity="center"
                 android:background="@drawable/border_avatar"
+                android:scaleType="centerCrop"
                 android:visibility="gone"
                 android:clipToOutline="true"
                 tools:src="@drawable/logo" />
