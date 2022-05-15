@@ -107,6 +107,7 @@ public class RegisterActivity extends AppCompatActivity {
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference myRef = database.getReference("user");
                             User user = new User(name, email,"https://firebasestorage.googleapis.com/v0/b/messagemobileapp.appspot.com/o/images%2Fooui_user-avatar.png?alt=media&token=5e572c2d-4f38-4f54-b39d-0b8574f1e8e5");
+                            user.setUid(uid);
                             myRef.child(uid).setValue(user);
 
                             Toast.makeText(context, "Đăng ký tài khoản thành công", Toast.LENGTH_SHORT).show();

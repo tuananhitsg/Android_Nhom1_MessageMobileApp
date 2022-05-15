@@ -30,7 +30,6 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class DanhBaFragment extends Fragment {
-
     private RecyclerView recyclerView;
     private UserAdapter userAdapter;
     private List<User> mUsers;
@@ -47,14 +46,6 @@ public class DanhBaFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DanhBaFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static DanhBaFragment newInstance(String param1, String param2) {
         DanhBaFragment fragment = new DanhBaFragment();
@@ -79,29 +70,30 @@ public class DanhBaFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_danh_ba, container, false);
-        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.danhBa_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mUsers= new ArrayList<>();
 
         readUser();
         return view;
     }
-    private void readUser(){
+    private void readUser() {
+
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user");
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mUsers.clear();
-                for(DataSnapshot snapshot1 : snapshot.getChildren()){
-                    User user = snapshot1.getValue(User.class);
-                    assert user!=null;
-                    assert firebaseUser!=null;
-                    if(!user.getUid().equals(firebaseUser.getUid())){
+                for (DataSnapshot s : snapshot.getChildren()) {
+                    User user = new User(s);
+
+                    if (!user.getUid().equals(firebaseUser.getUid())) {
                         mUsers.add(user);
                     }
                 }
-                userAdapter = new UserAdapter(getContext(),mUsers);
+                userAdapter = new UserAdapter(getContext(), mUsers);
                 recyclerView.setAdapter(userAdapter);
             }
 
@@ -110,5 +102,6 @@ public class DanhBaFragment extends Fragment {
 
             }
         });
+
     }
 }

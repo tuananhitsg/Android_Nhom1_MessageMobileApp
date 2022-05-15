@@ -100,6 +100,7 @@ public class HomeFragment extends Fragment {
         refMessage.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 ShowListUserTask  showListUserTask = new ShowListUserTask();
                 showListUserTask.execute();
             }
