@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.nhom1_messagemobileapp.entity.User;
+import com.example.nhom1_messagemobileapp.utils.SharedPreference;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -60,6 +61,9 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
+                                        SharedPreference sp = SharedPreference.getInstance(LoginActivity.this);
+                                        sp.saveData("uid", task.getResult().getUser().getUid());
+
                                         Toast.makeText(context, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                         startActivity(intent);

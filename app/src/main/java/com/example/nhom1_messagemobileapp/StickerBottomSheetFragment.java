@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -57,6 +58,8 @@ public class StickerBottomSheetFragment extends BottomSheetDialogFragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_bottom_sheet, container, false);
 
+
+
         tabLayout = view.findViewById(R.id.tab_layout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
@@ -70,8 +73,15 @@ public class StickerBottomSheetFragment extends BottomSheetDialogFragment {
         viewSearching = view.findViewById(R.id.view_searching);
         viewContent = view.findViewById(R.id.view_content);
 
-        ShowPackagesTask getPackagesTask = new ShowPackagesTask();
-        getPackagesTask.execute();
+        if(MainActivity.isNetworkConnected()) {
+            ShowPackagesTask getPackagesTask = new ShowPackagesTask();
+            getPackagesTask.execute();
+        }else{
+            Toast.makeText(context, "Không có kết nối mạng!", Toast.LENGTH_SHORT).show();
+            dismiss();
+            return null;
+        }
+
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

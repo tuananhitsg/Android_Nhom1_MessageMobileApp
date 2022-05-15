@@ -57,7 +57,7 @@ import java.util.UUID;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private String uid = "6kBO5yFQu1Y355mxKuc1YSaLtSZ2";
+    private String uid = "";
     private RecyclerView recyclerView;
     private MessageListAdapter recyclerAdapter;
     private ImageButton btnCamera;
@@ -162,7 +162,6 @@ public class ChatActivity extends AppCompatActivity {
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     if(event.getRawX() >= (edtMessage.getRight() - edtMessage.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         // your action here
-                        Toast.makeText(ChatActivity.this, "click", Toast.LENGTH_SHORT).show();
                         StickerBottomSheetFragment bottomSheetFragment = new StickerBottomSheetFragment(ChatActivity.this);
                         bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
                         return true;
@@ -179,11 +178,19 @@ public class ChatActivity extends AppCompatActivity {
 
         btnMedia = findViewById(R.id.btn_media);
         btnMedia.setOnClickListener(v -> {
+            if(!MainActivity.isNetworkConnected()) {
+                Toast.makeText(this, "Không có kết nối mạng!", Toast.LENGTH_SHORT).show();
+                return;
+            }
             imageChooser();
         });
 
         btnAction = findViewById(R.id.btn_action);
         btnAction.setOnClickListener(v -> {
+            if(!MainActivity.isNetworkConnected()) {
+                Toast.makeText(this, "Không có kết nối mạng!", Toast.LENGTH_SHORT).show();
+                return;
+            }
             String msg = "";
             String type = "";
             if (isBtnSend) {
@@ -197,7 +204,6 @@ public class ChatActivity extends AppCompatActivity {
             Message message = new Message(uid, friend.getUid(), msg, new Date(), type);
             addNewMessage(message);
         });
-
         refMessage.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -209,6 +215,10 @@ public class ChatActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+        if(!MainActivity.isNetworkConnected()) {
+            ShowListMessageTask showListMessageTask = new ShowListMessageTask();
+            showListMessageTask.execute();
+        }
     }
 
 
@@ -221,14 +231,12 @@ public class ChatActivity extends AppCompatActivity {
 
         @Override
         protected List<Message> doInBackground(String... params) {
-            Log.e("chat", uid + " " + friend.getUid());
             List<Message> messages = messageSqlDAO.findAllByUsers(uid, friend.getUid());
             return messages;
         }
 
         @Override
         protected void onPostExecute(List<Message> messages) {
-            Log.d("->>> sqll messages", messages.toString());
             recyclerAdapter.setMessages(messages);
             recyclerView.smoothScrollToPosition(messages.size() - 1);
         }
