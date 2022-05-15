@@ -6,9 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,7 +35,6 @@ import com.squareup.picasso.Picasso;
 
 import android.net.Uri;
 
-import java.io.ByteArrayOutputStream;
 import java.util.UUID;
 
 public class UpdateUserInfoActivity extends AppCompatActivity {
@@ -45,9 +44,10 @@ public class UpdateUserInfoActivity extends AppCompatActivity {
     private EditText edtEmail, edtName, edtPassword;
     private User theUser;
     private String uid;
-    private int SELECT_PICTURE = 200;
-    private Uri filePath;
+    private boolean isHiddenPassword = true;
 
+    private final int SELECT_PICTURE = 200;
+    private Uri filePath;
     private Context context;
     private FirebaseAuth mAuth;
     private FirebaseUser account;
@@ -153,6 +153,34 @@ public class UpdateUserInfoActivity extends AppCompatActivity {
                         }
                     });
                 }
+            }
+        });
+
+        edtPassword.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (edtPassword.getRight() - edtPassword.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if (isHiddenPassword) {
+                            edtPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_hidepass, 0);
+                            edtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            edtPassword.setSelection(edtPassword.length());
+                            isHiddenPassword = false;
+                        } else {
+                            edtPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_showpass, 0);
+                            edtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            edtPassword.setSelection(edtPassword.length());
+                            isHiddenPassword = true;
+                        }
+                        return true;
+                    }
+                }
+                return false;
             }
         });
     }

@@ -12,8 +12,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -93,13 +95,14 @@ public class UserInfoFragment extends Fragment {
     private TextView tvName;
     private ImageView imgAvatar;
     private Button btnDarkMode, btnEditInfo, btnChangePassword, btnLogout;
-    private String email;
-    private String name;
-    private String avatar;
     private User theUser;
     private ProgressBar progressBar;
+    private boolean isHiddenPassword;
+    private boolean flagHiddenCurrentPassword = true;
+    private boolean flagHiddenNewPassword = true;
+    private boolean flagHiddenReNewPassword = true;
 
-    private boolean flagDarkMode = false;
+    private boolean isDarkMode = false;
     private UiModeManager uiModeManager;
 
     private FirebaseAuth mAuth;
@@ -111,7 +114,6 @@ public class UserInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_info, container, false);
-        view.setForceDarkAllowed(true);
         // Inflate the layout for this fragment
 
 //        tìm đối tượng trong view
@@ -289,10 +291,14 @@ public class UserInfoFragment extends Fragment {
             }
         });
 
+        showAndHiddenPasswordField(edtPassword, flagHiddenCurrentPassword);
+        showAndHiddenPasswordField(edtNewPassword, flagHiddenNewPassword);
+        showAndHiddenPasswordField(edtReNewPassword, flagHiddenReNewPassword);
+
         dialog.show();
     }
 
-    public void setNightMode(Context target){
+    public void setNightMode(Context target) {
         int whiteColor = Color.parseColor("#ffffff");
         int blackColor = Color.parseColor("#000000");
         int seletedColor;
@@ -302,19 +308,50 @@ public class UserInfoFragment extends Fragment {
             uiManager.enableCarMode(0);
         }
 
-        if (!flagDarkMode) {
+        if (!isDarkMode) {
             uiManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
             seletedColor = whiteColor;
-            flagDarkMode = false;
+            isDarkMode = false;
         } else {
             uiManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
             seletedColor = blackColor;
-            flagDarkMode = true;
+            isDarkMode = true;
         }
-            tvName.setTextColor(seletedColor);
-            btnDarkMode.setTextColor(seletedColor);
-            btnEditInfo.setTextColor(seletedColor);
-            btnChangePassword.setTextColor(seletedColor);
-            btnLogout.setTextColor(seletedColor);
+        tvName.setTextColor(seletedColor);
+        btnDarkMode.setTextColor(seletedColor);
+        btnEditInfo.setTextColor(seletedColor);
+        btnChangePassword.setTextColor(seletedColor);
+        btnLogout.setTextColor(seletedColor);
+    }
+
+    private void showAndHiddenPasswordField(EditText edt, boolean flagHiddenPassword) {
+        isHiddenPassword = flagHiddenPassword;
+        edt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (edt.getRight() - edt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if (isHiddenPassword) {
+                            edt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_hidepass, 0);
+                            edt.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            edt.setSelection(edt.length());
+                            isHiddenPassword = false;
+                        } else {
+                            edt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_showpass, 0);
+                            edt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            edt.setSelection(edt.length());
+                            isHiddenPassword = true;
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 }
