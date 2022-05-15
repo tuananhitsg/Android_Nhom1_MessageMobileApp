@@ -27,10 +27,14 @@ public class User implements Serializable {
     @Ignore
     private List<Message> messages = new ArrayList<>();
 
+
     public User(String uid){
         this.uid = uid;
     }
 
+    public User() {
+        this.messages = new ArrayList<>();
+    }
     public User(DataSnapshot snapshot){
         this.uid = snapshot.getKey();
         this.name = snapshot.child("name").getValue(String.class);
@@ -87,9 +91,7 @@ public class User implements Serializable {
         this.messages.add(msg);
     }
 
-    public User() {
-        this.messages = new ArrayList<>();
-    }
+
 
     public String getUid() {
         return uid;

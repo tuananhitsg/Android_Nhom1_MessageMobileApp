@@ -1,156 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp"
     android:background="@color/background_color"
+    android:orientation="vertical"
     tools:context=".RegisterActivity">
-
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="120dp"
-        android:layout_height="118dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp"
-        app:srcCompat="@drawable/brand_icon" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="10dp">
 
-        <EditText
-            android:id="@+id/regis_edtEmailInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_white_conner_16_border_gray"
-            android:drawableLeft="@drawable/ic_mail"
-            android:hint="Tài khoản email"
-            android:inputType="textEmailAddress"
-            android:minHeight="48dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="6dp"
-            android:textColorHint="@color/text_color_hint"
-            android:textColorLink="@color/text_color_hint" />
-
-        <EditText
-            android:id="@+id/regis_edtUserHandleName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_white_conner_16_border_gray"
-            android:drawableLeft="@drawable/ic_acong"
-            android:hint="Tên người dùng"
-            android:inputType="textEmailAddress"
-            android:minHeight="48dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="6dp"
-            android:textColorHint="@color/text_color_hint"
-            android:textColorLink="@color/text_color_hint" />
-
-        <EditText
-            android:id="@+id/regis_edtPassInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_white_conner_16_border_gray"
-            android:drawableLeft="@drawable/ic_lock"
-            android:drawableRight="@drawable/ic_hidepass"
-            android:hint="Mật khẩu"
-            android:inputType="textPassword"
-            android:minHeight="48dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="6dp"
-            android:textColorHint="@color/text_color_hint"
-            android:textColorLink="@color/text_color_hint" />
-        <EditText
-            android:id="@+id/regis_edtConfirmPassInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_white_conner_16_border_gray"
-            android:drawableLeft="@drawable/ic_lock"
-            android:hint="Nhập lại mật khẩu"
-            android:inputType="textPassword"
-            android:minHeight="48dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="6dp"
-            android:textColorHint="@color/text_color_hint"
-            android:textColorLink="@color/text_color_hint" />
-
-
-        <Button
-            android:id="@+id/btn_register"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="20dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_popup_conner_16"
-            android:minHeight="48dp"
-            android:text="Đăng ký"
-            android:textColor="@color/text_color"
-            android:textAllCaps="false"
-            android:textSize="17sp" />
-
-        <Button
-            android:id="@+id/btnForgotPass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="120dp"
+            android:layout_height="118dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            android:backgroundTint="@android:color/transparent"
-            android:minHeight="48dp"
-            android:stateListAnimator="@null"
-            android:text="Quên mật khẩu?"
-            android:textAllCaps="false"
-            android:textColor="@color/primary_text_color"
-            android:textSize="17sp" />
+            android:layout_marginTop="100dp"
+            app:srcCompat="@drawable/brand_icon" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:layout_marginTop="50dp"
+            android:orientation="vertical"
+            android:padding="16dp">
 
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:startIconDrawable="@drawable/ic_mail">
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="50dp"
-                android:text="Đã có tài khoản?"
-                android:textColor="@color/text_color"
-                android:textSize="14sp" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/regis_edtEmailInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Tài khoản email"
+                    android:inputType="textEmailAddress"
+                    android:minHeight="48dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="6dp"
+                    android:textColorHint="#ACACAC"
+                    android:textColorLink="#ACACAC" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:startIconDrawable="@drawable/ic_acong">
+
+                <EditText
+                    android:id="@+id/regis_edtUserHandleName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Tên người dùng"
+                    android:inputType="textEmailAddress"
+                    android:minHeight="48dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="6dp"
+                    android:textColorHint="#ACACAC"
+                    android:textColorLink="#ACACAC" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/primary"
+                app:startIconDrawable="@drawable/ic_lock">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/regis_edtPassInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Mật khẩu"
+                    android:inputType="textPassword"
+                    android:minHeight="48dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="6dp"
+                    android:textColorHint="#ACACAC"
+                    android:textColorLink="#ACACAC" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/primary"
+                app:startIconDrawable="@drawable/ic_lock">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/regis_edtConfirmPassInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Nhập lại mật khẩu"
+                    android:inputType="textPassword"
+                    android:minHeight="48dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="6dp"
+                    android:textColorHint="#ACACAC"
+                    android:textColorLink="#ACACAC" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/btn_to_login_page"
-                android:layout_width="wrap_content"
+                android:id="@+id/btn_register"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="5dp"
-                android:backgroundTint="@android:color/transparent"
-                android:stateListAnimator="@null"
-                android:text="Đăng nhập"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_popup_conner_16"
+                android:minHeight="48dp"
+                android:text="Đăng ký"
                 android:textAllCaps="false"
-                android:textColor="@color/primary_text_color"
-                android:textSize="14sp" />
+                android:textSize="17sp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="70dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="50dp"
+                    android:text="Đã có tài khoản?"
+                    android:textColorHint="#ACACAC"
+
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/btn_to_login_page"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:backgroundTint="@android:color/transparent"
+                    android:stateListAnimator="@null"
+                    android:text="Đăng nhập"
+                    android:textAllCaps="false"
+                    android:textColor="#29CE75"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

@@ -208,7 +208,7 @@ public class UserInfoFragment extends Fragment {
         return view;
     }
 
-    private Dialog createDialog(int gravity, int layoutId) {
+    public Dialog createDialog(int gravity, int layoutId) {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(layoutId);
