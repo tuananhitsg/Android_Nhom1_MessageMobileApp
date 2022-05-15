@@ -10,10 +10,12 @@
     <color name="primary">#07DB89</color>
     <color name="pink">#ffe8ed</color>
 
-    <!--    design dark mode-->
-    <color name="text_color">#FFFFFFFF</color>
-    <color name="text_color_hint">#acacac</color>
-    <color name="subText_color">#b7b7b7</color>
-    <color name="background_color">#27292c</color>
-    <color name="background_color_popup">#28292d</color>
+    <!--    design dark mode: night-->
+    <color name="text_color">#eaeaea</color>
+    <color name="text_color_btn">#eaeaea</color>
+    <color name="text_color_hint">#737373</color>
+    <color name="primary_text_color">#29CE75</color>
+    <color name="subText_color">#646464</color>
+    <color name="background_color">#000</color>
+    <color name="background_color_popup">#18191a</color>
 </resources>

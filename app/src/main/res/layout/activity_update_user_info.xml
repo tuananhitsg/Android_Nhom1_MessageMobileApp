@@ -52,11 +52,12 @@
 
             <ImageView
                 android:id="@+id/updateUserInfo_imgAvatar"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:layout_gravity="center"
                 android:background="@drawable/border_avatar"
                 android:clipToOutline="true"
+                android:scaleType="centerCrop"
                 tools:src="@drawable/logo" />
 
             <ImageView
@@ -76,48 +77,88 @@
             android:layout_marginRight="16dp"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/updateUserInfo_edtEmail"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="2dp"
-                android:background="@drawable/bg_white_conner_16_border_gray"
-                android:textColor="@color/text_color"
-                android:hint="Họ và tên"
-                android:inputType="textEmailAddress"
-                android:paddingLeft="10dp"
-                android:paddingTop="6dp"
-                android:paddingBottom="8dp"
-                android:textColorHint="#acacac" />
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:startIconDrawable="@drawable/ic_profile">
 
-            <EditText
-                android:id="@+id/updateUserInfo_edtName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="2dp"
-                android:background="@drawable/bg_white_conner_16_border_gray"
-                android:hint="Email"
-                android:inputType="textPersonName"
-                android:paddingLeft="10dp"
-                android:paddingTop="6dp"
-                android:paddingBottom="8dp"
-                android:textColorHint="#acacac" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/updateUserInfo_edtName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Họ và tên"
+                    android:inputType="textPersonName"
+                    android:minHeight="48dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="6dp"
+                    android:text=""
+                    android:textColorHint="@color/text_color_hint"
+                    android:textColorLink="@color/text_color_hint" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/updateUserInfo_edtPassword"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="2dp"
-                android:background="@drawable/bg_white_conner_16_border_gray"
-                android:hint="Mật khẩu"
-                android:inputType="textPassword"
-                android:paddingLeft="10dp"
-                android:paddingTop="6dp"
-                android:paddingBottom="8dp"
-                android:textColorHint="#acacac" />
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:startIconDrawable="@drawable/ic_mail">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/updateUserInfo_edtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:minHeight="48dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="6dp"
+                    android:text=""
+                    android:textColorHint="@color/text_color_hint"
+                    android:textColorLink="@color/text_color_hint" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="2dp"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/updateUserInfo_edtPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_lock"
+                    android:drawableRight="@drawable/ic_showpass"
+                    android:drawablePadding="20dp"
+                    android:hint="Mật khẩu"
+                    android:inputType="textPassword"
+                    android:minHeight="48dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="6dp"
+                    android:text=""
+                    android:textColorHint="@color/text_color_hint"
+                    android:textColorLink="@color/text_color_hint" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <LinearLayout

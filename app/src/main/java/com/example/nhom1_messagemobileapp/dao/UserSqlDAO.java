@@ -60,6 +60,10 @@ public abstract class UserSqlDAO {
         List<User> friends = new ArrayList<>();
         List<Message> messages = database.getMessageSqlDAO().findAllByUserOrderByTimeDesc(uid);
         messages.forEach(message -> {
+            if(message.getType().equals("image")){
+                message.setContent("Đã gửi một ảnh");
+            }
+
             String friendUid = message.getFromUid();
             if(uid.equals(message.getFromUid()))
                 friendUid = message.getToUid();
