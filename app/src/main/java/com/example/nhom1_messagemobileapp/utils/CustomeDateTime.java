@@ -1,27 +1,42 @@
 package com.example.nhom1_messagemobileapp.utils;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class CustomeDateTime {
-    static DateTimeFormatter datetimeFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-    static DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    static DateTimeFormatter hMFormat = DateTimeFormatter.ofPattern("HH:mm");
+    static DateFormat datetimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    static DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    static DateFormat hMFormat = new SimpleDateFormat("HH:mm");
 
-    public static String dateFormat(LocalDateTime dt){
-        return dateFormat.format(dt);
-    }
-
-    public static String datetimeFormat(LocalDateTime dt){
-        return datetimeFormat.format(dt);
-    }
-
-    public static String HMFormat(LocalDateTime dt){
+    public static String dateFormat(Date d){
         try {
-            return hMFormat.format(dt);
-        }catch (Exception e){
-            return "";
+            return dateFormat.format(d);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return null;
+    }
+
+    public static String datetimeFormat(Date d){
+        try {
+            return datetimeFormat.format(d);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String HMFormat(Date d){
+        try {
+            return hMFormat.format(d);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

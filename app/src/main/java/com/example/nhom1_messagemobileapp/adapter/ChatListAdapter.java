@@ -26,16 +26,16 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     private static final String TAG = "ChatListAdapter";
     private Context context;
 
-    List<User> userMessages;
+    List<User> friends;
 
     public ChatListAdapter(Context context) {
         this.context = context;
-        userMessages = new ArrayList<>();
+        friends = new ArrayList<>();
     }
 
     public ChatListAdapter(Context context, List<User> userMessages) {
         this.context = context;
-        this.userMessages = userMessages;
+        this.friends = userMessages;
     }
 
     @NonNull
@@ -50,7 +50,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User userMessage = userMessages.get(position);
+        User userMessage = friends.get(position);
         holder.txt_name.setText(userMessage.getName());
         holder.txt_message.setText(userMessage.getMessages().get(0).getContent());
         holder.txt_time.setText(CustomeDateTime.HMFormat(userMessage.getMessages().get(0).getTime()));
@@ -68,7 +68,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return userMessages.size();
+        return friends.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
@@ -90,8 +90,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 //        return componentList;
 //    }
 //
-    public void setUserMessages(List<User> userMessages) {
-        this.userMessages = userMessages;
+    public void setFriends(List<User> friends) {
+        this.friends = friends;
         notifyDataSetChanged();
     }
 }

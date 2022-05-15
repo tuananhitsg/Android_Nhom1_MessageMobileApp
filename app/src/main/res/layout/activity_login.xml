@@ -39,7 +39,8 @@
             android:paddingTop="4dp"
             android:paddingBottom="6dp"
             android:textColorHint="@color/text_color_hint"
-            android:textColorLink="@color/text_color_hint" />
+            android:textColorLink="@color/text_color_hint"
+            android:text="test@gmail.com"/>
 
         <EditText
             android:id="@+id/login_edtPassInput"
@@ -57,7 +58,8 @@
             android:paddingRight="10dp"
             android:paddingBottom="6dp"
             android:textColorHint="@color/text_color_hint"
-            android:textColorLink="@color/text_color_hint" />
+            android:textColorLink="@color/text_color_hint"
+            android:text="nhan3008"/>
 
         <Button
             android:id="@+id/btnLogin"

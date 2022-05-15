@@ -6,37 +6,27 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import com.example.nhom1_messagemobileapp.R;
-import com.example.nhom1_messagemobileapp.adapter.ChatListAdapter;
-import com.example.nhom1_messagemobileapp.entity.Message;
+import com.example.nhom1_messagemobileapp.database.Database;
 import com.example.nhom1_messagemobileapp.entity.User;
+import com.example.nhom1_messagemobileapp.service.SyncDatabaseService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager mPager;
     private BottomNavigationView navigationView;
     private ScreenSlidePagerAdapter pagerAdapter;
-    private String uid = "";
+    private String uid = "pKtiff3DLPPWtNNOnN906uzELha2";
+    private Database database;
 
 
     @Override
@@ -44,13 +34,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        try {
-            uid = getIntent().getExtras().getString("uid");
-            System.out.println(uid);
-        }catch (Exception e){
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        database = Database.getInstance(this);
 
-        }
-
+        
+//        database.getUserSqlDAO().insert();
+        Log.d("sqlite", database.getUserSqlDAO().findAll().toString());
+        Intent intent = new Intent(this, SyncDatabaseService.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("uid", uid);
+        intent.putExtras(bundle);
+        startService(intent);
 
         mPager = findViewById(R.id.pager);
         navigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
