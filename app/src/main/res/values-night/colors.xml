@@ -13,9 +13,9 @@
     <!--    design dark mode: night-->
     <color name="text_color">#eaeaea</color>
     <color name="text_color_btn">#eaeaea</color>
-    <color name="text_color_hint">#737373</color>
+    <color name="text_color_hint">#B0B3B8</color>
     <color name="primary_text_color">#29CE75</color>
-    <color name="subText_color">#646464</color>
-    <color name="background_color">#000</color>
-    <color name="background_color_popup">#18191a</color>
+    <color name="subText_color">#B0B3B8</color>
+    <color name="background_color">#323639</color>
+    <color name="background_color_popup">#303135</color>
 </resources>
