@@ -38,8 +38,8 @@
             android:paddingLeft="10dp"
             android:paddingTop="4dp"
             android:paddingBottom="6dp"
-            android:textColorHint="#ACACAC"
-            android:textColorLink="#ACACAC" />
+            android:textColorHint="@color/text_color_hint"
+            android:textColorLink="@color/text_color_hint" />
 
         <EditText
             android:id="@+id/regis_edtUserHandleName"
@@ -54,8 +54,8 @@
             android:paddingLeft="10dp"
             android:paddingTop="4dp"
             android:paddingBottom="6dp"
-            android:textColorHint="#ACACAC"
-            android:textColorLink="#ACACAC" />
+            android:textColorHint="@color/text_color_hint"
+            android:textColorLink="@color/text_color_hint" />
 
         <EditText
             android:id="@+id/regis_edtPassInput"
@@ -72,8 +72,8 @@
             android:paddingRight="10dp"
             android:paddingTop="4dp"
             android:paddingBottom="6dp"
-            android:textColorHint="#ACACAC"
-            android:textColorLink="#ACACAC" />
+            android:textColorHint="@color/text_color_hint"
+            android:textColorLink="@color/text_color_hint" />
         <EditText
             android:id="@+id/regis_edtConfirmPassInput"
             android:layout_width="match_parent"
@@ -88,8 +88,8 @@
             android:paddingRight="10dp"
             android:paddingTop="4dp"
             android:paddingBottom="6dp"
-            android:textColorHint="#ACACAC"
-            android:textColorLink="#ACACAC" />
+            android:textColorHint="@color/text_color_hint"
+            android:textColorLink="@color/text_color_hint" />
 
 
         <Button
@@ -102,6 +102,7 @@
             android:background="@drawable/bg_popup_conner_16"
             android:minHeight="48dp"
             android:text="Đăng ký"
+            android:textColor="@color/text_color"
             android:textAllCaps="false"
             android:textSize="17sp" />
 
@@ -118,7 +119,7 @@
             android:stateListAnimator="@null"
             android:text="Quên mật khẩu?"
             android:textAllCaps="false"
-            android:textColor="#29CE75"
+            android:textColor="@color/primary_text_color"
             android:textSize="17sp" />
 
         <LinearLayout
@@ -135,8 +136,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="50dp"
                 android:text="Đã có tài khoản?"
-                android:textColorHint="#ACACAC"
-
+                android:textColor="@color/text_color"
                 android:textSize="14sp" />
 
             <Button
@@ -149,7 +149,7 @@
                 android:stateListAnimator="@null"
                 android:text="Đăng nhập"
                 android:textAllCaps="false"
-                android:textColor="#29CE75"
+                android:textColor="@color/primary_text_color"
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>

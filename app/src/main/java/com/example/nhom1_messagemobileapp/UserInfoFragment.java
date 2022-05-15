@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import android.text.InputType;
@@ -103,7 +104,6 @@ public class UserInfoFragment extends Fragment {
     private boolean flagHiddenReNewPassword = true;
 
     private boolean isDarkMode = false;
-    private UiModeManager uiModeManager;
 
     private FirebaseAuth mAuth;
     private FirebaseUser account;
@@ -112,8 +112,13 @@ public class UserInfoFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                            Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_info, container, false);
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            getActivity().setTheme(R.style.AppTheme_MessageMobileApp_Dark);
+        } else {
+            getActivity().setTheme(R.style.AppTheme_MessageMobileApp);
+        }
         // Inflate the layout for this fragment
 
 //        tìm đối tượng trong view
@@ -162,7 +167,7 @@ public class UserInfoFragment extends Fragment {
         btnDarkMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setNightMode(getActivity());
+                setNightMode();
             }
         });
 
@@ -298,30 +303,19 @@ public class UserInfoFragment extends Fragment {
         dialog.show();
     }
 
-    public void setNightMode(Context target) {
-        int whiteColor = Color.parseColor("#ffffff");
-        int blackColor = Color.parseColor("#000000");
-        int seletedColor;
-        UiModeManager uiManager = (UiModeManager) target.getSystemService(Context.UI_MODE_SERVICE);
-
-        if (Build.VERSION.SDK_INT <= 22) {
-            uiManager.enableCarMode(0);
+    public void setNightMode(){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            Toast.makeText(getContext(), "Tính năng này chỉ hoạt động trên hệ điều hành android 9 trở lên", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        if (!isDarkMode) {
-            uiManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
-            seletedColor = whiteColor;
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             isDarkMode = false;
         } else {
-            uiManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
-            seletedColor = blackColor;
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             isDarkMode = true;
         }
-        tvName.setTextColor(seletedColor);
-        btnDarkMode.setTextColor(seletedColor);
-        btnEditInfo.setTextColor(seletedColor);
-        btnChangePassword.setTextColor(seletedColor);
-        btnLogout.setTextColor(seletedColor);
     }
 
     private void showAndHiddenPasswordField(EditText edt, boolean flagHiddenPassword) {

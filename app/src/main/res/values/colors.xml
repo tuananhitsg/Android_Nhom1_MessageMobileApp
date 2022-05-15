@@ -12,7 +12,9 @@
 
 <!--    design dark mode: day-->
     <color name="text_color">#FF000000</color>
+    <color name="text_color_btn">#eaeaea</color>
     <color name="text_color_hint">#acacac</color>
+    <color name="primary_text_color">#29CE75</color>
     <color name="subText_color">#b7b7b7</color>
     <color name="background_color">#FFFFFFFF</color>
     <color name="background_color_popup">#FFFFFFFF</color>
