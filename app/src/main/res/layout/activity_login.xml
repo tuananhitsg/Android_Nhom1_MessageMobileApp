@@ -50,8 +50,8 @@
                     android:paddingTop="4dp"
                     android:paddingBottom="6dp"
                     android:text="test@gmail.com"
-                    android:textColorHint="#ACACAC"
-                    android:textColorLink="#ACACAC" />
+                    android:textColorHint="@color/text_color_hint"
+                    android:textColorLink="@color/text_color_hint" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -78,8 +78,8 @@
                     android:paddingTop="4dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="6dp"
-                    android:textColorHint="#ACACAC"
-                    android:textColorLink="#ACACAC"  />
+                    android:textColorHint="@color/text_color_hint"
+                    android:textColorLink="@color/text_color_hint"  />
             </com.google.android.material.textfield.TextInputLayout>
             <Button
                 android:id="@+id/btnForgotPass"
@@ -126,7 +126,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="50dp"
                     android:text="Chưa có tài khoản?"
-                    android:textColorHint="#ACACAC"
+                    android:textColorHint="@color/text_color_hint"
                     android:textSize="14sp" />
 
                 <Button
@@ -139,7 +139,7 @@
                     android:stateListAnimator="@null"
                     android:text="Đăng ký"
                     android:textAllCaps="false"
-                    android:textColor="#29CE75"
+                    android:textColor="@color/primary_text_color"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>

@@ -32,7 +32,7 @@
         android:layout_marginTop="12dp"
         android:layout_toEndOf="@+id/card_avatar_friend"
         android:text="Huỳnh Tuấn Anh"
-        android:textColor="@color/black"
+        android:textColor="@color/text_color"
         android:textSize="18dp"
         app:layout_constraintLeft_toRightOf="@+id/card_avatar_friend"
         app:layout_constraintTop_toTopOf="parent" />

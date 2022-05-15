@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.nhom1_messagemobileapp.entity.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -73,10 +74,15 @@ public class LoginActivity extends AppCompatActivity {
                                         finish();
                                         WelcomeActivity.fa.finish();
                                     } else {
-                                        Toast.makeText(context, "Tài khoản/ mật khẩu không đúng", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, "Tài khoản hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show();
                                     }
                                 }
-                            });
+                            }).addOnFailureListener(LoginActivity.this, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(context,"Kết nối không ổn định", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });

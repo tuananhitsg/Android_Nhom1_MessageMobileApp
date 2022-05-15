@@ -50,8 +50,8 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="4dp"
                     android:paddingBottom="6dp"
-                    android:textColorHint="#ACACAC"
-                    android:textColorLink="#ACACAC" />
+                    android:textColorHint="@color/text_color_hint"
+                    android:textColorLink="@color/text_color_hint" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -63,7 +63,7 @@
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusTopStart="16dp"
-                app:startIconDrawable="@drawable/ic_acong">
+                app:startIconDrawable="@drawable/ic_profile">
 
                 <EditText
                     android:id="@+id/regis_edtUserHandleName"
@@ -76,8 +76,8 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="4dp"
                     android:paddingBottom="6dp"
-                    android:textColorHint="#ACACAC"
-                    android:textColorLink="#ACACAC" />
+                    android:textColorHint="@color/text_color_hint"
+                    android:textColorLink="@color/text_color_hint" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -105,8 +105,8 @@
                     android:paddingTop="4dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="6dp"
-                    android:textColorHint="#ACACAC"
-                    android:textColorLink="#ACACAC" />
+                    android:textColorHint="@color/text_color_hint"
+                    android:textColorLink="@color/text_color_hint" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -134,8 +134,8 @@
                     android:paddingTop="4dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="6dp"
-                    android:textColorHint="#ACACAC"
-                    android:textColorLink="#ACACAC" />
+                    android:textColorHint="@color/text_color_hint"
+                    android:textColorLink="@color/text_color_hint" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
@@ -167,7 +167,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="50dp"
                     android:text="Đã có tài khoản?"
-                    android:textColorHint="#ACACAC"
+                    android:textColorHint="@color/text_color_hint"
 
                     android:textSize="14sp" />
 
@@ -181,9 +181,10 @@
                     android:stateListAnimator="@null"
                     android:text="Đăng nhập"
                     android:textAllCaps="false"
-                    android:textColor="#29CE75"
+                    android:textColor="@color/primary_text_color"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 </ScrollView>
