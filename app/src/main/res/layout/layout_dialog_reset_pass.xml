@@ -21,7 +21,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="12dp"
             android:background="@drawable/bg_white_conner_16_border_gray"
-            android:hint="Nhập gmail của bạni"
+            android:hint="Nhập gmail của bạn"
             android:inputType="textEmailAddress"
             android:paddingLeft="10dp"
             android:paddingTop="4dp"

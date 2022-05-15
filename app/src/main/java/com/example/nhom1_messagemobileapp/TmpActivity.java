@@ -19,12 +19,6 @@ public class TmpActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        Button btnDemoFirebase = findViewById(R.id.button_demoFirebase);
-        btnDemoFirebase.setOnClickListener((v) -> {
-            Intent intent = new Intent(this, DemoFirebase.class);
-            startActivity(intent);
-        });
-
         Button btnStartPage = findViewById(R.id.btn_to_welcome_page);
         btnStartPage.setOnClickListener((v) -> {
             Intent intent = new Intent(this, WelcomeActivity.class);

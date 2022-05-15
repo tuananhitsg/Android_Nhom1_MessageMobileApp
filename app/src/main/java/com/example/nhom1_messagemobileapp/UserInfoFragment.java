@@ -98,10 +98,6 @@ public class UserInfoFragment extends Fragment {
     private Button btnDarkMode, btnEditInfo, btnChangePassword, btnLogout;
     private User theUser;
     private ProgressBar progressBar;
-    private boolean isHiddenPassword;
-    private boolean flagHiddenCurrentPassword = true;
-    private boolean flagHiddenNewPassword = true;
-    private boolean flagHiddenReNewPassword = true;
 
     private boolean isDarkMode = false;
 
@@ -296,10 +292,6 @@ public class UserInfoFragment extends Fragment {
             }
         });
 
-        showAndHiddenPasswordField(edtPassword, flagHiddenCurrentPassword);
-        showAndHiddenPasswordField(edtNewPassword, flagHiddenNewPassword);
-        showAndHiddenPasswordField(edtReNewPassword, flagHiddenReNewPassword);
-
         dialog.show();
     }
 
@@ -316,36 +308,5 @@ public class UserInfoFragment extends Fragment {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             isDarkMode = true;
         }
-    }
-
-    private void showAndHiddenPasswordField(EditText edt, boolean flagHiddenPassword) {
-        isHiddenPassword = flagHiddenPassword;
-        edt.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                final int DRAWABLE_LEFT = 0;
-                final int DRAWABLE_TOP = 1;
-                final int DRAWABLE_RIGHT = 2;
-                final int DRAWABLE_BOTTOM = 3;
-
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (edt.getRight() - edt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        if (isHiddenPassword) {
-                            edt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_hidepass, 0);
-                            edt.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            edt.setSelection(edt.length());
-                            isHiddenPassword = false;
-                        } else {
-                            edt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_showpass, 0);
-                            edt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            edt.setSelection(edt.length());
-                            isHiddenPassword = true;
-                        }
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
     }
 }

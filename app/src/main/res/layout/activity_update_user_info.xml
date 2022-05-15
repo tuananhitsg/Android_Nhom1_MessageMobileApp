@@ -140,15 +140,15 @@
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp">
+                app:boxCornerRadiusTopStart="16dp"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/primary"
+                app:startIconDrawable="@drawable/ic_lock">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/updateUserInfo_edtPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_lock"
-                    android:drawableRight="@drawable/ic_showpass"
-                    android:drawablePadding="20dp"
                     android:hint="Mật khẩu"
                     android:inputType="textPassword"
                     android:minHeight="48dp"
