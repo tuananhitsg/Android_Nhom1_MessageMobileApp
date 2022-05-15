@@ -14,24 +14,19 @@
         android:padding="16dp">
 
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Nhập gmail của bạn "
-            android:textColor="@color/text_color"
-            android:textSize="17sp" />
-
         <EditText
             android:id="@+id/dialogResetPassword_edtConfirmMail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_white_conner_16_border_gray"
-            android:inputType="textPassword"
+            android:hint="Nhập gmail của bạni"
+            android:inputType="textEmailAddress"
             android:paddingLeft="10dp"
             android:paddingTop="4dp"
-            android:paddingBottom="6dp" />
+            android:paddingBottom="6dp"
+            android:textColorHint="#acacac" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,27 +35,7 @@
             android:orientation="horizontal"
             android:weightSum="2">
 
-            <Button
-                android:id="@+id/dialogChangePassword_btnCancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/pink"
-                android:text="Hủy"
-                android:textAllCaps="false"
-                android:textColor="#ff4668"
-                android:textSize="17sp" />
 
-            <Button
-                android:id="@+id/dialogResetPassword_btnSubmit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:text="Xác nhận"
-                android:textAllCaps="false"
-                android:textSize="17sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
