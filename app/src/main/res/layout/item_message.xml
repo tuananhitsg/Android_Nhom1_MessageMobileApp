@@ -32,6 +32,7 @@
         android:padding="10dp"
         android:layout_marginLeft="10dp"
         android:maxWidth="250dp"
+        android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints" />
     <ImageView

@@ -21,12 +21,12 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="12dp"
             android:background="@drawable/bg_white_conner_16_border_gray"
-            android:hint="Nhập gmail của bạni"
+            android:hint="Nhập gmail của bạn"
             android:inputType="textEmailAddress"
             android:paddingLeft="10dp"
             android:paddingTop="4dp"
             android:paddingBottom="6dp"
-            android:textColorHint="#acacac" />
+            android:textColorHint="@color/text_color_hint" />
 
         <LinearLayout
             android:layout_width="match_parent"

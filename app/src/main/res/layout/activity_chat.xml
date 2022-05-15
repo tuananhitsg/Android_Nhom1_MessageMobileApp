@@ -4,143 +4,149 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     tools:context=".ChatActivity">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/border_bottom"
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
-        android:background="@drawable/border_bottom">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <ImageButton
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"
             android:background="@android:color/transparent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:padding="5dp"
-            />
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/card_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
             app:cardCornerRadius="30dp"
             app:layout_constraintLeft_toRightOf="@id/btn_back"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginLeft="15dp">
+            app:layout_constraintTop_toTopOf="parent">
+
             <ImageView
                 android:id="@+id/img_avatar"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:scaleType="centerCrop"
-                android:background="@drawable/ic_user_default"
-                />
+                android:background="@drawable/ic_user_default"/>
         </androidx.cardview.widget.CardView>
+
         <TextView
             android:id="@+id/txt_name_friend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:text="Trần Văn Nhân"
-            android:textColor="@color/black"
+            android:textColorHint="@color/text_color"
+            android:textColorLink="@color/text_color"
             android:textSize="16dp"
-            app:layout_constraintLeft_toRightOf="@id/card_avatar"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginLeft="10dp"/>
+            app:layout_constraintLeft_toRightOf="@id/card_avatar"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:orientation="vertical"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toRightOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/header"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/action">-->
-<!--       -->
-<!--    </LinearLayout>-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:orientation="vertical"-->
+    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--        app:layout_constraintRight_toRightOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/header"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/action">-->
+    <!--       -->
+    <!--    </LinearLayout>-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/action"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header"
-        app:layout_constraintBottom_toTopOf="@+id/action">
+        app:layout_constraintTop_toBottomOf="@+id/header">
 
     </androidx.recyclerview.widget.RecyclerView>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/border_top"
         android:padding="10dp"
-        android:background="@drawable/border_top">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
         <ImageButton
             android:id="@+id/btn_camera"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_camera"
             android:background="@android:color/transparent"
             android:padding="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:scaleType="fitXY"
             android:scaleX="1.2"
             android:scaleY="1.2"
-            />
+            android:src="@drawable/ic_camera"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageButton
             android:id="@+id/btn_media"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_media"
             android:background="@android:color/transparent"
             android:padding="10dp"
-            app:layout_constraintLeft_toRightOf="@id/btn_camera"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:scaleType="fitXY"
             android:scaleX="1.2"
             android:scaleY="1.2"
-            />
+            android:src="@drawable/ic_media"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/btn_camera"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/input"
             android:layout_width="0dp"
             android:layout_height="40dp"
+            android:layout_marginHorizontal="10dp"
             android:background="@drawable/bg_message_input"
             android:drawableRight="@drawable/ic_react"
             android:drawablePadding="10dp"
             android:hint="Ab"
             android:paddingHorizontal="15dp"
             android:paddingVertical="5dp"
-            android:layout_marginHorizontal="10dp"
             android:textColorHint="#b6b6b6"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/btn_media"
             app:layout_constraintRight_toLeftOf="@id/btn_action"
             app:layout_constraintTop_toTopOf="parent" />
+
         <ImageButton
             android:id="@+id/btn_action"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_love"
             android:background="@android:color/transparent"
             android:padding="10dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:scaleType="fitXY"
             android:scaleX="1.2"
             android:scaleY="1.2"
-            />
+            android:src="@drawable/ic_love"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
