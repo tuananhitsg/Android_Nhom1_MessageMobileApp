@@ -54,7 +54,7 @@ public abstract class UserSqlDAO {
         return findById(id) != null;
     }
 
-    public List<User> getFriends(String uid){
+    public List<User> getFriends(String uid, boolean sql){
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference refUser = firebaseDatabase.getReference("user");
 
@@ -69,7 +69,7 @@ public abstract class UserSqlDAO {
             if(uid.equals(message.getFromUid()))
                 friendUid = message.getToUid();
 
-            if(MainActivity.isNetworkConnected()) {
+            if(MainActivity.isNetworkConnected() && sql == false) {
                 refUser.child(friendUid).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {

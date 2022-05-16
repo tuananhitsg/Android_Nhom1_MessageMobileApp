@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.example.nhom1_messagemobileapp.utils.FlaticonAPI;
+
 public class WelcomeActivity extends AppCompatActivity {
     public static Activity fa;
 
@@ -21,5 +23,7 @@ public class WelcomeActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         });
+
+
     }
 }

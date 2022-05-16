@@ -11,18 +11,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.nhom1_messagemobileapp.adapter.ChatListAdapter;
 import com.example.nhom1_messagemobileapp.dao.UserSqlDAO;
 import com.example.nhom1_messagemobileapp.database.Database;
 import com.example.nhom1_messagemobileapp.entity.Message;
+import com.example.nhom1_messagemobileapp.entity.StickerPackage;
 import com.example.nhom1_messagemobileapp.entity.User;
+import com.example.nhom1_messagemobileapp.utils.FlaticonAPI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.Map;
@@ -91,16 +96,35 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        ImageView imgAvatar = view.findViewById(R.id.img_avatar);
+
+        refUser.child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User theUser = dataSnapshot.getValue(User.class);
+                Picasso.get().load(theUser.getAvatar()).into(imgAvatar);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+
         getFriends();
+
+
         return view;
     }
 
     public void getFriends(){
-        Log.e("internet", "true");
+        Log.e("getFriends", "getFriends");
+        ShowListUserTask showListUserTask = new ShowListUserTask(true);
+        showListUserTask.execute();
+
         refMessage.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ShowListUserTask  showListUserTask = new ShowListUserTask();
+                ShowListUserTask showListUserTask = new ShowListUserTask(false);
                 showListUserTask.execute();
             }
 
@@ -109,17 +133,15 @@ public class HomeFragment extends Fragment {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-        if(!MainActivity.isNetworkConnected()) {
-            Log.e("internet", "false");
-            ShowListUserTask showListUserTask = new ShowListUserTask();
-            showListUserTask.execute();
-        }
+
     }
 
-
-
-
     public class ShowListUserTask extends AsyncTask<Void, Void, List<User>> {
+        private boolean sql;
+        public ShowListUserTask(boolean sql){
+            this.sql = sql;
+        }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -127,7 +149,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected List<User> doInBackground (Void...voids){
-            List<User> friends = userSqlDAO.getFriends(uid);
+            List<User> friends = userSqlDAO.getFriends(uid, sql);
             return friends;
         }
 
@@ -135,6 +157,28 @@ public class HomeFragment extends Fragment {
         protected void onPostExecute (List<User> friends){
             Log.e("get friendsssssssssssssss", friends.toString());
             recyclerAdapter.setFriends(friends);
+        }
+    }
+
+    public class LoadPackagesTask extends AsyncTask<String, String, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground (String...params){
+            if(FlaticonAPI.packages.size() == 0){
+                FlaticonAPI flaticonApi = new FlaticonAPI();
+                flaticonApi.getPackages();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute (Void v){
+
         }
     }
 }
