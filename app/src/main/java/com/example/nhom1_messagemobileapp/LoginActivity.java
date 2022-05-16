@@ -5,14 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.nhom1_messagemobileapp.entity.User;
+import com.example.nhom1_messagemobileapp.utils.SharedPreference;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -24,7 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class LoginActivity extends AppCompatActivity {
 
     EditText edtPassword, edtEmail;
-    Button btnLogin, btnToRegisterPage,  btnForgotPass;
+    Button btnLogin, btnToRegisterPage, btnForgotPass;
     private Context context;
     private FirebaseDatabase database;
     private FirebaseAuth auth;
@@ -40,12 +43,12 @@ public class LoginActivity extends AppCompatActivity {
         initUi();
 
         //lưu đăng nhập
-
-        if (user != null) {
+        if (mUser != null) {
             // User is signed in
             Intent i = new Intent(LoginActivity.this, MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
+
         } else {
             // User is signed out
             Log.d("bay màuuuuuuuu", "onAuthStateChanged:signed_out");
@@ -56,34 +59,29 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        edtPassword.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (i == KeyEvent.KEYCODE_ENTER) {
+                        String email = edtEmail.getText().toString();
+                        String password = edtPassword.getText().toString();
+                        logIn(email, password);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = edtEmail.getText().toString();
                 String password = edtPassword.getText().toString();
-                boolean result = checkData(email, password);
-                if (result) {
-                    auth.signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(context, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                        WelcomeActivity.fa.finish();
-                                    } else {
-                                        Toast.makeText(context, "Tài khoản hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }).addOnFailureListener(LoginActivity.this, new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(context,"Kết nối không ổn định", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+
+                logIn(email, password);
+
             }
         });
         btnForgotPass.setOnClickListener(new View.OnClickListener() {
@@ -122,24 +120,35 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-//    private void onClickForgotPass(String gmail) {
-//        FirebaseAuth auth = FirebaseAuth.getInstance();
-//        String emailAddress = gmail;
-//
-//        auth.sendPasswordResetEmail(emailAddress)
-//                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        if (task.isSuccessful()) {
-//                            Toast.makeText(LoginActivity.this, "Email sent", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//    }
+    private void logIn(String email, String password) {
+        boolean result = checkData(email, password);
+        if (result) {
+            auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(context, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                                WelcomeActivity.fa.finish();
+                            } else {
+                                Toast.makeText(context, "Tài khoản hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }).addOnFailureListener(LoginActivity.this, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(context, "Kết nối không ổn định", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
 
-    private void openDialog(){
+    private void openDialog() {
         ResetPassDialog resetPassDialog = new ResetPassDialog();
-        resetPassDialog.show(getSupportFragmentManager(),"Dialog");
+        resetPassDialog.show(getSupportFragmentManager(), "Dialog");
     }
 
 
