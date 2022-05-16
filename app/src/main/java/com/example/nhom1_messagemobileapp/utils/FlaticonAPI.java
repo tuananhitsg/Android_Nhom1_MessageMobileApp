@@ -114,8 +114,7 @@ public class FlaticonAPI {
     public List<StickerPackage> getPackages(){
 //        List<String> packages = Arrays.asList("love-364", "love-371", "wedding-424",
 //                "cave-man", "monk", "influencer-66", "meditation-9", "lineman");
-        List<String> packages = Arrays.asList("stay-at-home-93", "christmas-531", "animals-139", "pets-92",
-                "birthday-209", "creativity-11", "nature-204", "new-year-177", "food-283");
+        List<String> packages = Arrays.asList("stay-at-home-93", "christmas-531", "animals-139", "food-283");
         List<StickerPackage> result = new ArrayList<>();
 
         for(int i=0; i<packages.size(); i++){

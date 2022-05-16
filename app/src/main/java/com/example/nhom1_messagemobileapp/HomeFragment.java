@@ -112,10 +112,7 @@ public class HomeFragment extends Fragment {
 
         getFriends();
 
-        if(MainActivity.isNetworkConnected()){
-            ShowPackagesTask showPackagesTask = new ShowPackagesTask();
-            showPackagesTask.execute();
-        }
+
         return view;
     }
 
@@ -163,7 +160,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    public class ShowPackagesTask extends AsyncTask<String, String, List<StickerPackage>> {
+    public class LoadPackagesTask extends AsyncTask<String, String, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -171,13 +168,16 @@ public class HomeFragment extends Fragment {
         }
 
         @Override
-        protected List<StickerPackage> doInBackground (String...params){
-            FlaticonAPI flaticonApi = new FlaticonAPI();
-            return flaticonApi.getPackages();
+        protected Void doInBackground (String...params){
+            if(FlaticonAPI.packages.size() == 0){
+                FlaticonAPI flaticonApi = new FlaticonAPI();
+                flaticonApi.getPackages();
+            }
+            return null;
         }
 
         @Override
-        protected void onPostExecute (List<StickerPackage> packages){
+        protected void onPostExecute (Void v){
 
         }
     }
