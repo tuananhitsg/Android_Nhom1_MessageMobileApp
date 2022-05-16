@@ -62,7 +62,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             intent.putExtras(bundle);
             context.startActivity(intent);
         });
-//        Picasso.get().load(friendMessage.getUser().getImage()).into(holder.img_avatar_friend);
     }
 
 
