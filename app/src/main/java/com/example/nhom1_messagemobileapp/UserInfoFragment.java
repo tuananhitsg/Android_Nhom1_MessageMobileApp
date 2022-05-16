@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nhom1_messagemobileapp.entity.User;
+import com.example.nhom1_messagemobileapp.utils.SharedPreference;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -98,12 +99,12 @@ public class UserInfoFragment extends Fragment {
 
     private TextView tvName;
     private ImageView imgAvatar;
-    private Button  btnEditInfo, btnChangePassword, btnLogout;
+    private Button btnEditInfo, btnChangePassword, btnLogout;
     private Switch btnDarkMode;
     private User theUser;
     private ProgressBar progressBar;
 
-    private boolean isDarkMode = false;
+    private SharedPreference sharedPreference;
 
     private FirebaseAuth mAuth;
     private FirebaseUser account;
@@ -112,13 +113,8 @@ public class UserInfoFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_info, container, false);
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            getActivity().setTheme(R.style.AppTheme_MessageMobileApp_Dark);
-        } else {
-            getActivity().setTheme(R.style.AppTheme_MessageMobileApp);
-        }
         // Inflate the layout for this fragment
 
 //        tìm đối tượng trong view
@@ -129,6 +125,17 @@ public class UserInfoFragment extends Fragment {
         btnChangePassword = view.findViewById(R.id.userInfo_btnChangePassword);
         btnLogout = view.findViewById(R.id.userInfo_btnLogout);
         progressBar = view.findViewById(R.id.progressBar);
+
+        sharedPreference = SharedPreference.getInstance(getActivity());
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            btnDarkMode.setChecked(true);
+            sharedPreference.saveData("isDarkMode", true);
+            getActivity().setTheme(R.style.AppTheme_MessageMobileApp_Dark);
+        } else {
+            btnDarkMode.setChecked(false);
+            sharedPreference.saveData("isDarkMode", false);
+            getActivity().setTheme(R.style.AppTheme_MessageMobileApp);
+        }
 
         if (progressBar != null) {
             progressBar.setVisibility(View.VISIBLE);
@@ -167,7 +174,7 @@ public class UserInfoFragment extends Fragment {
         btnDarkMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                setNightMode();
+                setNightMode(b);
             }
         });
 
@@ -301,7 +308,7 @@ public class UserInfoFragment extends Fragment {
         dialog.show();
     }
 
-    public void setNightMode(){
+    public void setNightMode(boolean isDarkMode) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             String message = "Tính năng này chỉ hoạt động trên hệ điều hành android 9 trở lên";
             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
@@ -309,11 +316,10 @@ public class UserInfoFragment extends Fragment {
         }
 
         if (isDarkMode) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            isDarkMode = false;
-        } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            isDarkMode = true;
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+        sharedPreference.saveData("isDarkMode", isDarkMode);
     }
 }
