@@ -2,17 +2,21 @@ package com.example.nhom1_messagemobileapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Process;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -26,15 +30,10 @@ import android.widget.Toast;
 
 import com.example.nhom1_messagemobileapp.adapter.MessageListAdapter;
 import com.example.nhom1_messagemobileapp.dao.MessageSqlDAO;
-import com.example.nhom1_messagemobileapp.dao.UserSqlDAO;
 import com.example.nhom1_messagemobileapp.database.Database;
 import com.example.nhom1_messagemobileapp.entity.Message;
-import com.example.nhom1_messagemobileapp.entity.StickerPackage;
 import com.example.nhom1_messagemobileapp.entity.User;
-import com.example.nhom1_messagemobileapp.utils.CustomeDateTime;
-import com.example.nhom1_messagemobileapp.utils.FlaticonAPI;
 import com.example.nhom1_messagemobileapp.utils.Random;
-import com.example.nhom1_messagemobileapp.utils.converter.TimestampConverter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -51,12 +50,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.UUID;
 
 public class ChatActivity extends AppCompatActivity {
@@ -74,11 +70,14 @@ public class ChatActivity extends AppCompatActivity {
     private Database sqlDatabase;
     private MessageSqlDAO messageSqlDAO;
     private boolean isBtnSend = false;
-    private int SELECT_PICTURE = 200;
     private Uri filePath;
     private FirebaseStorage rootRef;
     private StorageReference storageRef;
     private EditText edtMessage;
+
+    private static final int SELECT_PICTURE = 200;
+    private Uri mImageUri = null;
+    static final int REQUEST_IMAGE_CAPTURE = 7;
 
     public ChatActivity(String uid) {
         this.uid = uid;
@@ -111,7 +110,6 @@ public class ChatActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         friend = (User) bundle.getSerializable("friend");
         System.out.println(friend);
-
 
         ImageView imgAvt = findViewById(R.id.img_avatar);
         Picasso.get().load(friend.getAvatar()).into(imgAvt);
@@ -163,8 +161,8 @@ public class ChatActivity extends AppCompatActivity {
                 final int DRAWABLE_RIGHT = 2;
                 final int DRAWABLE_BOTTOM = 3;
 
-                if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if(event.getRawX() >= (edtMessage.getRight() - edtMessage.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (edtMessage.getRight() - edtMessage.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         // your action here
                         StickerBottomSheetFragment bottomSheetFragment = new StickerBottomSheetFragment(ChatActivity.this);
                         bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
@@ -177,12 +175,14 @@ public class ChatActivity extends AppCompatActivity {
 
         btnCamera = findViewById(R.id.btn_camera);
         btnCamera.setOnClickListener(v -> {
-            Toast.makeText(this, "Đang phát triển", Toast.LENGTH_SHORT).show();
+            Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(camera_intent, REQUEST_IMAGE_CAPTURE);
+//            Toast.makeText(this, "Đang phát triển", Toast.LENGTH_SHORT).show();
         });
 
         btnMedia = findViewById(R.id.btn_media);
         btnMedia.setOnClickListener(v -> {
-            if(!MainActivity.isNetworkConnected()) {
+            if (!MainActivity.isNetworkConnected()) {
                 Toast.makeText(this, "Không có kết nối mạng!", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -191,7 +191,7 @@ public class ChatActivity extends AppCompatActivity {
 
         btnAction = findViewById(R.id.btn_action);
         btnAction.setOnClickListener(v -> {
-            if(!MainActivity.isNetworkConnected()) {
+            if (!MainActivity.isNetworkConnected()) {
                 Toast.makeText(this, "Không có kết nối mạng!", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -224,7 +224,6 @@ public class ChatActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-
     }
 
 
@@ -250,9 +249,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
-
-    public void scrool(){
-        if(recyclerAdapter.getMessages().size() != 0)
+    public void scrool() {
+        if (recyclerAdapter.getMessages().size() != 0)
             recyclerView.smoothScrollToPosition(recyclerAdapter.getMessages().size() - 1);
     }
 
@@ -261,8 +259,8 @@ public class ChatActivity extends AppCompatActivity {
         String key = timestamp.toString() + "_" + Random.generateTicketNumber(0, 10000);
         message.setId(key);
 
-        if(message.getFromUid() == null)message.setFromUid(uid);
-        if(message.getToUid() == null)message.setToUid(friend.getUid());
+        if (message.getFromUid() == null) message.setFromUid(uid);
+        if (message.getToUid() == null) message.setToUid(friend.getUid());
         Log.e("new msg", message.toString());
         // me
         refMessage.child(uid).child(message.getId()).setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -297,18 +295,23 @@ public class ChatActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == SELECT_PICTURE) {
-                Uri selectedImageUri = data.getData();
-                filePath = selectedImageUri;
-                if (null != selectedImageUri) {
-                    Log.e("image", selectedImageUri.toString());
-                    uploadImage();
-//                    imgLogo.setImageURI(selectedImageUri);
-                }
+        if (resultCode == RESULT_OK && requestCode == SELECT_PICTURE) {
+            Uri selectedImageUri = data.getData();
+            filePath = selectedImageUri;
+            if (null != selectedImageUri) {
+                Log.e("image", selectedImageUri.toString());
+                uploadImage();
             }
+        }
+        // set take a photo imageView and upload on firebase
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            filePath = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), imageBitmap, "", null));
+            uploadImage();
         }
     }
 
@@ -329,8 +332,6 @@ public class ChatActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     String image = task.getResult().toString();
-//                                    theUser.setAvatar(avatar);
-//                                    myRef.child(uid).child("avatar").setValue(avatar);
                                     Log.e("image", image);
                                     Message message = new Message(uid, friend.getUid(), image, new Date(), "image");
                                     addNewMessage(message);

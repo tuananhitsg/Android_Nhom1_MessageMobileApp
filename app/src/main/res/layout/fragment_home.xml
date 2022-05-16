@@ -36,11 +36,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:text="Đoạn chat"
-            android:textColor="@color/text_color"
-            android:textSize="25sp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginLeft="10dp"
             android:textSize="28dp"
