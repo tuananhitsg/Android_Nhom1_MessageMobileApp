@@ -200,7 +200,7 @@ public class UserInfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                Toast.makeText(getActivity(), "Đăng xuất thành công", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Đã đăng xuất", Toast.LENGTH_LONG).show();
                 getActivity().finish();
             }
         });
@@ -301,7 +301,8 @@ public class UserInfoFragment extends Fragment {
 
     public void setNightMode(){
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-            Toast.makeText(getContext(), "Tính năng này chỉ hoạt động trên hệ điều hành android 9 trở lên", Toast.LENGTH_SHORT).show();
+            String message = "Tính năng này chỉ hoạt động trên hệ điều hành android 9 trở lên";
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
             return;
         }
 

@@ -155,34 +155,6 @@ public class UpdateUserInfoActivity extends AppCompatActivity {
                 }
             }
         });
-
-        edtPassword.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                final int DRAWABLE_LEFT = 0;
-                final int DRAWABLE_TOP = 1;
-                final int DRAWABLE_RIGHT = 2;
-                final int DRAWABLE_BOTTOM = 3;
-
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (edtPassword.getRight() - edtPassword.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        if (isHiddenPassword) {
-                            edtPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_hidepass, 0);
-                            edtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            edtPassword.setSelection(edtPassword.length());
-                            isHiddenPassword = false;
-                        } else {
-                            edtPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_showpass, 0);
-                            edtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            edtPassword.setSelection(edtPassword.length());
-                            isHiddenPassword = true;
-                        }
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
     }
 
     private void updateData(User theUser) {
