@@ -16,7 +16,7 @@
         android:allowBackup="true"
         android:configChanges="uiMode"
         android:icon="@drawable/ic_logo"
-        android:label="Đẹp trai siêu cấp vũ trụ"
+        android:label="Messenger rep 1:1"
         android:roundIcon="@drawable/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.MessageMobileApp">
