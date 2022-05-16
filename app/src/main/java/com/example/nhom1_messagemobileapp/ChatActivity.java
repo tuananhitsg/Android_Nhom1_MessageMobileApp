@@ -245,14 +245,15 @@ public class ChatActivity extends AppCompatActivity {
         protected void onPostExecute(List<Message> messages) {
             Log.e("reload message", messages.toString());
             recyclerAdapter.setMessages(messages);
-            recyclerView.smoothScrollToPosition(messages.size() - 1);
+            scrool();
         }
     }
 
 
 
     public void scrool(){
-        recyclerView.smoothScrollToPosition(recyclerAdapter.getMessages().size() - 1);
+        if(recyclerAdapter.getMessages().size() != 0)
+            recyclerView.smoothScrollToPosition(recyclerAdapter.getMessages().size() - 1);
     }
 
     public void addNewMessage(Message message) {

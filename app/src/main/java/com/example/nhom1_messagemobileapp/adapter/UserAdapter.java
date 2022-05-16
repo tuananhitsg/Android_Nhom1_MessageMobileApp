@@ -1,6 +1,8 @@
 package com.example.nhom1_messagemobileapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.nhom1_messagemobileapp.ChatActivity;
 import com.example.nhom1_messagemobileapp.R;
 import com.example.nhom1_messagemobileapp.entity.User;
 import com.squareup.picasso.Picasso;
@@ -41,6 +44,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         User userMessage = mUser.get(position);
         holder.txt_name.setText(userMessage.getName());
         Picasso.get().load(userMessage.getAvatar()).into(holder.img_avatar_friend);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ChatActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("friend", userMessage);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
+        });
     }
 
 

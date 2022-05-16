@@ -83,7 +83,7 @@ public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter
                 holder.image_message.setVisibility(View.VISIBLE);
                 holder.txt_message.setVisibility(View.INVISIBLE);
 
-                Picasso.get().load(message.getContent()).into(holder.image_message);
+                Picasso.get().load(message.getContent()).placeholder(R.drawable.gif_loading).into(holder.image_message);
             }else {
                 holder.image_message.setVisibility(View.INVISIBLE);
 
@@ -111,7 +111,7 @@ public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter
                 holder.image_message.setVisibility(View.VISIBLE);
                 holder.txt_message.setVisibility(View.INVISIBLE);
 
-                Picasso.get().load(message.getContent()).into(holder.image_message);
+                Picasso.get().load(message.getContent()).placeholder(R.drawable.gif_loading).into(holder.image_message);
 
             }else {
                 holder.image_message.setVisibility(View.INVISIBLE);

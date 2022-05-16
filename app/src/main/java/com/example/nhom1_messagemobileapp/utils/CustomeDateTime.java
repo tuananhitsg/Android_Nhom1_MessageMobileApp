@@ -11,6 +11,11 @@ public class CustomeDateTime {
     static DateFormat datetimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     static DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     static DateFormat hMFormat = new SimpleDateFormat("HH:mm");
+    static DateFormat dayFormat = new SimpleDateFormat("EEEE");
+
+    public static Date today(){
+        return new Date();
+    }
 
     public static String dateFormat(Date d){
         try {
@@ -32,7 +37,12 @@ public class CustomeDateTime {
 
     public static String HMFormat(Date d){
         try {
-            return hMFormat.format(d);
+            if(d.getDate() == today().getDate()){
+                return hMFormat.format(d);
+            }else{
+                return dayFormat.format(d)+" lúc "+hMFormat.format(d);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
