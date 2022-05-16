@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Process;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -27,8 +29,10 @@ import com.example.nhom1_messagemobileapp.dao.MessageSqlDAO;
 import com.example.nhom1_messagemobileapp.dao.UserSqlDAO;
 import com.example.nhom1_messagemobileapp.database.Database;
 import com.example.nhom1_messagemobileapp.entity.Message;
+import com.example.nhom1_messagemobileapp.entity.StickerPackage;
 import com.example.nhom1_messagemobileapp.entity.User;
 import com.example.nhom1_messagemobileapp.utils.CustomeDateTime;
+import com.example.nhom1_messagemobileapp.utils.FlaticonAPI;
 import com.example.nhom1_messagemobileapp.utils.Random;
 import com.example.nhom1_messagemobileapp.utils.converter.TimestampConverter;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -164,7 +168,7 @@ public class ChatActivity extends AppCompatActivity {
                         // your action here
                         StickerBottomSheetFragment bottomSheetFragment = new StickerBottomSheetFragment(ChatActivity.this);
                         bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
-                        return true;
+
                     }
                 }
                 return false;
@@ -204,9 +208,14 @@ public class ChatActivity extends AppCompatActivity {
             Message message = new Message(uid, friend.getUid(), msg, new Date(), type);
             addNewMessage(message);
         });
+
+        ShowListMessageTask showListMessageTask = new ShowListMessageTask();
+        showListMessageTask.execute();
+
         refMessage.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 ShowListMessageTask showListMessageTask = new ShowListMessageTask();
                 showListMessageTask.execute();
             }
@@ -215,10 +224,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-        if(!MainActivity.isNetworkConnected()) {
-            ShowListMessageTask showListMessageTask = new ShowListMessageTask();
-            showListMessageTask.execute();
-        }
+
     }
 
 
@@ -237,13 +243,17 @@ public class ChatActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<Message> messages) {
+            Log.e("reload message", messages.toString());
             recyclerAdapter.setMessages(messages);
-            recyclerView.smoothScrollToPosition(messages.size() - 1);
+            scrool();
         }
     }
 
+
+
     public void scrool(){
-        recyclerView.smoothScrollToPosition(recyclerAdapter.getMessages().size() - 1);
+        if(recyclerAdapter.getMessages().size() != 0)
+            recyclerView.smoothScrollToPosition(recyclerAdapter.getMessages().size() - 1);
     }
 
     public void addNewMessage(Message message) {

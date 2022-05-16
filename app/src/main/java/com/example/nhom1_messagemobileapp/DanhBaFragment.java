@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.nhom1_messagemobileapp.adapter.UserAdapter;
 import com.example.nhom1_messagemobileapp.entity.User;
@@ -24,9 +25,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,8 +40,12 @@ public class DanhBaFragment extends Fragment {
     private RecyclerView recyclerView;
     private UserAdapter userAdapter;
     private List<User> mUsers;
-
     EditText search_users;
+    ImageView imgAvatar;
+    private String uid = FirebaseAuth.getInstance().getUid();;
+    private FirebaseUser firebaseUser;
+    private DatabaseReference reference;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -75,12 +82,20 @@ public class DanhBaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("user");
+
         View view = inflater.inflate(R.layout.fragment_danh_ba, container, false);
         recyclerView = view.findViewById(R.id.danhBa_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mUsers = new ArrayList<>();
 
+        imgAvatar = view.findViewById(R.id.img_avt_danhba);
+        loadAvt();
+
+        //===============================================
         readUser();
+
 
         search_users = view.findViewById(R.id.search_users);
         search_users.addTextChangedListener(new TextWatcher() {
@@ -122,7 +137,6 @@ public class DanhBaFragment extends Fragment {
                 recyclerView.setAdapter(userAdapter);
             }
 
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -131,10 +145,6 @@ public class DanhBaFragment extends Fragment {
     }
 
     private void readUser() {
-
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user");
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -158,5 +168,20 @@ public class DanhBaFragment extends Fragment {
             }
         });
 
+    }
+
+    public void loadAvt(){
+        reference.child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User theUser = snapshot.getValue(User.class);
+                Picasso.get().load(theUser.getAvatar()).into(imgAvatar);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

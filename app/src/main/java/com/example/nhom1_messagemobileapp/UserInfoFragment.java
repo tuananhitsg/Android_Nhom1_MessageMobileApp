@@ -200,8 +200,10 @@ public class UserInfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                Toast.makeText(getActivity(), "Đã đăng xuất", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Đăng xuất thành công", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
                 getActivity().finish();
+                startActivity(intent);
             }
         });
 

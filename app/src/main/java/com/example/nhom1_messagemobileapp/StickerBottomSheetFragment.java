@@ -115,6 +115,8 @@ public class StickerBottomSheetFragment extends BottomSheetDialogFragment {
         return view;
     }
 
+
+
     public void viewLoading(){
 //        viewError.setVisibility(View.INVISIBLE);
         viewContent.setVisibility(View.INVISIBLE);
