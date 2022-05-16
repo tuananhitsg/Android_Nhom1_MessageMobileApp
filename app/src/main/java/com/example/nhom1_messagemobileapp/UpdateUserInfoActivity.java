@@ -171,13 +171,11 @@ public class UpdateUserInfoActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == SELECT_PICTURE) {
-                Uri selectedImageUri = data.getData();
-                filePath = selectedImageUri;
-                if (null != selectedImageUri) {
-                    imgAvatar.setImageURI(selectedImageUri);
-                }
+        if (resultCode == RESULT_OK && requestCode == SELECT_PICTURE) {
+            Uri selectedImageUri = data.getData();
+            filePath = selectedImageUri;
+            if (null != selectedImageUri) {
+                imgAvatar.setImageURI(selectedImageUri);
             }
         }
     }

@@ -41,7 +41,7 @@
             android:textSize="28dp"
             android:textStyle="bold"
             android:textColor="@color/text_color"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
     <EditText
         android:singleLine="true"
