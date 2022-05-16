@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -18,7 +19,9 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nhom1_messagemobileapp.ChatActivity;
+import com.example.nhom1_messagemobileapp.DeleteMessageFragment;
 import com.example.nhom1_messagemobileapp.R;
+import com.example.nhom1_messagemobileapp.StickerBottomSheetFragment;
 import com.example.nhom1_messagemobileapp.entity.Message;
 import com.example.nhom1_messagemobileapp.entity.User;
 import com.example.nhom1_messagemobileapp.utils.CustomeDateTime;
@@ -70,6 +73,7 @@ public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter
 
     @Override
     public void onBindViewHolder(@NonNull MessageListAdapter.ViewHolder holder, int position) {
+        holder.setIsRecyclable(false);
         Message message = messages.get(position);
         holder.txt_message.setText(message.getContent());
         Picasso.get().load(friend.getAvatar()).into(holder.img_avatar_friend);
@@ -128,13 +132,17 @@ public class MessageListAdapter  extends RecyclerView.Adapter<MessageListAdapter
             }
         }
 
-//        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                Toa
-//                return false;
-//            }
-//        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if(message.getFromUid().equals(uid)){
+                    DeleteMessageFragment deleteMessageFragment = new DeleteMessageFragment(context, message.getFromUid(), message.getToUid(), message.getId());
+                    deleteMessageFragment.show(((ChatActivity)context).getSupportFragmentManager(), deleteMessageFragment.getTag());
+                }
+
+                return false;
+            }
+        });
     }
 
 
