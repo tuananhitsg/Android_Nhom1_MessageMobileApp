@@ -13,22 +13,23 @@
     android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
         <androidx.cardview.widget.CardView
             android:id="@+id/card_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardCornerRadius="30dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+           >
 
             <ImageView
                 android:id="@+id/img_avt_danhba"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:scaleType="centerCrop"
+                android:layout_gravity="center_vertical"
                 android:background="@drawable/ic_user_default"
                 />
         </androidx.cardview.widget.CardView>
@@ -40,11 +41,8 @@
             android:text="Danh bạ"
             android:textColor="@color/text_color"
             android:textSize="25sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/card_avatar"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <EditText
         android:singleLine="true"

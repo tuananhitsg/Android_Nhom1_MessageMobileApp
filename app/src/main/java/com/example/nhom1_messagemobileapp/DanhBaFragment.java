@@ -42,8 +42,7 @@ public class DanhBaFragment extends Fragment {
     private List<User> mUsers;
     EditText search_users;
     ImageView imgAvatar;
-    private String uid = "";
-
+    private String uid = FirebaseAuth.getInstance().getUid();;
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
 
@@ -96,6 +95,7 @@ public class DanhBaFragment extends Fragment {
 
         //===============================================
         readUser();
+
 
         search_users = view.findViewById(R.id.search_users);
         search_users.addTextChangedListener(new TextWatcher() {
@@ -170,7 +170,7 @@ public class DanhBaFragment extends Fragment {
 
     }
 
-    private void loadAvt(){
+    public void loadAvt(){
         reference.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
