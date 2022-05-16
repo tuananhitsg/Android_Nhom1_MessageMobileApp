@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
 import android.text.InputType;
@@ -22,9 +23,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,7 +98,8 @@ public class UserInfoFragment extends Fragment {
 
     private TextView tvName;
     private ImageView imgAvatar;
-    private Button btnDarkMode, btnEditInfo, btnChangePassword, btnLogout;
+    private Button  btnEditInfo, btnChangePassword, btnLogout;
+    private Switch btnDarkMode;
     private User theUser;
     private ProgressBar progressBar;
 
@@ -160,9 +164,9 @@ public class UserInfoFragment extends Fragment {
         });
 
 //        bắt sự kiện button
-        btnDarkMode.setOnClickListener(new View.OnClickListener() {
+        btnDarkMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 setNightMode();
             }
         });
