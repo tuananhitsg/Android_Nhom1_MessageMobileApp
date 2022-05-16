@@ -21,11 +21,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private Context context;
     List<User> mUser;
 
-//    public ChatListAdapter(Context context) {
-//        this.context = context;
-//        friends = new ArrayList<>();
-//    }
-
     public UserAdapter(Context context, List<User> mUser) {
         this.context = context;
         this.mUser = mUser;
@@ -46,15 +41,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         User userMessage = mUser.get(position);
         holder.txt_name.setText(userMessage.getName());
         Picasso.get().load(userMessage.getAvatar()).into(holder.img_avatar_friend);
-
-//        holder.itemView.setOnClickListener(view1 -> {
-//            Intent intent = new Intent(context, ChatActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("friend", userMessage);
-//            intent.putExtras(bundle);
-//            context.startActivity(intent);
-//        });
-//        Picasso.get().load(friendMessage.getUser().getImage()).into(holder.img_avatar_friend);
     }
 
 
@@ -76,47 +62,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     }
 
-    //    public List<CardComponent> getComponentList() {
-//        return componentList;
-//    }
-//
+
 
 }
-//public class UserAdapter extends RecyclerView.Adapter{
-//    private Context context;
-//    private List<User> mUsers;
-//    public UserAdapter(Context mContext, List<User> mUsers){
-//        this.mUsers = mUsers;
-//        this.context=mContext;
-//    }
-//
-//    @NonNull
-//    @Override
-//    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        LayoutInflater layoutInflater = LayoutInflater.from(R.layout.item);
-//        View view = layoutInflater.inflate(R.layout.item_friend_message, parent, false);
-//        ViewHolder viewHolder = new ViewHolder(view);
-//        return null;
-//    }
-//
-//    @Override
-//    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-//
-//    }
-//
-//    @Override
-//    public int getItemCount() {
-//        return mUsers.size();
-//    }
-//
-//    public class ViewHHolder extends RecyclerView.ViewHolder{
-//
-//        public TextView userName;
-//        public ImageView avt;
-//        public ViewHHolder(@NonNull View itemView) {
-//            super(itemView);
-//            userName = itemView.findViewById(R.id.txt_user_name);
-//            avt = itemView.findViewById(R.id.img_user_avt);
-//        }
-//    }
-//}
+
