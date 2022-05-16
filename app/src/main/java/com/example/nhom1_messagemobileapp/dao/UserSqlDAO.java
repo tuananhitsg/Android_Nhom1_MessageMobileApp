@@ -9,6 +9,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.example.nhom1_messagemobileapp.MainActivity;
 import com.example.nhom1_messagemobileapp.database.Database;
 import com.example.nhom1_messagemobileapp.entity.Message;
 import com.example.nhom1_messagemobileapp.entity.User;
@@ -53,7 +54,7 @@ public abstract class UserSqlDAO {
         return findById(id) != null;
     }
 
-    public List<User> getFriends(String uid){
+    public List<User> getFriends(String uid, boolean sql){
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference refUser = firebaseDatabase.getReference("user");
 
@@ -68,26 +69,33 @@ public abstract class UserSqlDAO {
             if(uid.equals(message.getFromUid()))
                 friendUid = message.getToUid();
 
-            refUser.child(friendUid).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    User friend = new User(snapshot);
-                    Log.e("INSERT", friend.toString());
-                    if(friend != null){
-                        if(!friends.contains(friend)){
-                            friend.addMessage(message);
-                            friends.add(friend);
+            if(MainActivity.isNetworkConnected() && sql == false) {
+                refUser.child(friendUid).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        User friend = new User(snapshot);
+                        if (friend != null) {
+                            if (!friends.contains(friend)) {
+                                friend.addMessage(message);
+                                friends.add(friend);
+                            }
+                            insertOrUpdate(friend);
                         }
-                        insertOrUpdate(friend);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+            }else{
+                User friend = findById(friendUid);
+                if (friend != null) {
+                    if (!friends.contains(friend)) {
+                        friend.addMessage(message);
+                        friends.add(friend);
                     }
                 }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
+            }
 
         });
         System.out.println(friends);

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_color"
-    android:layout_marginBottom="50dp"
+    android:paddingBottom="80dp"
     tools:context=".UserInfoFragment">
 
     <LinearLayout

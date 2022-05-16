@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Process;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -27,8 +29,10 @@ import com.example.nhom1_messagemobileapp.dao.MessageSqlDAO;
 import com.example.nhom1_messagemobileapp.dao.UserSqlDAO;
 import com.example.nhom1_messagemobileapp.database.Database;
 import com.example.nhom1_messagemobileapp.entity.Message;
+import com.example.nhom1_messagemobileapp.entity.StickerPackage;
 import com.example.nhom1_messagemobileapp.entity.User;
 import com.example.nhom1_messagemobileapp.utils.CustomeDateTime;
+import com.example.nhom1_messagemobileapp.utils.FlaticonAPI;
 import com.example.nhom1_messagemobileapp.utils.Random;
 import com.example.nhom1_messagemobileapp.utils.converter.TimestampConverter;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -57,7 +61,7 @@ import java.util.UUID;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private String uid = "6kBO5yFQu1Y355mxKuc1YSaLtSZ2";
+    private String uid = "";
     private RecyclerView recyclerView;
     private MessageListAdapter recyclerAdapter;
     private ImageButton btnCamera;
@@ -162,10 +166,9 @@ public class ChatActivity extends AppCompatActivity {
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     if(event.getRawX() >= (edtMessage.getRight() - edtMessage.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         // your action here
-                        Toast.makeText(ChatActivity.this, "click", Toast.LENGTH_SHORT).show();
                         StickerBottomSheetFragment bottomSheetFragment = new StickerBottomSheetFragment(ChatActivity.this);
                         bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
-                        return true;
+
                     }
                 }
                 return false;
@@ -179,11 +182,19 @@ public class ChatActivity extends AppCompatActivity {
 
         btnMedia = findViewById(R.id.btn_media);
         btnMedia.setOnClickListener(v -> {
+            if(!MainActivity.isNetworkConnected()) {
+                Toast.makeText(this, "Không có kết nối mạng!", Toast.LENGTH_SHORT).show();
+                return;
+            }
             imageChooser();
         });
 
         btnAction = findViewById(R.id.btn_action);
         btnAction.setOnClickListener(v -> {
+            if(!MainActivity.isNetworkConnected()) {
+                Toast.makeText(this, "Không có kết nối mạng!", Toast.LENGTH_SHORT).show();
+                return;
+            }
             String msg = "";
             String type = "";
             if (isBtnSend) {
@@ -198,9 +209,13 @@ public class ChatActivity extends AppCompatActivity {
             addNewMessage(message);
         });
 
+        ShowListMessageTask showListMessageTask = new ShowListMessageTask();
+        showListMessageTask.execute();
+
         refMessage.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 ShowListMessageTask showListMessageTask = new ShowListMessageTask();
                 showListMessageTask.execute();
             }
@@ -209,6 +224,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+
     }
 
 
@@ -221,18 +237,19 @@ public class ChatActivity extends AppCompatActivity {
 
         @Override
         protected List<Message> doInBackground(String... params) {
-            Log.e("chat", uid + " " + friend.getUid());
             List<Message> messages = messageSqlDAO.findAllByUsers(uid, friend.getUid());
             return messages;
         }
 
         @Override
         protected void onPostExecute(List<Message> messages) {
-            Log.d("->>> sqll messages", messages.toString());
+            Log.e("reload message", messages.toString());
             recyclerAdapter.setMessages(messages);
             recyclerView.smoothScrollToPosition(messages.size() - 1);
         }
     }
+
+
 
     public void scrool(){
         recyclerView.smoothScrollToPosition(recyclerAdapter.getMessages().size() - 1);

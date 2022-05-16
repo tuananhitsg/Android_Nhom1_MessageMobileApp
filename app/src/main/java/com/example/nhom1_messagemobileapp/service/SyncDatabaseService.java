@@ -15,6 +15,7 @@ import com.example.nhom1_messagemobileapp.database.Database;
 import com.example.nhom1_messagemobileapp.entity.Message;
 import com.example.nhom1_messagemobileapp.entity.User;
 import com.example.nhom1_messagemobileapp.utils.converter.TimestampConverter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -107,8 +108,7 @@ public class SyncDatabaseService extends IntentService {
         firebaseDatabase = FirebaseDatabase.getInstance();
         refMessage = firebaseDatabase.getReference("message");
         refUser = firebaseDatabase.getReference("user");
-        uid = intent.getExtras().getString("uid");
-        Log.e("uid", uid);
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         sync();
     }
 

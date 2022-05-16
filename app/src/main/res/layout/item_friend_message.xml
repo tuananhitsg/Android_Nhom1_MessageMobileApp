@@ -18,7 +18,8 @@
             android:id="@+id/img_avatar_friend"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:background="@drawable/ic_user_default"/>
     </androidx.cardview.widget.CardView>
     <TextView
         android:id="@+id/txt_name"
@@ -26,7 +27,7 @@
         android:layout_height="wrap_content"
         android:text="Trần Văn Nhân"
         android:textSize="18dp"
-        android:textColor="@color/black"
+        android:textColor="@color/text_color"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/card_avatar_friend"
         android:layout_marginLeft="10dp"
@@ -37,6 +38,7 @@
         android:layout_height="wrap_content"
         android:text="Bye =)))"
         android:textSize="16dp"
+        android:textColor="@color/text_color_hint"
         app:layout_constraintTop_toBottomOf="@+id/txt_name"
         app:layout_constraintLeft_toRightOf="@+id/card_avatar_friend"
         android:layout_marginLeft="10dp"
@@ -47,6 +49,7 @@
         android:layout_height="wrap_content"
         android:text="12:43"
         android:textSize="14dp"
+        android:textColor="@color/text_color_hint"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="10dp"

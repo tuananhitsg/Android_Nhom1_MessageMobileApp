@@ -9,27 +9,38 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.nhom1_messagemobileapp.database.Database;
+import com.example.nhom1_messagemobileapp.entity.StickerPackage;
 import com.example.nhom1_messagemobileapp.entity.User;
 import com.example.nhom1_messagemobileapp.service.SyncDatabaseService;
+import com.example.nhom1_messagemobileapp.utils.FlaticonAPI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static Context context;
     private ViewPager mPager;
     private BottomNavigationView navigationView;
     private ScreenSlidePagerAdapter pagerAdapter;
-    private String uid = "pKtiff3DLPPWtNNOnN906uzELha2";
+    private String uid = "";
     private Database database;
     boolean doubleBackToExitPressedOnce = false;
 
@@ -38,17 +49,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MainActivity.context = this;
+
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            finish();
+            return;
+        }
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.e("------------> uid", uid);
         database = Database.getInstance(this);
-
-
         
 //        database.getUserSqlDAO().insert();
-        Log.d("sqlite", database.getUserSqlDAO().findAll().toString());
+//        Log.d("sqlite", database.getUserSqlDAO().findAll().toString());
         Intent intent = new Intent(this, SyncDatabaseService.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("uid", uid);
-        intent.putExtras(bundle);
         startService(intent);
 
         mPager = findViewById(R.id.pager);
@@ -94,6 +107,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    public static boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) MainActivity.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
 
     @Override
     public void onBackPressed() {
@@ -138,4 +156,6 @@ public class MainActivity extends AppCompatActivity {
             return 3;
         }
     }
+
+
 }
