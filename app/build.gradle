@@ -26,6 +26,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    configurations {
+        all*.exclude group: 'com.google.guava', module: 'lítenablefuture'
+    }
 }
 
 dependencies {
@@ -44,4 +48,20 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    // room
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+
+    // okhttp
+    implementation "com.squareup.okhttp3:okhttp:4.9.0"
+
+    // jsoup HTML parser library @ https://jsoup.org/
+    implementation 'org.jsoup:jsoup:1.14.3'
+
+    // lottie
+    implementation "com.airbnb.android:lottie:4.2.2"
+
+    // glide
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
 }

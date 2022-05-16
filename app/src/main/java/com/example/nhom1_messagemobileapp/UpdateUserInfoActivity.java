@@ -6,9 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,20 +35,19 @@ import com.squareup.picasso.Picasso;
 
 import android.net.Uri;
 
-import java.io.ByteArrayOutputStream;
 import java.util.UUID;
 
 public class UpdateUserInfoActivity extends AppCompatActivity {
-    private ImageView imgLogo;
+    private ImageView imgAvatar;
     private ImageButton btnBack;
     private Button btnSave, btnCancel;
     private EditText edtEmail, edtName, edtPassword;
     private User theUser;
     private String uid;
-    private int SELECT_PICTURE = 200;
-    private final int PICK_IMAGE_REQUEST = 22;
-    private Uri filePath;
+    private boolean isHiddenPassword = true;
 
+    private final int SELECT_PICTURE = 200;
+    private Uri filePath;
     private Context context;
     private FirebaseAuth mAuth;
     private FirebaseUser account;
@@ -63,7 +62,7 @@ public class UpdateUserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update_user_info);
         context = this;
 
-        imgLogo = findViewById(R.id.updateUserInfo_imgAvatar);
+        imgAvatar = findViewById(R.id.updateUserInfo_imgAvatar);
         btnBack = findViewById(R.id.updateUserInfo_btnBack);
         btnSave = findViewById(R.id.updateUserInfo_btnSave);
         btnCancel = findViewById(R.id.updateUserInfo_btnCancel);
@@ -83,14 +82,15 @@ public class UpdateUserInfoActivity extends AppCompatActivity {
         Intent intentUserInfo = getIntent();
         if (intentUserInfo != null) {
             theUser = (User) intentUserInfo.getSerializableExtra("user");
-            Picasso.get().load(theUser.getAvatar()).into(imgLogo);
-            imgLogo.setClipToOutline(true);
+            Picasso.get().load(theUser.getAvatar()).into(imgAvatar);
+            imgAvatar.setClipToOutline(true);
+
             edtName.setText(theUser.getName());
             edtEmail.setText(theUser.getEmail());
         }
         uid = account.getUid();
 
-        imgLogo.setOnClickListener(new View.OnClickListener() {
+        imgAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 imageChooser();
@@ -171,13 +171,11 @@ public class UpdateUserInfoActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == SELECT_PICTURE) {
-                Uri selectedImageUri = data.getData();
-                filePath = selectedImageUri;
-                if (null != selectedImageUri) {
-                    imgLogo.setImageURI(selectedImageUri);
-                }
+        if (resultCode == RESULT_OK && requestCode == SELECT_PICTURE) {
+            Uri selectedImageUri = data.getData();
+            filePath = selectedImageUri;
+            if (null != selectedImageUri) {
+                imgAvatar.setImageURI(selectedImageUri);
             }
         }
     }
@@ -221,32 +219,5 @@ public class UpdateUserInfoActivity extends AppCompatActivity {
                                 }
                             });
         }
-    }
-
-    private void uploadImage1() {
-        StorageReference mountainsRef = storageRef.child("images/pet_shop.png");
-        StorageReference mountainImagesRef = storageRef.child("images/pet_shop.png");
-        mountainsRef.getName().equals(mountainImagesRef.getName());
-        mountainsRef.getPath().equals(mountainImagesRef.getPath());
-
-        imgLogo.setDrawingCacheEnabled(true);
-        imgLogo.buildDrawingCache();
-        Bitmap bitmap = ((BitmapDrawable) imgLogo.getDrawable()).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] data = baos.toByteArray();
-
-        UploadTask uploadTask = mountainsRef.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(context, "upload that bai", Toast.LENGTH_LONG).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(context, "upload thanh cong", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 }

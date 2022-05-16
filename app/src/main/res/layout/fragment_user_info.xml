@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/background_color"
+    android:paddingBottom="55dp"
     tools:context=".UserInfoFragment">
 
     <LinearLayout
@@ -28,15 +30,15 @@
                 android:paddingBottom="4dp"
                 android:text="Tôi"
                 android:textAlignment="textStart"
-                android:textColor="@color/black"
-                android:textSize="22dp"
+                android:textColor="@color/text_color"
+                android:textSize="28dp"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:orientation="vertical">
 
             <ProgressBar
@@ -50,10 +52,11 @@
 
             <ImageView
                 android:id="@+id/userInfo_imgAvatar"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:layout_gravity="center"
                 android:background="@drawable/border_avatar"
+                android:scaleType="centerCrop"
                 android:visibility="gone"
                 android:clipToOutline="true"
                 tools:src="@drawable/logo" />
@@ -63,17 +66,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="name"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text=""
                 android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="26dp"
+                android:textColor="@color/text_color"
+                android:textSize="28dp"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:orientation="vertical">
 
             <TextView
@@ -82,25 +87,26 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
                 android:text="Tính năng"
-                android:textColor="@color/text_color_gray"
+                android:textColor="@color/subText_color"
                 android:textSize="17dp"
                 android:textStyle="bold" />
 
-            <Button
+            <Switch
                 android:id="@+id/userInfo_btnDarkMode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:drawableLeft="@drawable/dark_mode_icon"
                 android:drawablePadding="10dp"
+                android:layout_marginRight="16dp"
                 android:paddingLeft="20dp"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="Chế độ tối"
                 android:textAlignment="textStart"
                 android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="16dp"
+                android:textColor="@color/text_color"
+                android:textSize="17dp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -108,7 +114,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:orientation="vertical">
 
             <TextView
@@ -117,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
                 android:text="Thông tin"
-                android:textColor="@color/text_color_gray"
+                android:textColor="@color/subText_color"
                 android:textSize="17dp"
                 android:textStyle="bold" />
 
@@ -135,8 +141,8 @@
                 android:text="Chỉnh sửa thông tin cá nhân"
                 android:textAlignment="textStart"
                 android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="16dp"
+                android:textColor="@color/text_color"
+                android:textSize="17dp"
                 android:enabled="false"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -153,7 +159,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
                 android:text="Tùy chọn"
-                android:textColor="@color/text_color_gray"
+                android:textColor="@color/subText_color"
                 android:textSize="17dp"
                 android:textStyle="bold" />
 
@@ -171,8 +177,8 @@
                 android:text="Đổi mật khẩu"
                 android:textAlignment="textStart"
                 android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="16dp"
+                android:textColor="@color/text_color"
+                android:textSize="17dp"
                 android:textStyle="bold" />
 
             <Button
@@ -189,8 +195,8 @@
                 android:text="Đăng xuất"
                 android:textAlignment="textStart"
                 android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="16dp"
+                android:textColor="@color/text_color"
+                android:textSize="17dp"
                 android:textStyle="bold" />
 
         </LinearLayout>

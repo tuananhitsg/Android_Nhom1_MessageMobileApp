@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.nhom1_messagemobileapp">
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+    </queries>
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:configChanges="uiMode"
+        android:icon="@drawable/ic_logo"
+        android:label="Đẹp trai siêu cấp vũ trụ"
+        android:roundIcon="@drawable/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.MessageMobileApp">
+        <service
+            android:name=".service.SyncDatabaseService"
+            android:enabled="true"
+            android:exported="false"></service>
+
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
@@ -17,24 +33,18 @@
             android:exported="false" />
         <activity
             android:name=".WelcomeActivity"
-            android:exported="false" />
+            android:exported="true"><intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
-        <activity
-            android:name=".TmpActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".ChatActivity"
-            android:exported="false" />
-        <activity
-            android:name=".DemoFirebase"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

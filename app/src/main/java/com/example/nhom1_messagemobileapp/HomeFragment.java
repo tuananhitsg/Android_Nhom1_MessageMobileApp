@@ -11,30 +11,31 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.nhom1_messagemobileapp.adapter.ChatListAdapter;
-import com.example.nhom1_messagemobileapp.dao.UserFirebaseDAO;
+import com.example.nhom1_messagemobileapp.dao.UserSqlDAO;
+import com.example.nhom1_messagemobileapp.database.Database;
 import com.example.nhom1_messagemobileapp.entity.Message;
+import com.example.nhom1_messagemobileapp.entity.StickerPackage;
 import com.example.nhom1_messagemobileapp.entity.User;
+import com.example.nhom1_messagemobileapp.utils.FlaticonAPI;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
-import java.util.concurrent.CountDownLatch;
 
 
 public class HomeFragment extends Fragment {
 
-    private String uid = "6kBO5yFQu1Y355mxKuc1YSaLtSZ2";
+    private String uid = "";
     private RecyclerView recyclerView;
     private ChatListAdapter recyclerAdapter;
 
@@ -47,9 +48,11 @@ public class HomeFragment extends Fragment {
     private DatabaseReference refUser;
     private User myUser;
     private User friendUser;
+    private Database sqlDatabase;
+    private UserSqlDAO userSqlDAO;
 
     public HomeFragment() {
-        // Required empty public constructor
+        uid = FirebaseAuth.getInstance().getUid();
     }
 
     public HomeFragment(String uid) {
@@ -81,63 +84,47 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        refMessage = database.getReference("message");
-        refUser = database.getReference("user");
+        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        refMessage = firebaseDatabase.getReference("message");
+        refUser = firebaseDatabase.getReference("user");
+
+        sqlDatabase = Database.getInstance(null);
+        userSqlDAO = sqlDatabase.getUserSqlDAO();
+
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerAdapter = new ChatListAdapter(getContext());
+        recyclerView.setAdapter(recyclerAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        ImageView imgAvatar = view.findViewById(R.id.img_avatar);
+
+        refUser.child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User theUser = dataSnapshot.getValue(User.class);
+                Picasso.get().load(theUser.getAvatar()).into(imgAvatar);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+
         getFriends();
 
 
-//        User user1 = new User("Trần Văn Nhân", "tranvannhan1911@gmail.com", ""); // me
-//        User user2 = new User("Trần Văn A", "tranvannhana@gmail.com", "");
-//        List<Message> messages1 = new ArrayList<Message>();
-//        messages1.add(new Message(2, user1, user2, "Có ở đó không", LocalDateTime.now()));
-//        messages1.add(new Message(1, user1, user2, "Hello", LocalDateTime.of(2022, 05, 01, 11, 30)));
-//        user2.setMessages(messages1);
-
-        List<User> userMessages = new ArrayList<User>();
-//        userMessages.add(user2);
-//
-//        User user3 = new User("Trần Văn B", "tranvanb@gmail.com", "");
-//        List<Message> messages2 = new ArrayList<Message>();
-//        messages2.add(new Message(2, user1, user3, "Aloooooooooooooo", LocalDateTime.now()));
-//        user3.setMessages(messages2);
-//        userMessages.add(user3);
-
-        recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerAdapter = new ChatListAdapter(getContext(), userMessages);
-//        System.out.println(recyclerView);
-        recyclerView.setAdapter(recyclerAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;
     }
 
     public void getFriends(){
-        getMyUser();
-        Map<String, Message> userLastMessages = new HashMap<>();
+        Log.e("getFriends", "getFriends");
+        ShowListUserTask showListUserTask = new ShowListUserTask(true);
+        showListUserTask.execute();
 
-        refMessage.addValueEventListener(new ValueEventListener() {
+        refMessage.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                UserFirebaseDAO userFirebaseDAO = new UserFirebaseDAO();
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                    Message message = new Message();
-                    System.out.println(snapshot);
-                    String content = snapshot.child("content").getValue(String.class);
-                    String uidFrom = snapshot.child("from").getValue(String.class);
-                    String uidTo = snapshot.child("to").getValue(String.class);
-                    Long timestamp = snapshot.child("time").getValue(Long.class);
-//                    Log.d("date", timestamp.toString());
-                    LocalDateTime time = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp),
-                                    TimeZone.getDefault().toZoneId());
-                    message.setContent(content);
-                    message.setTime(time);
-                    if(uidFrom.equals(uid)){
-                        userLastMessages.put(uidTo, message);
-                    }else if(uidTo.equals(uid)){
-                        userLastMessages.put(uidFrom, message);
-                    }
-                }
-                ShowListUserTask  showListUserTask = new ShowListUserTask(userLastMessages);
+                ShowListUserTask showListUserTask = new ShowListUserTask(false);
                 showListUserTask.execute();
             }
 
@@ -146,25 +133,13 @@ public class HomeFragment extends Fragment {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+
     }
 
-    public void getMyUser(){
-        refUser.child(uid).get().addOnCompleteListener(task ->{
-            if (!task.isSuccessful()) {
-                Log.e("firebase", "Error getting data", task.getException());
-            }
-            else {
-                myUser = task.getResult().getValue(User.class);
-            }
-        });
-    }
-
-
-    public class ShowListUserTask extends AsyncTask<String, String, List<User>> {
-        Map<String, Message> userLastMessages;
-
-        public ShowListUserTask(Map<String, Message> userLastMessages){
-            this.userLastMessages = userLastMessages;
+    public class ShowListUserTask extends AsyncTask<Void, Void, List<User>> {
+        private boolean sql;
+        public ShowListUserTask(boolean sql){
+            this.sql = sql;
         }
 
         @Override
@@ -173,42 +148,37 @@ public class HomeFragment extends Fragment {
         }
 
         @Override
-        protected List<User> doInBackground (String...params){
-            List<User> users = new ArrayList<>();
-            CountDownLatch latch = new CountDownLatch(userLastMessages.size());
-
-            userLastMessages.forEach((uid, message)-> {
-                refUser.child(uid).get().addOnCompleteListener(task ->{
-                    if (!task.isSuccessful()) {
-                        Log.e("firebase", "Error getting data", task.getException());
-                    }
-                    else {
-                        User user = task.getResult().getValue(User.class);
-
-                        try {
-                            Log.d("firebase user", user.toString());
-                            user.addMessage(message);
-                            users.add(user);
-                            Log.d("uid", uid);
-                        }catch (Exception e){
-
-                        }
-                    }
-                    latch.countDown();
-                });
-            });
-            try {
-                latch.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return users;
+        protected List<User> doInBackground (Void...voids){
+            List<User> friends = userSqlDAO.getFriends(uid, sql);
+            return friends;
         }
 
         @Override
-        protected void onPostExecute (List<User> users){
-            Log.d("firebase users", users.toString());
-            recyclerAdapter.setUserMessages(users);
+        protected void onPostExecute (List<User> friends){
+            Log.e("get friendsssssssssssssss", friends.toString());
+            recyclerAdapter.setFriends(friends);
+        }
+    }
+
+    public class LoadPackagesTask extends AsyncTask<String, String, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground (String...params){
+            if(FlaticonAPI.packages.size() == 0){
+                FlaticonAPI flaticonApi = new FlaticonAPI();
+                flaticonApi.getPackages();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute (Void v){
+
         }
     }
 }

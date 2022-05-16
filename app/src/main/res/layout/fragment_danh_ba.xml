@@ -1,14 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:clickable="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DanhBaFragment">
+    android:background="@color/background_color"
+    tools:context=".DanhBaFragment"
+    android:padding="10dp"
+    android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="danh ba" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="30dp"
+           >
 
-</FrameLayout>
+            <ImageView
+                android:id="@+id/img_avt_danhba"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/ic_user_default"
+                />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="28dp"
+            android:textStyle="bold"
+            android:textColor="@color/text_color"/>
+    </LinearLayout>
+
+    <EditText
+        android:singleLine="true"
+        android:id="@+id/search_users"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bg_search_input"
+        android:drawableLeft="@drawable/ic_search"
+        android:drawablePadding="10dp"
+        android:hint="Tìm kiếm"
+        android:textColorHint="@color/text_color_hint"
+        android:paddingHorizontal="15dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/danhBa_recyclerView"
+        android:layout_width="match_parent"
+        android:paddingBottom="55dp"
+        android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+</LinearLayout>

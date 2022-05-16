@@ -10,22 +10,29 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nhom1_messagemobileapp.entity.User;
+import com.example.nhom1_messagemobileapp.utils.SharedPreference;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -88,17 +95,16 @@ public class UserInfoFragment extends Fragment {
         }
     }
 
-    private String uid = "6kBO5yFQu1Y355mxKuc1YSaLtSZ2";
+    private String uid;
 
     private TextView tvName;
     private ImageView imgAvatar;
-    private Button btnDarkMode, btnEditInfo, btnChangePassword, btnLogout;
-    private String email;
-    private String name;
-    private String avatar;
+    private Button btnEditInfo, btnChangePassword, btnLogout;
+    private Switch btnDarkMode;
     private User theUser;
     private ProgressBar progressBar;
-    private boolean flagDarkMode = false;
+
+    private SharedPreference sharedPreference;
 
     private FirebaseAuth mAuth;
     private FirebaseUser account;
@@ -118,7 +124,18 @@ public class UserInfoFragment extends Fragment {
         btnEditInfo = view.findViewById(R.id.userInfo_btnEditInfo);
         btnChangePassword = view.findViewById(R.id.userInfo_btnChangePassword);
         btnLogout = view.findViewById(R.id.userInfo_btnLogout);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        progressBar = view.findViewById(R.id.progressBar);
+
+        sharedPreference = SharedPreference.getInstance(getActivity());
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            btnDarkMode.setChecked(true);
+            sharedPreference.saveData("isDarkMode", true);
+            getActivity().setTheme(R.style.AppTheme_MessageMobileApp_Dark);
+        } else {
+            btnDarkMode.setChecked(false);
+            sharedPreference.saveData("isDarkMode", false);
+            getActivity().setTheme(R.style.AppTheme_MessageMobileApp);
+        }
 
         if (progressBar != null) {
             progressBar.setVisibility(View.VISIBLE);
@@ -154,10 +171,10 @@ public class UserInfoFragment extends Fragment {
         });
 
 //        bắt sự kiện button
-        btnDarkMode.setOnClickListener(new View.OnClickListener() {
+        btnDarkMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                setNightMode(getActivity());
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                setNightMode(b);
             }
         });
 
@@ -191,14 +208,16 @@ public class UserInfoFragment extends Fragment {
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
                 Toast.makeText(getActivity(), "Đăng xuất thành công", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
                 getActivity().finish();
+                startActivity(intent);
             }
         });
 
         return view;
     }
 
-    private Dialog createDialog(int gravity, int layoutId) {
+    public Dialog createDialog(int gravity, int layoutId) {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(layoutId);
@@ -237,7 +256,6 @@ public class UserInfoFragment extends Fragment {
                 String newPassword = edtNewPassword.getText().toString().trim();
                 String reNewPassword = edtReNewPassword.getText().toString().trim();
 
-                Toast.makeText(getActivity(), password, Toast.LENGTH_LONG).show();
                 if (password.isEmpty() || password.length() <= 0) {
                     Toast.makeText(getActivity(), "Mật khẩu không được để trống", Toast.LENGTH_LONG).show();
                     return;
@@ -290,29 +308,18 @@ public class UserInfoFragment extends Fragment {
         dialog.show();
     }
 
-    public void setNightMode(Context target){
-        int whiteColor = Color.parseColor("#ffffff");
-        int blackColor = Color.parseColor("#000000");
-        int seletedColor;
-        UiModeManager uiManager = (UiModeManager) target.getSystemService(Context.UI_MODE_SERVICE);
-
-        if (Build.VERSION.SDK_INT <= 22) {
-            uiManager.enableCarMode(0);
+    public void setNightMode(boolean isDarkMode) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            String message = "Tính năng này chỉ hoạt động trên hệ điều hành android 9 trở lên";
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        if (!flagDarkMode) {
-            uiManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
-            seletedColor = whiteColor;
-            flagDarkMode = false;
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
-            uiManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
-            seletedColor = blackColor;
-            flagDarkMode = true;
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-            tvName.setTextColor(seletedColor);
-            btnDarkMode.setTextColor(seletedColor);
-            btnEditInfo.setTextColor(seletedColor);
-            btnChangePassword.setTextColor(seletedColor);
-            btnLogout.setTextColor(seletedColor);
+        sharedPreference.saveData("isDarkMode", isDarkMode);
     }
 }

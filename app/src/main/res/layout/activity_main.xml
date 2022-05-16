@@ -21,9 +21,9 @@
             android:layout_width="match_parent"
             android:layout_height="64dp"
             app:menu="@menu/bottom_nav_menu"
-            android:background="#00ffffff"
+            android:background="@color/background_color_popup"
             app:elevation="0dp"
-            app:itemTextColor="@color/black"
+            app:itemTextColor="@color/text_color"
             app:itemIconSize="25dp"
             app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
             />

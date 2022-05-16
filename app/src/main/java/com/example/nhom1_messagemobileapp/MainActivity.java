@@ -6,51 +6,63 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.nhom1_messagemobileapp.R;
-import com.example.nhom1_messagemobileapp.adapter.ChatListAdapter;
-import com.example.nhom1_messagemobileapp.entity.Message;
+import com.example.nhom1_messagemobileapp.database.Database;
+import com.example.nhom1_messagemobileapp.entity.StickerPackage;
 import com.example.nhom1_messagemobileapp.entity.User;
+import com.example.nhom1_messagemobileapp.service.SyncDatabaseService;
+import com.example.nhom1_messagemobileapp.utils.FlaticonAPI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static Context context;
     private ViewPager mPager;
     private BottomNavigationView navigationView;
     private ScreenSlidePagerAdapter pagerAdapter;
     private String uid = "";
-
+    private Database database;
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        try {
-            uid = getIntent().getExtras().getString("uid");
-            System.out.println(uid);
-        }catch (Exception e){
+        MainActivity.context = this;
 
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            finish();
+            return;
         }
-
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.e("------------> uid", uid);
+        database = Database.getInstance(this);
+        
+//        database.getUserSqlDAO().insert();
+//        Log.d("sqlite", database.getUserSqlDAO().findAll().toString());
+        Intent intent = new Intent(this, SyncDatabaseService.class);
+        startService(intent);
 
         mPager = findViewById(R.id.pager);
         navigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
@@ -95,6 +107,30 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    public static boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) MainActivity.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Ấn lần nữa để thoát", Toast.LENGTH_SHORT).show();
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
@@ -120,4 +156,6 @@ public class MainActivity extends AppCompatActivity {
             return 3;
         }
     }
+
+
 }
