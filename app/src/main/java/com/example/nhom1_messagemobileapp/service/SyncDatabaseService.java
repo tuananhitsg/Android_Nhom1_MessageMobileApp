@@ -3,12 +3,14 @@ package com.example.nhom1_messagemobileapp.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.Room;
 
+import com.example.nhom1_messagemobileapp.R;
 import com.example.nhom1_messagemobileapp.dao.MessageSqlDAO;
 import com.example.nhom1_messagemobileapp.dao.UserSqlDAO;
 import com.example.nhom1_messagemobileapp.database.Database;
@@ -56,6 +58,7 @@ public class SyncDatabaseService extends IntentService {
     private MessageSqlDAO messageSqlDAO;
     private UserSqlDAO userSqlDAO;
     List<User> users = new ArrayList<>();
+    private MediaPlayer mediaPlayer;
 
     public SyncDatabaseService() {
         super("SyncDatabaseService");
@@ -109,6 +112,9 @@ public class SyncDatabaseService extends IntentService {
         refMessage = firebaseDatabase.getReference("message");
         refUser = firebaseDatabase.getReference("user");
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.nhac_chuong);
+
         sync();
     }
 
@@ -158,7 +164,9 @@ public class SyncDatabaseService extends IntentService {
                     Message message = snapshot.getValue(Message.class);
                     Log.e("->>>>>>", message.toString());
                     messageSqlDAO.insert(message);
-
+                    if(message.getToUid().equals(uid)){
+                        mediaPlayer.start();
+                    }
                     Log.e("messagesssssss", messageSqlDAO.findAll().toString());
                 }
 
