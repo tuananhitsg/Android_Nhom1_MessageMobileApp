@@ -52,7 +52,7 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="4dp"
                     android:paddingBottom="6dp"
-                    android:text="test@gmail.com"
+                    android:text=""
                     android:textColorHint="@color/text_color_hint"
                     android:textColorLink="@color/text_color_hint" />
             </com.google.android.material.textfield.TextInputLayout>
